@@ -100,7 +100,7 @@ class AssistantDetail(APIView):
 
 class ClassroomList(APIView):
 
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly,)
+	# permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 	def get(self, request, format=None):
 		classrooms = Classroom.objects.all()
@@ -121,7 +121,7 @@ class ClassroomList(APIView):
 
 class ClassroomDetail(APIView):
 
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly,)
+	# permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 	def get_instance(self, pk):
 		try:

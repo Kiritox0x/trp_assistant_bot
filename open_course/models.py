@@ -5,26 +5,45 @@ from django.db import models
 # Create your models here.
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
+from django.core.validators import RegexValidator
+
 
 # for storing code later use
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
+PHONE_REGEX = RegexValidator(regex=r'^\+[1-9]{1}[0-9]{3,14}$', message="Phone number must be entered in the format: '+84988888888'. Up to 15 digits allowed.")
+EMAIL_TOPICA_REGEX = RegexValidator(regex=r'^[a-zA-Z0-9_.+-]+@topica.edu.vn$', message="Email must be entered in the format: 'linhlnm@topica.edu.vn'") 
+
 class Teacher(models.Model):
-	name = models.TextField(max_length = 40)
-	email = models.EmailField()
-	account = models.TextField(max_length = 40)
+	code = models.CharField(max_length = 8)
+	name = models.CharField(max_length = 40)
+	topica_email = models.CharField(validators=[EMAIL_TOPICA_REGEX], max_length=50)
+	personal_email = models.EmailField()
+	phone_number = models.CharField(validators=[PHONE_REGEX], max_length=15)
+	status = models.CharField(max_length = 40, blank=True)
+	location = models.CharField(max_length = 20, blank=True)
+	account = models.CharField(max_length = 40, unique=True)
+	date_of_birth = models.DateField(default="1990-01-01")
 	note = models.TextField(blank = True)
+	supporter = models.TextField(max_length = 20, blank=True)
 
 	def __unicode__(self):
 		return self.name
 
 class Assistant(models.Model):
-	name = models.TextField(max_length = 40)
-	email = models.EmailField()
-	account = models.TextField(max_length = 40)
+	code = models.CharField(max_length = 8)
+	name = models.CharField(max_length = 40)
+	topica_email = models.CharField(validators=[EMAIL_TOPICA_REGEX], max_length=50)
+	personal_email = models.EmailField()
+	phone_number = models.CharField(validators=[PHONE_REGEX], max_length=15)
+	status = models.CharField(max_length = 40, blank=True)
+	location = models.CharField(max_length = 20, blank=True)
+	account = models.CharField(max_length = 40, unique=True)
+	date_of_birth = models.DateField(default="1990-01-01")
 	note = models.TextField(blank = True)
+	supporter = models.TextField(max_length = 20, blank=True)
 
 	def __unicode__(self):
 		return self.name
@@ -37,7 +56,7 @@ class Supporter(models.Model):
 		return self.name
 
 class Classroom(models.Model):
-	owner = models.ForeignKey('auth.User', related_name='classrooms', on_delete=models.CASCADE)
+	# owner = models.ForeignKey('auth.User', related_name='classrooms', on_delete=models.CASCADE)
 
 	created = models.DateTimeField(auto_now_add=True)
 	school = models.CharField(max_length=10)
@@ -49,8 +68,8 @@ class Classroom(models.Model):
 	start_date = models.DateTimeField()
 	finish_date = models.DateTimeField()
 	examination_date = models.DateTimeField()
-	teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
-	assistant = models.ForeignKey(Assistant, on_delete = models.CASCADE)
+	teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE, to_field='account')
+	assistant = models.ForeignKey(Assistant, on_delete = models.CASCADE, to_field='account')
 	change_note = models.TextField(blank = True)
 	supporter = models.ForeignKey(Supporter, on_delete = models.CASCADE)
 

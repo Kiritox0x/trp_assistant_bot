@@ -1,16 +1,17 @@
 from django.conf.urls import url, include
 from open_course import views
+from trp_assistant_bot.settings import URL_API_PREFIX 
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
-	url(r'^api/v1/classrooms/$', views.ClassroomList.as_view()),
-	url(r'^api/v1/classrooms/(?P<pk>[0-9]+)/$', views.ClassroomDetail.as_view()),
-	url(r'^api/v1/users/$', views.UserList.as_view()),
-	url(r'^api/v1/users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
-	url(r'^api/v1/teachers/$', views.TeacherList.as_view()),
-	url(r'^api/v1/teachers/(?P<pk>[0-9]+)/$', views.TeacherDetail.as_view()),
-	url(r'^api/v1/assistants/$', views.AssistantList.as_view()),
-	url(r'^api/v1/assistants/(?P<pk>[0-9]+)/$', views.AssistantDetail.as_view()),
+	url(URL_API_PREFIX+r'classrooms/$', views.ClassroomList.as_view()),
+	url(URL_API_PREFIX+r'classrooms/(?P<pk>[0-9]+)/$', views.ClassroomDetail.as_view()),
+	url(URL_API_PREFIX+r'users/$', views.UserList.as_view()),
+	url(URL_API_PREFIX+r'users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
+	url(URL_API_PREFIX+r'teachers/$', views.TeacherList.as_view()),
+	url(URL_API_PREFIX+r'teachers/(?P<pk>[0-9]+)/$', views.TeacherDetail.as_view()),
+	url(URL_API_PREFIX+r'assistants/$', views.AssistantList.as_view()),
+	url(URL_API_PREFIX+r'assistants/(?P<pk>[0-9]+)/$', views.AssistantDetail.as_view()),
 	url(r'^api-auth/', include('rest_framework.urls',namespace='rest_framework')),
 ]
 
