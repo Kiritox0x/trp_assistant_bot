@@ -13,7 +13,7 @@ from open_course.permissions import IsOwnerOrReadOnly
 # Create your views here.
 
 class TeacherList(APIView):
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+	permission_classes = (permissions.IsAuthenticated,)
 
 	def get(self, request, format=None):
 		teachers = Teacher.objects.all()
@@ -29,7 +29,7 @@ class TeacherList(APIView):
 		return Response(serializer.erros, status = status.HTTP_400_BAD_REQUEST)
 
 class TeacherDetail(APIView):
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+	permission_classes = (permissions.IsAuthenticated,)
 
 	def get_instance(self, pk):
 		try:
@@ -56,7 +56,7 @@ class TeacherDetail(APIView):
 		return Response(status = status.HTTP_204_NO_CONTENT)
 
 class AssistantList(APIView):
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+	permission_classes = (permissions.IsAuthenticated,)
 
 	def get(self, request, format=None):
 		assistants = Assistant.objects.all()
@@ -72,7 +72,7 @@ class AssistantList(APIView):
 		return Response(serializer.erros, status = status.HTTP_400_BAD_REQUEST)
 
 class AssistantDetail(APIView):
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+	permission_classes = (permissions.IsAuthenticated,)
 
 	def get_instance(self, pk):
 		try:
@@ -99,8 +99,7 @@ class AssistantDetail(APIView):
 		return Response(status = status.HTTP_204_NO_CONTENT)
 
 class ClassroomList(APIView):
-
-	# permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+	permission_classes = (permissions.IsAuthenticated,)
 
 	def get(self, request, format=None):
 		classrooms = Classroom.objects.all()
@@ -120,8 +119,7 @@ class ClassroomList(APIView):
 
 
 class ClassroomDetail(APIView):
-
-	# permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+	permission_classes = (permissions.IsAuthenticated,)
 
 	def get_instance(self, pk):
 		try:
@@ -150,11 +148,15 @@ class ClassroomDetail(APIView):
 
 
 class UserList(generics.ListAPIView):
+	permission_classes = (permissions.IsAuthenticated,permissions.IsAdminUser,)
+
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
 
 
 class UserDetail(generics.RetrieveAPIView):
+	permission_classes = (permissions.IsAuthenticated,permissions.IsAdminUser,)
+
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
 
