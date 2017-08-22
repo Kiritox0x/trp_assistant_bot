@@ -1,0 +1,48 @@
+.classroom .row .col-xs-12:last-child {
+  overflow-x: scroll;
+  width: calc(100% - 30px);
+  margin-left: 15px;
+  padding-left: 0;
+}
+
+.classroom .col-md-4.col-xs-12:first-child {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .classroom .col-md-4.col-xs-12:nth-child(2) {
+    width: 66.66666667%;
+  }
+}
+
+.thead-tr-default .thead-th-default {
+  vertical-align: top;
+}
+
+.thead-tr-default .thead-th-default:not(:nth-child(1):nth-child(2)) {
+
+  min-width: 100px;
+  max-width: 120px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.tbody-default .tbody-td-default {
+  /* min-width: 50px; */
+  /* max-width: 100px; */
+  word-break: break-all;
+  word-wrap: break-word;
+  /* text-overflow: ellipsis; */
+  /* overflow: hidden; */
+}
+
+.modal-body {
+  max-height: calc(100vh - 200px);
+  overflow-y: scroll;
+}
+.modal-body textarea {
+  max-width: 100%;
+  min-height: 100px;
+  max-height: 200px;
+}

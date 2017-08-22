@@ -6,7 +6,7 @@ django.setup()
 from open_course.models import Teacher, Assistant
 
 class ExcelParser:
- 	@classmethod
+	@classmethod
 	def create_teacher(self, person):
 		if len(Teacher.objects.filter(topica_email=person[3]))==0:
 			teacher = Teacher.objects.create()

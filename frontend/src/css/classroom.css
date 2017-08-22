@@ -1,0 +1,15 @@
+.classroom .row .col-xs-12:last-child {
+  overflow-x: scroll;
+  width: calc(100% - 30px);
+  margin-left: 15px;
+  padding-left: 0;
+}
+
+.thead-tr-default .thead-th-default {
+  vertical-align: top;
+}
+
+.modal-body {
+  max-height: calc(100vh - 200px);
+  overflow-y: scroll;
+}
