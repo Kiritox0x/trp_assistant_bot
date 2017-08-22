@@ -25,7 +25,7 @@ media
 # Distribution / packaging
 .Python
 env/
-build/
+#build/
 develop-eggs/
 dist/
 downloads/
@@ -120,7 +120,7 @@ ENV/
 /coverage
 
 # production
-/build
+#/build
 
 # misc
 .DS_Store
@@ -241,4 +241,3 @@ GitHub.sublime-settings
 
 open_course/migrations/
 frontend/node_modules
-frontend/test.ignore
