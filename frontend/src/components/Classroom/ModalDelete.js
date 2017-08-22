@@ -26,7 +26,7 @@ class ModalDelete extends Component {
       teacher, assistant, change_note, supporter
     } = this.state;
     return (
-      <Modal show={this.props.classroom.showModalDelete} onHide={() => this.props.toggleModalDelete(false, actionsType.TOGGLE_MODAL_DELETE_TEACHER)}>
+      <Modal show={this.props.classroom.showModalDelete} onHide={() => this.props.toggleModalDelete(false, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM)}>
         <Modal.Header closeButton>
           <Modal.Title>Xóa lớp</Modal.Title>
         </Modal.Header>
@@ -35,7 +35,7 @@ class ModalDelete extends Component {
         </Modal.Body>
         <Modal.Footer>
         <Button bsStyle="primary">Đồng ý</Button>
-        <Button onClick={() => this.props.toggleModalDelete(false, actionsType.TOGGLE_MODAL_DELETE_TEACHER)}>Hủy</Button>
+        <Button onClick={() => this.props.toggleModalDelete(false, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM)}>Hủy</Button>
         </Modal.Footer>
       </Modal>
     );
