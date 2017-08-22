@@ -63,8 +63,8 @@ class ExcelParser:
 			assistant.save()
 
 	@classmethod
-	def load_data(self,filepath):
-		data = pd.read_excel(filepath)
+	def load_data(self,filename):
+		data = pd.read_excel(filename)
 		num_instance = len(data)-1
 		for i in range(1, num_instance):
 			person = data.iloc[i]
@@ -74,7 +74,6 @@ class ExcelParser:
 				self.create_teacher(person)
 			elif person[7] == 'GVHD':
 				self.create_assistant(person)
-
 
 if __name__ == '__main__':
 	print 'Start generating data from scrath'
