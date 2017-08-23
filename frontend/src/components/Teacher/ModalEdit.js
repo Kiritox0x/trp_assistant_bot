@@ -37,7 +37,7 @@ class ModalEdit extends Component {
   render() {
     const { 
       id, name, code,
-      topica_email, personal_email,
+      topica_email, personal_email, phone_number,
       status, location, account,
       date_of_birth, note, supporter,
       dateFormat, timeFormat
@@ -45,7 +45,7 @@ class ModalEdit extends Component {
     return (
       <Modal show={this.props.teacher.showModal} onHide={() => this.props.toggleModalEdit(false, actionsType.TOGGLE_MODAL_EDIT_TEACHER)}>
         <Modal.Header closeButton>
-          <Modal.Title>Sửa giảng viên</Modal.Title>
+          <Modal.Title>Sửa GVCM</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormGroup> {/* Tên */}

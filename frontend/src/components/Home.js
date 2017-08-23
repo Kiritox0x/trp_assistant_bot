@@ -11,8 +11,9 @@ export default class Home extends Component {
   render() {
     return (
       <div>
-        <Col md={3} sm={3} xs={6}><Row><Link to="/classroom" className="btn btn-primary btn-block">Classroom</Link></Row></Col>
-        <Col md={3} sm={3} xs={6}><Row><Link to="/teacher" className="btn btn-success btn-block">Teacher</Link></Row></Col>
+        <Col md={3} sm={3} xs={6}><Link to="/classroom" className="btn btn-primary btn-block">Classroom</Link></Col>
+        <Col md={3} sm={3} xs={6}><Link to="/teacher" className="btn btn-success btn-block">Teacher</Link></Col>
+        <Col md={3} sm={3} xs={6}><Link to="/assistant" className="btn btn-info btn-block">Assistant</Link></Col>
       </div>
     );
   }

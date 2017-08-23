@@ -76,5 +76,5 @@ class ExcelParser:
 				self.create_assistant(person)
 
 if __name__ == '__main__':
-	print 'Start generating data from scrath'
+	# print 'Start generating data from scrath'
 	ExcelParser.load_data('data.xlsx')
