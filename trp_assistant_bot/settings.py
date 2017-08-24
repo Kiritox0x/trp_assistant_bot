@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'content_editor',
     'rest_framework',
     'rest_framework.authtoken',
     'open_course.apps.OpenCourseConfig',
+    'database_loader.apps.DatabaseLoaderConfig',
 ]
 
 MIDDLEWARE_CLASSES = [

@@ -7,8 +7,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics, permissions
-from open_course.models import Classroom, Teacher, Assistant
-from open_course.serializers import ClassroomSerializer, UserSerializer, TeacherSerializer, AssistantSerializer
+from open_course.models import Classroom, Teacher, Assistant, Supporter
+from open_course.serializers import ClassroomSerializer, UserSerializer, TeacherSerializer, AssistantSerializer, SupporterSerializer
 from open_course.permissions import IsOwnerOrReadOnly
 # Create your views here.
 
@@ -145,6 +145,48 @@ class ClassroomDetail(APIView):
 		classroom.delete()
 		return Response(status = status.HTTP_204_NO_CONTENT)
 
+class SupporterList(APIView):
+	permission_classes = (permissions.IsAuthenticated,)
+
+	def get(self, request, format=None):
+		supporters = Supporter.objects.all()
+		serializer = SupporterSerializer(supporters, many=True)
+		return Response(serializer.data)
+
+	def post(self, request, format=None):
+		serializer = SupporterSerializer(data = request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data,
+				status = status.HTTP_201_CREATED)
+		return Response(serializer.erros, status = status.HTTP_400_BAD_REQUEST)
+
+class SupporterDetail(APIView):
+	permission_classes = (permissions.IsAuthenticated,)
+
+	def get_instance(self, pk):
+		try:
+			return Supporter.objects.get(pk = pk)
+		except Supporter.DoesNotExist:
+			raise Http404
+
+	def get(self, request, pk, format=None):
+		supporter = self.get_instance(pk)
+		serializer = SupporterSerializer(supporter)
+		return Response(serializer.data)
+
+	def put(self, request, pk, format=None):
+		supporter = self.get_instance(pk)
+		serializer = SupporterSerializer(supporter, data = request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+	def delete(self, request, pk, format=None):
+		supporter = self.get_instance(pk)
+		supporter.delete()
+		return Response(status = status.HTTP_204_NO_CONTENT)
 
 
 class UserList(generics.ListAPIView):

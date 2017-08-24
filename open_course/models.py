@@ -26,6 +26,15 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 PHONE_REGEX = RegexValidator(regex=r'^(\+[1-9])|(0){1}[0-9]{5,11}$', message="Phone number must be entered in the format: '+84988888888'. Up to 15 digits allowed.")
 EMAIL_TOPICA_REGEX = RegexValidator(regex=r'(^[a-zA-Z0-9_.+-]+@topica.edu.vn$)|(^[a-zA-Z0-9_.+-]+@neu-edutop.edu.vn$)', message="Email must be entered in the format: 'linhlnm@topica.edu.vn' or 'linhlnm@neu-edutop.edu.vn")
 
+
+class Supporter(models.Model):
+	name = models.CharField(max_length=40)
+	account = models.CharField(max_length=20, unique=True)
+	email = models.EmailField()
+
+	def __unicode__(self):
+		return self.name
+
 class Teacher(models.Model):
 	code = models.CharField(max_length = 8)
 	name = models.CharField(max_length = 40)	
@@ -37,7 +46,7 @@ class Teacher(models.Model):
 	account = models.CharField(max_length = 40)
 	date_of_birth = models.DateField(default="1990-01-01")
 	note = models.TextField(blank = True)
-	supporter = models.TextField(max_length = 20, blank=True)
+	supporter = models.ForeignKey(Supporter, on_delete = models.CASCADE, to_field='account')
 
 	def __unicode__(self):
 		return self.name
@@ -53,14 +62,7 @@ class Assistant(models.Model):
 	account = models.CharField(max_length = 40)
 	date_of_birth = models.DateField(default="1990-01-01")
 	note = models.TextField(blank = True)
-	supporter = models.TextField(max_length = 20, blank=True)
-
-	def __unicode__(self):
-		return self.name
-
-class Supporter(models.Model):
-	name = models.TextField(max_length=40)
-	email = models.EmailField()
+	supporter = models.ForeignKey(Supporter, on_delete = models.CASCADE, to_field='account')
 
 	def __unicode__(self):
 		return self.name
@@ -81,7 +83,7 @@ class Classroom(models.Model):
 	teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE, to_field='topica_email')
 	assistant = models.ForeignKey(Assistant, on_delete = models.CASCADE, to_field='topica_email')
 	change_note = models.TextField(blank = True)
-	supporter = models.ForeignKey(Supporter, on_delete = models.CASCADE)
+	supporter = models.ForeignKey(Supporter, on_delete = models.CASCADE, to_field='account')
 
 	class Meta:
 		ordering = ('created',)
