@@ -65,6 +65,12 @@ class Header extends Component {
           </div>
         </div>
         <ul className="nav navbar-nav">
+          <li><a onClick={() => {
+              store.dispatch(unsetToken());
+              this.props.history.replace('/');
+            }}
+            >
+            <Glyphicon glyph="log-out" /> Logout</a></li>
           <LinkContainer to="/" exact><li><a>Bảng điều khiển</a></li></LinkContainer>
           <li>
             <a>Quản lý</a>
@@ -73,13 +79,6 @@ class Header extends Component {
               <LinkContainer to="/teacher"><li><a>GVCM</a></li></LinkContainer>
               <LinkContainer to="/assistant"><li><a>GVHD</a></li></LinkContainer>
             </ul>
-          </li>
-          <li><a onClick={() => {
-              store.dispatch(unsetToken());
-              this.props.history.replace('/');
-            }}
-            >
-            <Glyphicon glyph="log-out" /> Logout</a>
           </li>
         </ul>
 

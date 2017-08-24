@@ -17,6 +17,7 @@ export const login = ({username, password}) => {
         isLogined: true
       }));
       axios.defaults.headers.common['Authorization'] = "Token " + response.data.token;
+      console.log('111111111' + axios.defaults.headers.common['Authorization']);
     })
     .catch(function (error) {
       throw error;
@@ -25,6 +26,7 @@ export const login = ({username, password}) => {
 
 
 export const syncIsLogined = () => {
+  return true;
   const { token, isLogined } = store.getState().token;
   if (!token) return false;
   if (isLogined) return true;

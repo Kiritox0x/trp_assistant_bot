@@ -4,7 +4,13 @@ import store from '../store';
 import { URL } from '../config/Api';
 
 export const getList = (ENDPOINTS) => {
-  return axios.get(URL + ENDPOINTS)
+  var instance = axios.create({
+    timeout: 1000,
+    headers: {'Authorization': 'Token ' + store.getState().token.token }
+  });
+  return axios.get(URL + ENDPOINTS, {
+    headers: {'Authorization': 'Token ' + store.getState().token.token }
+  })
     .then((response) => {
       return JSON.parse(response.data);
     })

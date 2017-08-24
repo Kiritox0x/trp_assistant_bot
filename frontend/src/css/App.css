@@ -3,6 +3,7 @@ a:hover {
 }
 .navbar-fixed-left {
   overflow-x: hidden;
+  overflow-y: overlay;
   width: 180px;
   position: fixed;
   border-radius: 0;
@@ -58,13 +59,12 @@ a:hover {
   font-style: italic;
 }
 
-.navbar-fixed-left li ul {
-  background: #2a3f54;
+#btn-logout {
+  display: block;
 }
 
-.navbar-fixed-left>ul>li:last-child {
-  position: absolute;
-  bottom: 0;
+.navbar-fixed-left li ul {
+  background: #2a3f54;
 }
 
 .navbar-fixed-left li ul li {
