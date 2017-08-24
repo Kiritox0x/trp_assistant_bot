@@ -19,4 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('open_course.urls')),
+    url(r'^', include('database_loader.urls')),
+	url(r'^', include('view_loader.urls')),    
 ]

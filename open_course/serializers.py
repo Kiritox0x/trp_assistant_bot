@@ -29,4 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
 		fields = ('id', 'username', 'classrooms')
 
 
-		
+class SupporterSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = ('id', 'name', 'account', 'email')		
