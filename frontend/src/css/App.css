@@ -17,15 +17,16 @@
 
 .thead-tr-default .thead-th-default {
   vertical-align: top;
-}
-
-.thead-tr-default .thead-th-default:not(:nth-child(1):nth-child(2)) {
-
-  min-width: 100px;
+  min-width: 80px;
   max-width: 120px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.thead-tr-default .thead-th-default:nth-child(1),
+.thead-tr-default .thead-th-default:nth-child(2) {
+  min-width: 45px;
+  max-width: 45px;
 }
 
 .tbody-default .tbody-td-default {

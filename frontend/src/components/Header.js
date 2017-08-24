@@ -26,6 +26,7 @@ class Header extends Component {
             <LinkContainer to="/" exact><NavItem eventKey={2} href="#">Home</NavItem></LinkContainer>
             <LinkContainer to="/classroom"><NavItem eventKey={2} href="#">Classroom</NavItem></LinkContainer>
             <LinkContainer to="/teacher"><NavItem eventKey={2} href="#">Teacher</NavItem></LinkContainer>
+            <LinkContainer to="/assistant"><NavItem eventKey={2} href="#">Assistant</NavItem></LinkContainer>
           </Nav>
           <Nav pullRight>
             <NavDropdown title="Name" id="basic-nav-dropdown" pullRight>

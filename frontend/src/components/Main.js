@@ -11,6 +11,7 @@ import Header from './Header';
 import Home from './Home';
 import Classroom from './Classroom/index';
 import Teacher from './Teacher/index';
+import Assistant from './Assistant/index';
 
 export default class Main extends Component {
 
@@ -26,6 +27,7 @@ export default class Main extends Component {
               <Route path='/' exact component={Home}/>
               <Route path='/classroom' component={Classroom}/>
               <Route path='/teacher' component={Teacher}/>
+              <Route path='/assistant' component={Assistant}/>
               <Redirect to="/" />
             </Switch> 
           </Col>

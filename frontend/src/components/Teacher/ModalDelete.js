@@ -21,7 +21,7 @@ class ModalDelete extends Component {
   render() {
     const {
       id, name, code,
-      topica_email, personal_email,
+      topica_email, personal_email, phone_number,
       status, location, account,
       date_of_birth, note, supporter
     } = this.state;

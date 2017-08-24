@@ -1,16 +1,14 @@
 // file: src/util/ApiClient.js
 import axios from 'axios';
 import store from '../store';
-import { URLAPI, LIST_TEACHERS } from '../config/Api';
+import { URL } from '../config/Api';
 
-export const getListTeachers = () => {
-  return new Promise((resolve, reject) => {
-    axios.get(URLAPI + LIST_TEACHERS)
+export const getList = (ENDPOINTS) => {
+  return axios.get(URL + ENDPOINTS)
     .then((response) => {
-      resolve(JSON.parse(response.data));
+      return JSON.parse(response.data);
     })
     .catch((error) => {
-      reject(error);
+      return error;
     });
-  });
 }
