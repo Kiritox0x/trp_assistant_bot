@@ -46,7 +46,7 @@ class Teacher(models.Model):
 	account = models.CharField(max_length = 40)
 	date_of_birth = models.DateField(default="1990-01-01")
 	note = models.TextField(blank = True)
-	supporter = models.ForeignKey(Supporter, on_delete = models.CASCADE, to_field='account')
+	supporter = models.CharField(max_length = 20)
 
 	def __unicode__(self):
 		return self.name
@@ -62,7 +62,7 @@ class Assistant(models.Model):
 	account = models.CharField(max_length = 40)
 	date_of_birth = models.DateField(default="1990-01-01")
 	note = models.TextField(blank = True)
-	supporter = models.ForeignKey(Supporter, on_delete = models.CASCADE, to_field='account')
+	supporter = models.CharField(max_length = 20)
 
 	def __unicode__(self):
 		return self.name
@@ -83,8 +83,8 @@ class Classroom(models.Model):
 	teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE, to_field='topica_email')
 	assistant = models.ForeignKey(Assistant, on_delete = models.CASCADE, to_field='topica_email')
 	change_note = models.TextField(blank = True)
-	supporter = models.ForeignKey(Supporter, on_delete = models.CASCADE, to_field='account')
-
+	supporter = models.CharField(max_length=20)
+	
 	class Meta:
 		ordering = ('created',)
 
