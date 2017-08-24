@@ -22,15 +22,13 @@ export default class Main extends Component {
       <div>
         <Header />
         <Grid>
-          <Col>
-            <Switch>
-              <Route path='/' exact component={Home}/>
-              <Route path='/classroom' component={Classroom}/>
-              <Route path='/teacher' component={Teacher}/>
-              <Route path='/assistant' component={Assistant}/>
-              <Redirect to="/" />
-            </Switch> 
-          </Col>
+          <Switch>
+            <Route path='/' exact component={Home}/>
+            <Route path='/classroom' component={Classroom}/>
+            <Route path='/teacher' component={Teacher}/>
+            <Route path='/assistant' component={Assistant}/>
+            <Redirect to="/" />
+          </Switch> 
         </Grid>
       </div>
     );

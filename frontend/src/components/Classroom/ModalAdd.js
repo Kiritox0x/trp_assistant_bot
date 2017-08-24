@@ -8,7 +8,7 @@ import Datetime from 'react-datetime';
 
 import { toggleModal } from '../../actions';
 import * as actionsType from '../../actions/types';
-class ModalEdit extends Component {
+class ModalAdd extends Component {
 
   constructor(props) {
     super(props);
@@ -30,12 +30,8 @@ class ModalEdit extends Component {
     });
   }
 
-  componentWillReceiveProps = () => {
-    this.setState(this.props.classroom.selected);
-  }
-
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_CLASSROOM)
+    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
   }
 
   render = () => {
@@ -47,9 +43,9 @@ class ModalEdit extends Component {
       dateFormat, timeFormat
     } = this.state;
     return (
-      <Modal show={this.props.classroom.showModalEdit} onHide={() => this.clickClose()}>
+      <Modal show={this.props.classroom.showModalAdd} onHide={() => this.clickClose()}>
         <Modal.Header closeButton>
-          <Modal.Title>Sửa lớp</Modal.Title>
+          <Modal.Title>Thêm lớp</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormGroup> {/* Trường */}
@@ -58,7 +54,6 @@ class ModalEdit extends Component {
               id="school"
               type="text"
               label="Text"
-              value={school}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -68,7 +63,6 @@ class ModalEdit extends Component {
               id="subject"
               type="text"
               label="Text"
-              value={subject}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -78,7 +72,6 @@ class ModalEdit extends Component {
               id="subject_code"
               type="text"
               label="Text"
-              value={subject_code}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -88,7 +81,6 @@ class ModalEdit extends Component {
               id="class_name"
               type="text"
               label="Text"
-              value={class_name}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -98,7 +90,6 @@ class ModalEdit extends Component {
               id="class_subject"
               type="text"
               label="Text"
-              value={class_subject}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -108,7 +99,6 @@ class ModalEdit extends Component {
               id="estimated_students"
               type="number"
               label="Text"
-              value={estimated_students}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -118,7 +108,6 @@ class ModalEdit extends Component {
               id="start_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
-              value={new Date(start_date)}
               onChange={(event) => { this.onChangeDate(event, 'start_date');}}
             />
           </FormGroup>
@@ -128,7 +117,6 @@ class ModalEdit extends Component {
               id="finish_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
-              value={new Date(finish_date)}
               onChange={(event) => { this.onChangeDate(event, 'finish_date');}}
             />
           </FormGroup>
@@ -138,7 +126,6 @@ class ModalEdit extends Component {
               id="examination_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
-              value={new Date(examination_date)}
               onChange={(event) => { this.onChangeDate(event, 'examination_date');}}
             />
           </FormGroup>
@@ -175,8 +162,7 @@ class ModalEdit extends Component {
             <FormControl 
               id="change_note"
               componentClass="textarea" 
-              placeholder="textarea" 
-              value={change_note}
+              placeholder="textarea"
               onChange={(event) => { this.onChange(event)}}
             />
           </FormGroup>
@@ -216,4 +202,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ModalEdit);
+)(ModalAdd);

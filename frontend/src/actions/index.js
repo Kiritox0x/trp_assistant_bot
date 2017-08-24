@@ -25,19 +25,12 @@ export const select = (classroom, type) => {
   }
 }
 
-export const toggleModalEdit = (toggle, type) => {
+export const toggleModal = (toggle, type) => {
   return {
     type,
     data: toggle
   }
 }
-export const toggleModalDelete = (toggle, type) => {
-  return {
-    type,
-    data: toggle
-  }
-}
-
 
 
 

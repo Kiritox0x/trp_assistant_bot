@@ -9,10 +9,11 @@ import Datatable from 'react-bs-datatable';
 
 import store from '../../store';
 
-import ModalDelete from './ModalDelete';
+import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
+import ModalDelete from './ModalDelete';
 import { 
-  toggleModalEdit, toggleModalDelete, select 
+  toggleModal, select 
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
@@ -42,38 +43,82 @@ class Assistant extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: [],
+      body: [
+        {
+          "id": 1,
+          "name": "Phạm Xuân Kiên (HCM)",
+          "code": "GV.20004",
+          "topica_email": "kienpx.gv@topica.edu.vn",
+          "personal_email": "pxkien@gmail.com",
+          "phone_number": "0913729747",
+          "status": "L9-Đang cộng tác",
+          "location": "Hồ Chí Minh",
+          "account": "kienpx.gv",
+          "date_of_birth": "1990-01-01",
+          "note": "Có QĐ",
+          "supporter": ""
+        }
+      ],
       filtered: []
     };
+  }
+
+  clickAdd() {
+    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_ASSISTANT);
   }
 
   clickEdit(index) {
     // alert('clicked');
     this.props.select(this.state.body[index], actionsType.SELECT_ASSISTANT);
-    setTimeout(() => {this.props.toggleModalEdit(true, actionsType.TOGGLE_MODAL_EDIT_ASSISTANT);}, 1);
+    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_ASSISTANT);}, 1);
   }
 
   clickDelete(index) {
     this.props.select(this.state.body[index], actionsType.SELECT_ASSISTANT);
-    setTimeout(() => {this.props.toggleModalDelete(true, actionsType.TOGGLE_MODAL_DELETE_ASSISTANT);}, 1);
+    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_ASSISTANT);}, 1);
   }
 
-  search(event) {
-    const keyWord = event.target.value;
-    if (keyWord.length === 0) {
-      return this.setState({
-        filtered: this.state.body
-      });
+  search = (event) => {
+    const { timeoutSearch } = this.state;
+    const value = event.target.value;
+    console.log(timeoutSearch);
+    if (timeoutSearch) {
+      clearTimeout(timeoutSearch);
     }
     this.setState({
-      filtered: this.state.body.filter((assistant) => {
-        // console.log(Object.values(assistant));
-        return Object.values(assistant).join('//').indexOf(keyWord) > -1;
-      })
-    })
+      timeoutSearch: setTimeout(() => {
+        const keyWord = value;
+        if (keyWord.length === 0) {
+          return this.setState({
+            filtered: this.state.body
+          });
+        }
+        this.setState({
+          filtered: this.state.body.filter((assistant) => {
+            // console.log(Object.values(assistant));
+            return Object.values(assistant).join('//').indexOf(keyWord) > -1;
+          })
+        })
+      }, 1500)
+    });
   }
 
   componentDidMount() {
+    document.title = "Assistant";
+    let index = 0;
+    this.setState({
+      // body,
+      filtered: this.state.body.map((assistant) => {
+        return {
+          ...assistant,
+          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
+          <span className="glyphicon glyphicon-pencil"></span></Button>,
+          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++)}>
+          <span className="glyphicon glyphicon-trash"></span></Button>
+        }
+      })
+    });
+    return;
     getList(API.ASSISTANTS)
     .then((data) => {
       console.log(data);
@@ -82,8 +127,7 @@ class Assistant extends Component {
         return {
           ...assistant,
           edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
-          <span className="glyphicon glyphicon-pencil"></span>
-        </Button>,
+          <span className="glyphicon glyphicon-pencil"></span></Button>,
           delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++)}>
           <span className="glyphicon glyphicon-trash"></span></Button>
         }
@@ -94,19 +138,21 @@ class Assistant extends Component {
       });
     })
     .catch(error => console.log(error));
-    
   }
 
   render() {  
     const body = [...this.state.filtered];
     return (
-      <div className="classroom">
-        <ModalDelete />
+      <div className="main-content">
+        <h2 className="text-center">Quản lý GVHD</h2>
+        <ModalAdd />
         <ModalEdit />
-        <Button bsStyle="success"><Glyphicon glyph="plus" /> Thêm GVHD mới</Button>
+        <ModalDelete />
+        <Button bsStyle="success" onClick={() => this.clickAdd()}>
+          <Glyphicon glyph="plus" /> Thêm GVHD mới
+        </Button>
         <br /><br />
         <FormGroup>
-          
           <ControlLabel>Tìm kiếm</ControlLabel>
           <FormControl 
             id="txtSearch"
@@ -135,9 +181,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModalEdit,
-  select,
-  toggleModalDelete
+  toggleModal,
+  select
 };
 
 export default connect(

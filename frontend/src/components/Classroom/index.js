@@ -9,10 +9,11 @@ import Datatable from 'react-bs-datatable';
 
 import store from '../../store';
 
-import ModalDelete from './ModalDelete';
+import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
+import ModalDelete from './ModalDelete';
 import { 
-  toggleModalEdit, toggleModalDelete, select 
+  toggleModal, select 
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
@@ -51,18 +52,22 @@ class Classroom extends Component {
     };
   }
 
-  clickEdit(index) {
+  clickAdd() {
+    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
+  }
+
+  clickEdit = (index) => {
     // alert('clicked');
     this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
-    setTimeout(() => {this.props.toggleModalEdit(true, actionsType.TOGGLE_MODAL_EDIT_CLASSROOM);}, 1);
+    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_CLASSROOM);}, 1);
   }
 
-  clickDelete(index) {
+  clickDelete = (index) => {
     this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
-    setTimeout(() => {this.props.toggleModalDelete(true, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM);}, 1);
+    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM);}, 1);
   }
 
-  search(event) {
+  search = (event) => {
     const keyWord = event.target.value;
     if (keyWord.length === 0) {
       return this.setState({
@@ -77,7 +82,8 @@ class Classroom extends Component {
     })
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
+    document.title = "Classroom";
     getList(API.CLASSROOMS)
     .then((data) => {
       console.log(data);
@@ -101,16 +107,19 @@ class Classroom extends Component {
     
   }
 
-  render() {  
+  render = () => {  
     const body = [...this.state.filtered];
     return (
-      <div className="classroom">
-        <ModalDelete />
+      <div className="main-content">
+        <h2 className="text-center">Quản lý lớp học</h2>
+        <ModalAdd />
         <ModalEdit />
-        <Button bsStyle="success"><Glyphicon glyph="plus" /> Thêm lớp học mới</Button>
+        <ModalDelete />
+        <Button bsStyle="success" onClick={() => this.clickAdd()}>
+          <Glyphicon glyph="plus" /> Thêm lớp học mới
+        </Button>
         <br /><br />
-        <FormGroup>
-          
+        <FormGroup>    
           <ControlLabel>Tìm kiếm</ControlLabel>
           <FormControl 
             id="txtSearch"
@@ -131,7 +140,6 @@ class Classroom extends Component {
       </div>
     );
   }
-
 }
 
 const mapStateToProps = (state, ownProps) => ({
@@ -139,9 +147,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModalEdit,
-  select,
-  toggleModalDelete
+  toggleModal,
+  select
 };
 
 export default connect(

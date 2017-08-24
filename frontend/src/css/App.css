@@ -1,23 +1,145 @@
-.classroom .row .col-xs-12:last-child {
+a:hover {
+  text-decoration: none;
+}
+.navbar-fixed-left {
+  overflow-x: hidden;
+  width: 180px;
+  position: fixed;
+  border-radius: 0;
+  height: 100%;
+  background-color: #2a3f54;
+  border-color: #2a3f54;
+}
+
+.navbar-fixed-left + .container {
+  padding-left: 200px;
+  width: auto;
+}
+
+.profile {
+  padding: 5px;
+  color: white;
+}
+
+.profile::after {
+  clear: both;
+  content: "";
+  display: block;
+  overflow: hidden;
+  width: 100%;
+}
+
+.profile-pic {
+  float: left;
+  width: 50px;
+  height: 50px;
+}
+
+.profile-pic img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.profile-info {
+  float: left;
+  margin-left: 10px;
+  padding-top: 5px;
+  width: 100px;
+}
+
+.profile-info p {
+  margin-bottom: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.profile-info p:last-child {
+  font-style: italic;
+}
+
+.navbar-fixed-left li ul {
+  background: #2a3f54;
+}
+
+.navbar-fixed-left>ul>li:last-child {
+  position: absolute;
+  bottom: 0;
+}
+
+.navbar-fixed-left li ul li {
+  padding-left: 30px;
+  display: block;
+}
+
+.navbar-fixed-left li ul li a {
+  display: block;
+  position: relative;
+  padding: 10px 0; 
+}
+
+.navbar-fixed-left li ul li a::before {
+  background: #425668;
+  bottom: auto;
+  content: "";
+  height: 8px;
+  left: -14px;
+  bottom: 16px;
+  position: absolute;
+  width: 8px;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+.navbar-inverse .navbar-nav>li>a,
+.navbar-inverse .navbar-nav>li>ul>li>a {
+  color: #ecf0f1;
+}
+
+.navbar-inverse .navbar-nav .active,
+.navbar-inverse .navbar-nav .active>a,
+.navbar-inverse .navbar-nav .active>a:hover,
+.navbar-inverse .navbar-nav>li>a:hover,
+.navbar-inverse .navbar-nav>li>ul>li:hover {
+  background-color: #35495d;
+}
+
+.navbar-inverse .navbar-nav>li>ul {
+  padding-left: 0;
+}
+
+.navbar-fixed-left .navbar-nav li {
+  cursor: pointer;
+  float: none;  /* Cancel default li float: left */
+  width: 179px;
+}
+
+.btn-huge {
+  padding-top: 20px; 
+  padding-bottom: 20px; 
+  margin-bottom: 30px;
+}
+
+.main-content .row .col-xs-12:last-child {
   overflow-x: scroll;
   width: calc(100% - 30px);
   margin-left: 15px;
   padding-left: 0;
 }
 
-.classroom .col-md-4.col-xs-12:first-child {
+.main-content .col-md-4.col-xs-12:first-child {
   display: none;
 }
 
 @media (min-width: 992px) {
-  .classroom .col-md-4.col-xs-12:nth-child(2) {
+  .main-content .col-md-4.col-xs-12:nth-child(2) {
     width: 66.66666667%;
   }
 }
 
 .thead-tr-default .thead-th-default {
   vertical-align: top;
-  min-width: 80px;
+  min-width: 100px;
   max-width: 120px;
   white-space: nowrap;
   text-overflow: ellipsis;

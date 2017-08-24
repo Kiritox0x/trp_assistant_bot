@@ -8,7 +8,7 @@ import Datetime from 'react-datetime';
 
 import { toggleModal } from '../../actions';
 import * as actionsType from '../../actions/types';
-class ModalEdit extends Component {
+class ModalAdd extends Component {
 
   constructor(props) {
     super(props);
@@ -30,12 +30,8 @@ class ModalEdit extends Component {
     });
   }
 
-  componentWillReceiveProps() {
-    this.setState(this.props.teacher.selected);
-  }
-
   clickClose() {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_TEACHER);
+    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_ADD_TEACHER);
   }
 
   render() {
@@ -47,9 +43,9 @@ class ModalEdit extends Component {
       dateFormat, timeFormat
     } = this.state;
     return (
-      <Modal show={this.props.teacher.showModalEdit} onHide={() => this.clickClose()}>
+      <Modal show={this.props.teacher.showModalAdd} onHide={() => this.clickClose()}>
         <Modal.Header closeButton>
-          <Modal.Title>Sửa GVCM</Modal.Title>
+          <Modal.Title>Thêm GVCM</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormGroup> {/* Tên */}
@@ -58,7 +54,6 @@ class ModalEdit extends Component {
               id="name"
               type="text"
               label="Text"
-              value={name}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -68,7 +63,6 @@ class ModalEdit extends Component {
               id="code"
               type="text"
               label="Text"
-              value={code}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -78,7 +72,6 @@ class ModalEdit extends Component {
               id="topica_email"
               type="text"
               label="Text"
-              value={topica_email}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -88,7 +81,6 @@ class ModalEdit extends Component {
               id="personal_email"
               type="text"
               label="Text"
-              value={personal_email}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -98,7 +90,6 @@ class ModalEdit extends Component {
               id="status"
               type="text"
               label="Text"
-              value={status}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -108,7 +99,6 @@ class ModalEdit extends Component {
               id="location"
               type="text"
               label="Text"
-              value={location}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -118,7 +108,6 @@ class ModalEdit extends Component {
               id="account"
               type="text"
               label="Text"
-              value={account}
               onChange={(event) => { this.onChange(event);}}
             />
           </FormGroup>
@@ -128,7 +117,6 @@ class ModalEdit extends Component {
               id="date_of_birth"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
-              value={new Date(date_of_birth)}
               onChange={(event) => { this.onChangeDate(event, 'date_of_birth');}}
             />
           </FormGroup>
@@ -138,7 +126,6 @@ class ModalEdit extends Component {
               id="note"
               componentClass="textarea" 
               placeholder="Ghi chú" 
-              value={note}
               onChange={(event) => { this.onChange(event)}}
             />
           </FormGroup>
@@ -158,8 +145,8 @@ class ModalEdit extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle="primary">Lưu lại</Button>
-          <Button onClick={() => this.clickClose()}>Hủy</Button>
+          <Button bsStyle="success">Thêm</Button>
+          <Button onClick={() => this.clickClose()}>Đóng</Button>
         </Modal.Footer>
       </Modal>
     );
@@ -178,4 +165,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ModalEdit);
+)(ModalAdd);

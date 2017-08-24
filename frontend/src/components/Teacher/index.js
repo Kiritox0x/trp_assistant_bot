@@ -9,10 +9,11 @@ import Datatable from 'react-bs-datatable';
 
 import store from '../../store';
 
-import ModalDelete from './ModalDelete';
+import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
+import ModalDelete from './ModalDelete';
 import { 
-  toggleModalEdit, toggleModalDelete, select 
+  toggleModal, select 
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
@@ -47,33 +48,47 @@ class Teacher extends Component {
     };
   }
 
+  clickAdd() {
+    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_TEACHER);
+  }
+
   clickEdit(index) {
     // alert('clicked');
     this.props.select(this.state.body[index], actionsType.SELECT_TEACHER);
-    setTimeout(() => {this.props.toggleModalEdit(true, actionsType.TOGGLE_MODAL_EDIT_TEACHER);}, 1);
+    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_TEACHER);}, 1);
   }
 
   clickDelete(index) {
     this.props.select(this.state.body[index], actionsType.SELECT_TEACHER);
-    setTimeout(() => {this.props.toggleModalDelete(true, actionsType.TOGGLE_MODAL_DELETE_TEACHER);}, 1);
+    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_TEACHER);}, 1);
   }
 
-  search(event) {
-    const keyWord = event.target.value;
-    if (keyWord.length === 0) {
-      return this.setState({
-        filtered: this.state.body
+  search = (event) => {
+    let { timeoutSearch } = this.state;
+    if (timeoutSearch) {
+      clearTimeout(timeoutSearch);
+      timeoutSearch = setTimeout(() => {
+        const keyWord = event.target.value;
+        if (keyWord.length === 0) {
+          return this.setState({
+            filtered: this.state.body
+          });
+        }
+        this.setState({
+          filtered: this.state.body.filter((teacher) => {
+            // console.log(Object.values(teacher));
+            return Object.values(teacher).join('//').indexOf(keyWord) > -1;
+          })
+        })
+      }, 500);
+      this.setState({
+        timeoutSearch
       });
     }
-    this.setState({
-      filtered: this.state.body.filter((teacher) => {
-        // console.log(Object.values(teacher));
-        return Object.values(teacher).join('//').indexOf(keyWord) > -1;
-      })
-    })
   }
 
   componentDidMount() {
+    document.title = "Teacher";
     getList(API.TEACHERS)
     .then((data) => {
       console.log(data);
@@ -100,10 +115,14 @@ class Teacher extends Component {
   render() {  
     const body = [...this.state.filtered];
     return (
-      <div className="classroom">
-        <ModalDelete />
+      <div className="main-content">
+        <h2 className="text-center">Quản lý GVCM</h2>
+        <ModalAdd />
         <ModalEdit />
-        <Button bsStyle="success"><Glyphicon glyph="plus" /> Thêm GVCM mới</Button>
+        <ModalDelete />
+        <Button bsStyle="success" onClick={() => this.clickAdd()}>
+          <Glyphicon glyph="plus" /> Thêm GVCM mới
+        </Button>
         <br /><br />
         <FormGroup>
           
@@ -135,9 +154,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModalEdit,
-  select,
-  toggleModalDelete
+  toggleModal,
+  select
 };
 
 export default connect(
