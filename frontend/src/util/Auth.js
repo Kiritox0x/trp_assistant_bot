@@ -26,7 +26,7 @@ export const login = ({username, password}) => {
 
 export const syncIsLogined = () => {
   const { token, isLogined } = store.getState().token;
-  if (token === null) return false;
+  if (!token) return false;
   if (isLogined) return true;
   const res = syncRequest(
     'POST', URL + CHECKTOKEN, {

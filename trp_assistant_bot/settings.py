@@ -58,7 +58,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 if DEBUG == True:
-    MIDDLEWARE = ['view_loader.middleware.dev_cors_middleware',]
+    MIDDLEWARE_CLASSES.append('view_loader.middleware.DevCorsMiddleware')
 
 ROOT_URLCONF = 'trp_assistant_bot.urls'
 
