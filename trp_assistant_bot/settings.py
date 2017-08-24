@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
 
 
 # Quick-start development settings - unsuitable for production
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'open_course.apps.OpenCourseConfig',
     'database_loader.apps.DatabaseLoaderConfig',
+    'view_loader.apps.ViewLoaderConfig',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -54,6 +56,9 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG == True:
+    MIDDLEWARE = ['view_loader.middleware.dev_cors_middleware',]
 
 ROOT_URLCONF = 'trp_assistant_bot.urls'
 
@@ -141,6 +146,11 @@ EMAIL_PORT = 587
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 #Done email settings
+
+#Statics file for react
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
+]
 
 #Basic authen classes
 REST_FRAMEWORK = {
