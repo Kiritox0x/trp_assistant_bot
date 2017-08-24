@@ -64,11 +64,15 @@ class Teacher extends Component {
   }
 
   search = (event) => {
-    let { timeoutSearch } = this.state;
+    const { timeoutSearch } = this.state;
+    const value = event.target.value;
+    console.log(timeoutSearch);
     if (timeoutSearch) {
       clearTimeout(timeoutSearch);
-      timeoutSearch = setTimeout(() => {
-        const keyWord = event.target.value;
+    }
+    this.setState({
+      timeoutSearch: setTimeout(() => {
+        const keyWord = value;
         if (keyWord.length === 0) {
           return this.setState({
             filtered: this.state.body
@@ -80,11 +84,8 @@ class Teacher extends Component {
             return Object.values(teacher).join('//').indexOf(keyWord) > -1;
           })
         })
-      }, 500);
-      this.setState({
-        timeoutSearch
-      });
-    }
+      }, 500)
+    });
   }
 
   componentDidMount() {

@@ -99,26 +99,12 @@ class Assistant extends Component {
             return Object.values(assistant).join('//').indexOf(keyWord) > -1;
           })
         })
-      }, 1500)
+      }, 500)
     });
   }
 
   componentDidMount() {
     document.title = "Assistant";
-    let index = 0;
-    this.setState({
-      // body,
-      filtered: this.state.body.map((assistant) => {
-        return {
-          ...assistant,
-          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
-          <span className="glyphicon glyphicon-pencil"></span></Button>,
-          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++)}>
-          <span className="glyphicon glyphicon-trash"></span></Button>
-        }
-      })
-    });
-    return;
     getList(API.ASSISTANTS)
     .then((data) => {
       console.log(data);

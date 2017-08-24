@@ -149,7 +149,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 #Statics file for react
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
+    os.path.join(REACT_APP_DIR, 'build', 'static'),
 ]
 
 #Basic authen classes

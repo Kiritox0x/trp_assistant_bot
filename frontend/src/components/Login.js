@@ -7,7 +7,7 @@ import {
 import { withRouter } from 'react-router-dom';
 
 import * as Auth from '../util/Auth';
-
+import Logo from '../images/logo.png';
 
 
 class Login extends Component {
@@ -53,6 +53,9 @@ class Login extends Component {
     return (
       <Grid>
         <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={8} xsOffset={2}>
+          <h1 className="text-center">
+            <img className="logo" src={Logo} alt="logo-uni" />
+          </h1>
           <Form horizontal>
             <FormGroup controlId="username">
               <ControlLabel>Email</ControlLabel>
