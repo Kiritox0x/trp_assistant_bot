@@ -5,7 +5,7 @@ import {
   FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 
-import { toggleModalDelete } from '../../actions';
+import { toggleModal } from '../../actions';
 import * as actionsType from '../../actions/types';
 class ModalDelete extends Component {
 
@@ -14,11 +14,15 @@ class ModalDelete extends Component {
     this.state = {};
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps = () => {
     this.setState(this.props.classroom.selected);
   }
 
-  render() {
+  clickClose = () => {
+    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM);
+  }
+
+  render = () => {
     const {
       id, school, subject, subject_code, 
       class_name, class_subject, estimated_students,
@@ -26,7 +30,7 @@ class ModalDelete extends Component {
       teacher, assistant, change_note, supporter
     } = this.state;
     return (
-      <Modal show={this.props.classroom.showModalDelete} onHide={() => this.props.toggleModalDelete(false, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM)}>
+      <Modal show={this.props.classroom.showModalDelete} onHide={() => this.clickClose()}>
         <Modal.Header closeButton>
           <Modal.Title>Xóa lớp</Modal.Title>
         </Modal.Header>
@@ -35,7 +39,7 @@ class ModalDelete extends Component {
         </Modal.Body>
         <Modal.Footer>
         <Button bsStyle="primary">Đồng ý</Button>
-        <Button onClick={() => this.props.toggleModalDelete(false, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM)}>Hủy</Button>
+        <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>
     );
@@ -48,7 +52,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModalDelete,
+  toggleModal,
 };
 
 export default connect(

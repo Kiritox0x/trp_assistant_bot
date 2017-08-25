@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 import Datetime from 'react-datetime';
 
-import { toggleModalEdit } from '../../actions';
+import { toggleModal } from '../../actions';
 import * as actionsType from '../../actions/types';
 class ModalEdit extends Component {
 
@@ -30,11 +30,15 @@ class ModalEdit extends Component {
     });
   }
 
-  componentWillReceiveProps() {
-    this.setState(this.props.teacher.selected);
+  componentWillReceiveProps = () => {
+    this.setState(this.props.assistant.selected);
   }
 
-  render() {
+  clickClose = () => {
+    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_ASSISTANT);
+  }
+
+  render = () => {
     const { 
       id, name, code,
       topica_email, personal_email, phone_number,
@@ -43,7 +47,7 @@ class ModalEdit extends Component {
       dateFormat, timeFormat
     } = this.state;
     return (
-      <Modal show={this.props.teacher.showModal} onHide={() => this.props.toggleModalEdit(false, actionsType.TOGGLE_MODAL_EDIT_TEACHER)}>
+      <Modal show={this.props.assistant.showModalEdit} onHide={() => this.clickClose()}>
         <Modal.Header closeButton>
           <Modal.Title>Sửa GVHD</Modal.Title>
         </Modal.Header>
@@ -155,20 +159,19 @@ class ModalEdit extends Component {
         </Modal.Body>
         <Modal.Footer>
           <Button bsStyle="primary">Lưu lại</Button>
-          <Button onClick={() => this.props.toggleModalEdit(false, actionsType.TOGGLE_MODAL_EDIT_TEACHER)}>Close</Button>
+          <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>
     );
   }
 }
 
-
 const mapStateToProps = (state, ownProps) => ({
-  teacher: state.teacher,
+  assistant: state.assistant,
 });
 
 const mapDispatchToProps = {
-  toggleModalEdit,
+  toggleModal,
 };
 
 export default connect(
