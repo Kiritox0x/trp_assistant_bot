@@ -14,7 +14,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fetching: true
+      fetching: false
     }
   }
 

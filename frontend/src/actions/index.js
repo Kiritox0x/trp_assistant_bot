@@ -12,7 +12,7 @@ export const unsetToken = () => {
   return {
     type: actionType.SET_TOKEN,
     data: {
-      token: null,
+      token: '',
       isLogined: false
     }
   }
