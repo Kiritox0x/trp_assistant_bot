@@ -24,24 +24,12 @@ import * as API from '../../config/Api';
 const header = [
   { title: 'Sửa', prop: 'edit', sortable: false },
   { title: 'Xóa', prop: 'delete', sortable: false },
-  { title: 'Trường', prop: 'school', sortable: true },
-  { title: 'Tên môn', prop: 'subject', sortable: true },
-  { title: 'Mã môn', prop: 'subject_code', sortable: true },
-  { title: 'Tên lớp', prop: 'class_name', sortable: true },
-  { title: 'Lớp môn', prop: 'class_subject', sortable: true },
-  { title: 'SL học viên dự kiến', prop: 'estimated_students', sortable: true },
-  { title: 'Ngày bắt đầu KH(D)', prop: 'start_date', sortable: true },
-  { title: 'Ngày kết thúc online(E)', prop: 'finish_date', sortable: true },
-  { title: 'Ngày thi(F)', prop: 'examination_date', sortable: true },
-  { title: 'GVCM', prop: 'teacher', sortable: true },
-  { title: 'GVHD', prop: 'assistant', sortable: true },
-  { title: 'VHTT thay đổi ', prop: 'change_note', sortable: true },
-  { title: 'Trợ giảng', prop: 'supporter', sortable: true },
+  { title: 'Tên', prop: 'name', sortable: true },
+  { title: 'Mã', prop: 'code', sortable: true },
+  { title: 'Email', prop: 'email', sortable: true },
 ];
 
-
-
-class Classroom extends Component {
+class Supporter extends Component {
 
   static isPrivate = true; 
 
@@ -55,18 +43,18 @@ class Classroom extends Component {
   }
 
   clickAdd() {
-    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
+    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_SUPPORTER);
   }
 
-  clickEdit = (index) => {
+  clickEdit(index) {
     // alert('clicked');
-    this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_CLASSROOM);}, 1);
+    this.props.select(this.state.body[index], actionsType.SELECT_SUPPORTER);
+    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_SUPPORTER);}, 1);
   }
 
-  clickDelete = (index) => {
-    this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM);}, 1);
+  clickDelete(index) {
+    this.props.select(this.state.body[index], actionsType.SELECT_SUPPORTER);
+    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_SUPPORTER);}, 1);
   }
 
   search = (event) => {
@@ -77,20 +65,20 @@ class Classroom extends Component {
       });
     }
     this.setState({
-      filtered: this.state.body.filter((classroom) => {
-        return Object.values(classroom).join('//').toLowerCase().indexOf(keyWord) > -1;
+      filtered: this.state.body.filter((supporter) => {
+        return Object.values(supporter).join('//').toLowerCase().indexOf(keyWord) > -1;
       })
     });
   }
 
-  componentDidMount = () => {
-    document.title = "Classroom";
-    getList(API.CLASSROOMS)
+  componentDidMount() {
+    document.title = "Supporter";
+    getList(API.SUPPORTERS)
     .then((data) => {
       let index = 0;
-      const body = data.map((teacher) => {
+      const body = data.map((supporter) => {
         return {
-          ...teacher,
+          ...supporter,
           edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
           <span className="glyphicon glyphicon-pencil"></span>
         </Button>,
@@ -108,21 +96,22 @@ class Classroom extends Component {
     
   }
 
-  render = () => {  
+  render() {  
     const body = [...this.state.filtered];
     const { fetching } = this.state;
     return (
       fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
-        <h2 className="text-center">Quản lý lớp học</h2>
+        <h2 className="text-center">Quản lý GVCM</h2>
         <ModalAdd />
         <ModalEdit />
         <ModalDelete />
         <Button bsStyle="success" onClick={() => this.clickAdd()}>
-          <Glyphicon glyph="plus" /> Thêm lớp học mới
+          <Glyphicon glyph="plus" /> Thêm trợ giảng mới
         </Button>
         <br /><br />
-        <FormGroup>    
+        <FormGroup>
+          
           <ControlLabel>Tìm kiếm</ControlLabel>
           <FormControl 
             id="txtSearch"
@@ -143,10 +132,11 @@ class Classroom extends Component {
       </div>
     );
   }
+
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  classroom: state.classroom,
+  teacher: state.teacher,
 });
 
 const mapDispatchToProps = {
@@ -157,4 +147,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Classroom);
+)(Supporter);

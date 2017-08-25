@@ -1,7 +1,13 @@
 body {
   background: #f2f2f2;
+  min-width: 650px;
 }
 
+.fa-spin {
+  position: absolute;
+  top: calc(50% - 35px);
+  left: calc(50% + 90px - 35px);
+}
 .logo {
   width: 200px;
   height: 200px;
@@ -122,6 +128,43 @@ a:hover {
   width: 179px;
 }
 
+/* CSS FOR DASHBOARD */
+.panel-body {
+  padding: 10px;
+}
+
+.panel-heading .huge {
+  font-size: 34px;
+}
+.panel-success {
+  border-color: #5cb85c;
+}
+
+.panel-success>.panel-heading {
+  background-color: #5cb85c;
+  color: #fff; 
+}
+
+.panel-warning {
+  border-color: #f0ad4e;
+}
+
+.panel-warning>.panel-heading {
+  background-color: #f0ad4e;
+  color: #fff; 
+}
+
+.panel-danger {
+  border-color: #d9534f;
+}
+
+.panel-danger>.panel-heading {
+  background-color: #d9534f;
+  color: #fff; 
+}
+
+
+/* CSS FOR TABLE */
 .btn-huge {
   padding-top: 20px; 
   padding-bottom: 20px; 

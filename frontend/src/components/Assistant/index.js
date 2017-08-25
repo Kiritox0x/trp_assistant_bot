@@ -6,6 +6,7 @@ import {
   ControlLabel, FormControl, Button, Glyphicon,
 } from 'react-bootstrap';
 import Datatable from 'react-bs-datatable';
+import { Icon } from 'react-fa';
 
 import store from '../../store';
 
@@ -43,23 +44,9 @@ class Assistant extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: [
-        {
-          "id": 1,
-          "name": "Phạm Xuân Kiên (HCM)",
-          "code": "GV.20004",
-          "topica_email": "kienpx.gv@topica.edu.vn",
-          "personal_email": "pxkien@gmail.com",
-          "phone_number": "0913729747",
-          "status": "L9-Đang cộng tác",
-          "location": "Hồ Chí Minh",
-          "account": "kienpx.gv",
-          "date_of_birth": "1990-01-01",
-          "note": "Có QĐ",
-          "supporter": ""
-        }
-      ],
-      filtered: []
+      body: [],
+      filtered: [],
+      fetching: true
     };
   }
 
@@ -79,27 +66,16 @@ class Assistant extends Component {
   }
 
   search = (event) => {
-    const { timeoutSearch } = this.state;
-    const value = event.target.value;
-    console.log(timeoutSearch);
-    if (timeoutSearch) {
-      clearTimeout(timeoutSearch);
+    const keyWord = event.target.value.toLowerCase();
+    if (keyWord.length === 0) {
+      return this.setState({
+        filtered: this.state.body
+      });
     }
     this.setState({
-      timeoutSearch: setTimeout(() => {
-        const keyWord = value;
-        if (keyWord.length === 0) {
-          return this.setState({
-            filtered: this.state.body
-          });
-        }
-        this.setState({
-          filtered: this.state.body.filter((assistant) => {
-            // console.log(Object.values(assistant));
-            return Object.values(assistant).join('//').indexOf(keyWord) > -1;
-          })
-        })
-      }, 500)
+      filtered: this.state.body.filter((assistant) => {
+        return Object.values(assistant).join('//').toLowerCase().indexOf(keyWord) > -1;
+      })
     });
   }
 
@@ -107,7 +83,6 @@ class Assistant extends Component {
     document.title = "Assistant";
     getList(API.ASSISTANTS)
     .then((data) => {
-      console.log(data);
       let index = 0;
       const body = data.map((assistant) => {
         return {
@@ -120,7 +95,8 @@ class Assistant extends Component {
       })
       this.setState({
         body,
-        filtered: [...body]
+        filtered: [...body],
+        fetching: false
       });
     })
     .catch(error => console.log(error));
@@ -128,7 +104,9 @@ class Assistant extends Component {
 
   render() {  
     const body = [...this.state.filtered];
+    const { fetching } = this.state;
     return (
+      fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
         <h2 className="text-center">Quản lý GVHD</h2>
         <ModalAdd />
@@ -153,7 +131,7 @@ class Assistant extends Component {
           tableBody={body}
           keyName="userTable"
           tableClass="striped bordered hover responsive"
-          rowsPerPage={20}
+          rowsPerPage={10}
           rowsPerPageOption={[5, 10, 15, 20, 50, 100]}
         />
       </div>

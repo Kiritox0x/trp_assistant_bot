@@ -21,7 +21,6 @@ class Header extends Component {
     $(document).ready(() => {
       $('ul.nav.navbar-nav li').on('click', (e) => {
         $('li.active').removeClass('active');
-        console.log(e.target);
         $(e.target).parent().addClass('active');
       });
     });
@@ -29,31 +28,6 @@ class Header extends Component {
 
   render = () => {
     return (
-      // <Navbar classNameName="navbar-inverse navbar-fixed-left">
-      //   <Navbar.Header>
-      //     <Navbar.Brand>
-      //       <a>Logo</a>
-      //     </Navbar.Brand>
-      //     <Navbar.Toggle />
-      //   </Navbar.Header>
-      //   <Navbar.Collapse>
-      //     <Nav>
-      //       <LinkContainer to="/" exact><NavItem eventKey={2} href="#">Home</NavItem></LinkContainer>
-      //       <LinkContainer to="/classNameroom"><NavItem eventKey={2} href="#">ClassNameroom</NavItem></LinkContainer>
-      //       <LinkContainer to="/teacher"><NavItem eventKey={2} href="#">Teacher</NavItem></LinkContainer>
-      //       <LinkContainer to="/assistant"><NavItem eventKey={2} href="#">Assistant</NavItem></LinkContainer>
-      //     </Nav>
-      //     <Nav pullRight>
-      //       <NavDropdown title="Name" id="basic-nav-dropdown" pullRight>
-      //         <MenuItem divider />
-      //         <MenuItem onClick={() => {
-      //           store.dispatch(unsetToken());
-      //           this.props.history.replace('/');
-      //         }}>Logout</MenuItem>
-      //       </NavDropdown>
-      //     </Nav>
-      //   </Navbar.Collapse>
-      // </Navbar>
       <div className="navbar navbar-inverse navbar-fixed-left">
         <div className="profile">
           <div className="profile-pic">
@@ -70,7 +44,7 @@ class Header extends Component {
               this.props.history.replace('/');
             }}
             >
-            <Glyphicon glyph="log-out" /> Logout</a></li>
+            <Glyphicon glyph="log-out" /> Đăng xuất</a></li>
           <LinkContainer to="/" exact><li><a>Bảng điều khiển</a></li></LinkContainer>
           <li>
             <a>Quản lý</a>
@@ -78,6 +52,7 @@ class Header extends Component {
               <LinkContainer to="/classroom"><li><a>Lớp học</a></li></LinkContainer>
               <LinkContainer to="/teacher"><li><a>GVCM</a></li></LinkContainer>
               <LinkContainer to="/assistant"><li><a>GVHD</a></li></LinkContainer>
+              <LinkContainer to="/supporter"><li><a>Trợ giảng</a></li></LinkContainer>
             </ul>
           </li>
         </ul>

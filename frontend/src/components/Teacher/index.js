@@ -6,6 +6,7 @@ import {
   ControlLabel, FormControl, Button, Glyphicon,
 } from 'react-bootstrap';
 import Datatable from 'react-bs-datatable';
+import { Icon } from 'react-fa';
 
 import store from '../../store';
 
@@ -44,7 +45,8 @@ class Teacher extends Component {
     super(props);
     this.state = {
       body: [],
-      filtered: []
+      filtered: [],
+      fetching: true
     };
   }
 
@@ -64,27 +66,16 @@ class Teacher extends Component {
   }
 
   search = (event) => {
-    const { timeoutSearch } = this.state;
-    const value = event.target.value;
-    console.log(timeoutSearch);
-    if (timeoutSearch) {
-      clearTimeout(timeoutSearch);
+    const keyWord = event.target.value.toLowerCase();
+    if (keyWord.length === 0) {
+      return this.setState({
+        filtered: this.state.body
+      });
     }
     this.setState({
-      timeoutSearch: setTimeout(() => {
-        const keyWord = value;
-        if (keyWord.length === 0) {
-          return this.setState({
-            filtered: this.state.body
-          });
-        }
-        this.setState({
-          filtered: this.state.body.filter((teacher) => {
-            // console.log(Object.values(teacher));
-            return Object.values(teacher).join('//').indexOf(keyWord) > -1;
-          })
-        })
-      }, 500)
+      filtered: this.state.body.filter((teacher) => {
+        return Object.values(teacher).join('//').toLowerCase().indexOf(keyWord) > -1;
+      })
     });
   }
 
@@ -92,7 +83,6 @@ class Teacher extends Component {
     document.title = "Teacher";
     getList(API.TEACHERS)
     .then((data) => {
-      console.log(data);
       let index = 0;
       const body = data.map((teacher) => {
         return {
@@ -106,7 +96,8 @@ class Teacher extends Component {
       })
       this.setState({
         body,
-        filtered: [...body]
+        filtered: [...body],
+        fetching: false
       });
     })
     .catch(error => console.log(error));
@@ -115,7 +106,9 @@ class Teacher extends Component {
 
   render() {  
     const body = [...this.state.filtered];
+    const { fetching } = this.state;
     return (
+      fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
         <h2 className="text-center">Quản lý GVCM</h2>
         <ModalAdd />
@@ -141,7 +134,7 @@ class Teacher extends Component {
           tableBody={body}
           keyName="userTable"
           tableClass="striped bordered hover responsive"
-          rowsPerPage={20}
+          rowsPerPage={10}
           rowsPerPageOption={[5, 10, 15, 20, 50, 100]}
         />
       </div>

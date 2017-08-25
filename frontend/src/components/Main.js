@@ -8,10 +8,11 @@ import request from 'request';
 
 import Route from '../routes/AuthRoute';
 import Header from './Header';
-import Home from './Home';
+import Home from './Home/index';
 import Classroom from './Classroom/index';
 import Teacher from './Teacher/index';
 import Assistant from './Assistant/index';
+import Supporter from './Supporter/index';
 
 export default class Main extends Component {
 
@@ -27,6 +28,7 @@ export default class Main extends Component {
             <Route path='/classroom' component={Classroom}/>
             <Route path='/teacher' component={Teacher}/>
             <Route path='/assistant' component={Assistant}/>
+            <Route path='/supporter' component={Supporter}/>
             <Redirect to="/" />
           </Switch> 
         </Grid>
