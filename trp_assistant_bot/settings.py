@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'open_course.apps.OpenCourseConfig',
     'database_loader.apps.DatabaseLoaderConfig',
     'view_loader.apps.ViewLoaderConfig',
+    'template_editor.apps.TemplateEditorConfig',
 ]
 
 MIDDLEWARE_CLASSES = [

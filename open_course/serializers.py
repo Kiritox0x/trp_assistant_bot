@@ -31,5 +31,5 @@ class UserSerializer(serializers.ModelSerializer):
 
 class SupporterSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = User
+		model = Supporter
 		fields = ('id', 'name', 'account', 'email')		
