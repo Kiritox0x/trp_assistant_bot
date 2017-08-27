@@ -5,4 +5,5 @@ export const TEACHERS = "/teachers/";
 export const ASSISTANTS = "/assistants/";
 export const CLASSROOMS = "/classrooms/";
 export const SUPPORTERS = "/supporters/";
+export const MAILTEMPLATES = "/mailtemplates/";
 

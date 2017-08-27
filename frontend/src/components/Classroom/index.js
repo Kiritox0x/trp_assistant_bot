@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { 
-  Col, Row, Modal, Table, FormGroup,
+  FormGroup,
   ControlLabel, FormControl, Button, Glyphicon,
 } from 'react-bootstrap';
 import Datatable from 'react-bs-datatable';
 import { Icon } from 'react-fa';
-
-import store from '../../store';
 
 import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
@@ -54,18 +52,20 @@ class Classroom extends Component {
     };
   }
 
-  clickAdd() {
+  selectIndex = (index) => {
+    this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
+  };
+  clickAdd = () => {
     this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
   }
 
   clickEdit = (index) => {
-    // alert('clicked');
-    this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
+    this.selectIndex(index);
     setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_CLASSROOM);}, 1);
-  }
+  };
 
   clickDelete = (index) => {
-    this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
+    this.selectIndex(index);
     setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM);}, 1);
   }
 
@@ -81,7 +81,7 @@ class Classroom extends Component {
         return Object.values(classroom).join('//').toLowerCase().indexOf(keyWord) > -1;
       })
     });
-  }
+  };
 
   componentDidMount = () => {
     document.title = "Classroom";
@@ -105,8 +105,7 @@ class Classroom extends Component {
       });
     })
     .catch(error => console.log(error));
-    
-  }
+  };
 
   render = () => {  
     const body = [...this.state.filtered];
@@ -142,7 +141,7 @@ class Classroom extends Component {
         />
       </div>
     );
-  }
+  };
 }
 
 const mapStateToProps = (state, ownProps) => ({

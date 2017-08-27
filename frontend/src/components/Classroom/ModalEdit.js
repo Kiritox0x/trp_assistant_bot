@@ -22,21 +22,21 @@ class ModalEdit extends Component {
     this.setState({
       [event.target.id]: event.target.value
     });
-  }
+  };
 
   onChangeDate = (event, id) => {
     this.setState({
       [id]: event.toDate()
     });
-  }
-
-  componentWillReceiveProps = () => {
-    this.setState(this.props.classroom.selected);
-  }
+  };
 
   clickClose = () => {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_CLASSROOM)
-  }
+  };
+
+  componentWillReceiveProps = () => {
+    this.setState(this.props.classroom.selected);
+  };
 
   render = () => {
     const {

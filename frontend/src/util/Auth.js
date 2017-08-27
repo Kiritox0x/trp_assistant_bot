@@ -17,12 +17,11 @@ export const login = ({username, password}) => {
         isLogined: true
       }));
       axios.defaults.headers.common['Authorization'] = "Token " + response.data.token;
-      console.log('111111111' + axios.defaults.headers.common['Authorization']);
     })
     .catch(function (error) {
       throw error;
     });
-}
+};
 
 
 export const syncIsLogined = () => {
@@ -43,24 +42,5 @@ export const syncIsLogined = () => {
     return true;
   }
   return false;
-  // return checkIsLogined(token);
-}
-
-const checkIsLogined = async (token) => {
-  const res = await new Promise((resolve, reject) => {
-    axios
-      .post(URL + CHECKTOKEN, { token })
-      .then((response) => {
-        store.dispatch(setToken({
-          token: response.data.token,
-          isLogined: true
-        }));
-        resolve(true);
-      })
-      .catch((error) => {
-        resolve(false);
-      });
-  });
-  return res;
-}
+};
 

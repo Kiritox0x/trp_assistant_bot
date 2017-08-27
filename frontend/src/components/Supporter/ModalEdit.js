@@ -30,15 +30,15 @@ class ModalEdit extends Component {
     });
   }
 
-  componentWillReceiveProps() {
-    this.setState(this.props.supporter.selected);
-  }
-
   clickClose() {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_SUPPORTER);
   }
 
-  render() {
+  componentWillReceiveProps = () => {
+    this.setState(this.props.supporter.selected);
+  }
+
+  render = () => {
     const { 
       id, name, account, email
     } = this.state;

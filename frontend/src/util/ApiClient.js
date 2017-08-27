@@ -13,4 +13,4 @@ export const getList = (ENDPOINTS) => {
     .catch((error) => {
       return error;
     });
-}
+};

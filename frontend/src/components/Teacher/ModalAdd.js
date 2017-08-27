@@ -22,19 +22,19 @@ class ModalAdd extends Component {
     this.setState({
       [event.target.id]: event.target.value
     });
-  }
+  };
 
   onChangeDate = (event, id) => {
     this.setState({
       [id]: event.toDate()
     });
-  }
+  };
 
-  clickClose() {
+  clickClose = () => {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_ADD_TEACHER);
-  }
+  };
 
-  render() {
+  render = () => {
     const { 
       id, name, code,
       topica_email, personal_email, phone_number,
@@ -151,8 +151,7 @@ class ModalAdd extends Component {
       </Modal>
     );
   }
-}
-
+};
 
 const mapStateToProps = (state, ownProps) => ({
   teacher: state.teacher,

@@ -11,9 +11,6 @@ const PUBLIC_ROOT = '/login';
 const AuthRoute = ({component, ...props}) => {
   const { isPrivate } = component;
   let isLogined = Auth.syncIsLogined();
-  // while (typeof isLogined !== 'boolean') {
-  //   console.log('in while loop');
-  // }
   if (typeof isLogined === 'boolean' && isLogined) {
     //User is Authenticated
     if (isPrivate === true || ! isPrivate) {

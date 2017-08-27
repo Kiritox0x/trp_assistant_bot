@@ -2,12 +2,6 @@
 import * as actionType from '../actions/types';
 import InitialState from './InitialSate';
 
-// const assistantInitialState = {
-//   allAssistants: [],
-//   selected: {},
-//   showModalEdit: false,
-//   showModalDelete: false
-// };
 const assistantInitialState = new InitialState();
 export default (state = assistantInitialState, action) => {
   switch(action.type) {

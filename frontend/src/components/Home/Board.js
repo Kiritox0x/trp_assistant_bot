@@ -23,5 +23,5 @@ export default class Board extends Component {
         </Panel>
       </Col>
     );
-  }
+  };
 }

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Modal, Button,
-  FormGroup, ControlLabel, FormControl
+  Modal, Button
 } from 'react-bootstrap';
 
 import { toggleModal } from '../../actions';
@@ -14,13 +13,13 @@ class ModalDelete extends Component {
     this.state = {};
   }
 
-  componentWillReceiveProps = () => {
-    this.setState(this.props.assistant.selected);
-  }
-
   clickClose = () => {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_DELETE_ASSISTANT);
-  }
+  };
+
+  componentWillReceiveProps = () => {
+    this.setState(this.props.assistant.selected);
+  };
 
   render = () => {
     const {
@@ -43,7 +42,7 @@ class ModalDelete extends Component {
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 }
 
 

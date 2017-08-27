@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Modal, Button,
-  FormGroup, ControlLabel, FormControl
+  Modal, Button
 } from 'react-bootstrap';
 
 import { toggleModal } from '../../actions';
@@ -14,14 +13,15 @@ class ModalDelete extends Component {
     this.state = {};
   }
 
-  componentWillReceiveProps() {
-    this.setState(this.props.teacher.selected);
-  }
-
-  clickClose() {
+  clickClose = () => {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_DELETE_TEACHER)
-  }
-  render() {
+  };
+
+  componentWillReceiveProps = () => {
+    this.setState(this.props.teacher.selected);
+  };
+
+  render = () => {
     const {
       id, name, code,
       topica_email, personal_email, phone_number,
@@ -42,7 +42,7 @@ class ModalDelete extends Component {
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 }
 
 

@@ -22,21 +22,21 @@ class ModalEdit extends Component {
     this.setState({
       [event.target.id]: event.target.value
     });
-  }
+  };
 
   onChangeDate = (event, id) => {
     this.setState({
       [id]: event.toDate()
     });
-  }
-
-  componentWillReceiveProps = () => {
-    this.setState(this.props.assistant.selected);
-  }
+  };
 
   clickClose = () => {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_ASSISTANT);
-  }
+  };
+
+  componentWillReceiveProps = () => {
+    this.setState(this.props.assistant.selected);
+  };
 
   render = () => {
     const { 
@@ -163,7 +163,7 @@ class ModalEdit extends Component {
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 }
 
 const mapStateToProps = (state, ownProps) => ({

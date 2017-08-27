@@ -18,11 +18,11 @@ export default class Home extends Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     document.title = "Bảng điều khiển";
-  }
+  };
 
-  render() {
+  render = () => {
     const { fetching } = this.state;
     return (
       fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
@@ -35,28 +35,28 @@ export default class Home extends Component {
         </Row>
         <Row>
           <Board 
-            style="primary" 
+            style={"primary"}
             icon="graduation-cap" 
             number={1000} 
             text="Lớp học" 
             link="/classroom"
           />
           <Board 
-            style="success" 
+            style={"success"} 
             icon="user-circle" 
             number={1000} 
             text="GV chuyên môn" 
             link="/teacher"
           />
           <Board 
-            style="warning" 
+            style={"warning"} 
             icon="user-o" 
             number={1000} 
             text="GV hướng dẫn" 
             link="/assistant"
           />
           <Board 
-            style="danger" 
+            style={"danger"}
             icon="support" 
             number={1000} 
             text="Trợ giảng" 
@@ -65,6 +65,5 @@ export default class Home extends Component {
         </Row>
       </div>
     );
-  }
-
+  };
 }

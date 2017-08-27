@@ -50,20 +50,23 @@ class Teacher extends Component {
     };
   }
 
-  clickAdd() {
+  selectIndex = (index) => {
+    this.props.select(this.state.body[index], actionsType.SELECT_TEACHER);
+  };
+
+  clickAdd = () => {
     this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_TEACHER);
-  }
+  };
 
-  clickEdit(index) {
-    // alert('clicked');
-    this.props.select(this.state.body[index], actionsType.SELECT_TEACHER);
+  clickEdit = (index) => {
+    this.selectIndex(index);
     setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_TEACHER);}, 1);
-  }
+  };
 
-  clickDelete(index) {
-    this.props.select(this.state.body[index], actionsType.SELECT_TEACHER);
+  clickDelete = (index) => {
+    this.selectIndex(index);
     setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_TEACHER);}, 1);
-  }
+  };
 
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
@@ -77,9 +80,9 @@ class Teacher extends Component {
         return Object.values(teacher).join('//').toLowerCase().indexOf(keyWord) > -1;
       })
     });
-  }
+  };
 
-  componentDidMount() {
+  componentDidMount = () => {
     document.title = "Teacher";
     getList(API.TEACHERS)
     .then((data) => {
@@ -100,11 +103,10 @@ class Teacher extends Component {
         fetching: false
       });
     })
-    .catch(error => console.log(error));
-    
-  }
+    .catch(error => console.log(error));   
+  };
 
-  render() {  
+  render = () => {  
     const body = [...this.state.filtered];
     const { fetching } = this.state;
     return (
@@ -139,8 +141,7 @@ class Teacher extends Component {
         />
       </div>
     );
-  }
-
+  };
 }
 
 const mapStateToProps = (state, ownProps) => ({

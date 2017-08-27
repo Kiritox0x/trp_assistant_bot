@@ -25,7 +25,7 @@ const header = [
   { title: 'Sửa', prop: 'edit', sortable: false },
   { title: 'Xóa', prop: 'delete', sortable: false },
   { title: 'Tên', prop: 'name', sortable: true },
-  { title: 'Mã', prop: 'code', sortable: true },
+  { title: 'Tài khoản', prop: 'account', sortable: true },
   { title: 'Email', prop: 'email', sortable: true },
 ];
 
@@ -42,18 +42,21 @@ class Supporter extends Component {
     };
   }
 
-  clickAdd() {
+  selectIndex = (index) => {
+    this.props.select(this.state.body[index], actionsType.SELECT_SUPPORTER);
+  };
+
+  clickAdd = () => {
     this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_SUPPORTER);
   }
 
-  clickEdit(index) {
-    // alert('clicked');
-    this.props.select(this.state.body[index], actionsType.SELECT_SUPPORTER);
+  clickEdit = (index) => {
+    this.selectIndex(index);
     setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_SUPPORTER);}, 1);
   }
 
-  clickDelete(index) {
-    this.props.select(this.state.body[index], actionsType.SELECT_SUPPORTER);
+  clickDelete = (index) => {
+    this.selectIndex(index);
     setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_SUPPORTER);}, 1);
   }
 
@@ -71,7 +74,7 @@ class Supporter extends Component {
     });
   }
 
-  componentDidMount() {
+  componentDidMount= () => {
     document.title = "Supporter";
     getList(API.SUPPORTERS)
     .then((data) => {
@@ -96,39 +99,41 @@ class Supporter extends Component {
     
   }
 
-  render() {  
+  render = () => {  
     const body = [...this.state.filtered];
     const { fetching } = this.state;
     return (
       fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
-        <h2 className="text-center">Quản lý GVCM</h2>
-        <ModalAdd />
-        <ModalEdit />
-        <ModalDelete />
-        <Button bsStyle="success" onClick={() => this.clickAdd()}>
-          <Glyphicon glyph="plus" /> Thêm trợ giảng mới
-        </Button>
-        <br /><br />
-        <FormGroup>
-          
-          <ControlLabel>Tìm kiếm</ControlLabel>
-          <FormControl 
-            id="txtSearch"
-            type="text"
-            label="Text"
-            placeholder="Từ khóa"
-            onChange={(event) => { this.search(event);}}
+        <Col md={10} mdOffset={1}>
+          <h2 className="text-center">Quản lý trợ giảng</h2>
+          <ModalAdd />
+          <ModalEdit />
+          <ModalDelete />
+          <Button bsStyle="success" onClick={() => this.clickAdd()}>
+            <Glyphicon glyph="plus" /> Thêm trợ giảng mới
+          </Button>
+          <br /><br />
+          <FormGroup>
+            
+            <ControlLabel>Tìm kiếm</ControlLabel>
+            <FormControl 
+              id="txtSearch"
+              type="text"
+              label="Text"
+              placeholder="Từ khóa"
+              onChange={(event) => { this.search(event);}}
+            />
+          </FormGroup>
+          <Datatable
+            tableHeader={header}
+            tableBody={body}
+            keyName="userTable"
+            tableClass="striped bordered hover responsive"
+            rowsPerPage={10}
+            rowsPerPageOption={[5, 10, 15, 20, 50, 100]}
           />
-        </FormGroup>
-        <Datatable
-          tableHeader={header}
-          tableBody={body}
-          keyName="userTable"
-          tableClass="striped bordered hover responsive"
-          rowsPerPage={10}
-          rowsPerPageOption={[5, 10, 15, 20, 50, 100]}
-        />
+        </Col>
       </div>
     );
   }

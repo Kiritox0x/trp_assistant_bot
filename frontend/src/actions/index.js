@@ -6,7 +6,7 @@ export const setToken = (data) => {
     type: actionType.SET_TOKEN,
     data
   }
-}
+};
 
 export const unsetToken = () => {
   return {
@@ -16,21 +16,21 @@ export const unsetToken = () => {
       isLogined: false
     }
   }
-}
+};
 
 export const select = (classroom, type) => {
   return {
     type,
     data: classroom
   }
-}
+};
 
 export const toggleModal = (toggle, type) => {
   return {
     type,
     data: toggle
   }
-}
+};
 
 
 

@@ -6,6 +6,7 @@ import classroom from './classroomReducer';
 import teacher from './teacherReducer';
 import assistant from './assistantReducer';
 import supporter from './supporterReducer';
+import mailtemplate from './mailtemplateReducer';
 
 
 const rootReducer = combineReducers({
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   classroom,
   teacher,
   assistant,
-  supporter
+  supporter,
+  mailtemplate
 })
 
 export default rootReducer;

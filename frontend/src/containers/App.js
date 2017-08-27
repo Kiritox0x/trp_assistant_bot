@@ -9,14 +9,14 @@ import '../css/react-datetime.css';
 
 class App extends Component {
 
-  render() {
+  render = () => {
     return (
       <div>
         <Route component={ Login } path="/login" />
         <Route component={ Main } path="/" />
       </div>
     );
-  }
+  };
 }
 
 export default App;

@@ -203,12 +203,8 @@ a:hover {
 }
 
 .tbody-default .tbody-td-default {
-  /* min-width: 50px; */
-  /* max-width: 100px; */
   word-break: break-all;
   word-wrap: break-word;
-  /* text-overflow: ellipsis; */
-  /* overflow: hidden; */
 }
 
 .modal-body {
@@ -219,4 +215,14 @@ a:hover {
   max-width: 100%;
   min-height: 100px;
   max-height: 200px;
+}
+
+/* CSS FOR MODAL PREVIEW */
+.modal-body-preview {
+  padding: 0;
+}
+
+.iframe-preview {
+  width: 100%;
+  border: 0;
 }

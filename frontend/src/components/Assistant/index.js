@@ -50,20 +50,23 @@ class Assistant extends Component {
     };
   }
 
-  clickAdd() {
+  selectIndex = (index) => {
+    this.props.select(this.state.body[index], actionsType.SELECT_ASSISTANT);
+  };
+
+  clickAdd = () => {
     this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_ASSISTANT);
-  }
+  };
 
-  clickEdit(index) {
-    // alert('clicked');
-    this.props.select(this.state.body[index], actionsType.SELECT_ASSISTANT);
+  clickEdit = (index) => {
+    this.selectIndex(index);
     setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_ASSISTANT);}, 1);
-  }
+  };
 
-  clickDelete(index) {
-    this.props.select(this.state.body[index], actionsType.SELECT_ASSISTANT);
+  clickDelete = (index) => {
+    this.selectIndex(index);
     setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_ASSISTANT);}, 1);
-  }
+  };
 
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
@@ -77,9 +80,9 @@ class Assistant extends Component {
         return Object.values(assistant).join('//').toLowerCase().indexOf(keyWord) > -1;
       })
     });
-  }
+  };
 
-  componentDidMount() {
+  componentDidMount = () => {
     document.title = "Assistant";
     getList(API.ASSISTANTS)
     .then((data) => {
@@ -100,9 +103,9 @@ class Assistant extends Component {
       });
     })
     .catch(error => console.log(error));
-  }
+  };
 
-  render() {  
+  render = () => {  
     const body = [...this.state.filtered];
     const { fetching } = this.state;
     return (
@@ -136,8 +139,7 @@ class Assistant extends Component {
         />
       </div>
     );
-  }
-
+  };
 }
 
 const mapStateToProps = (state, ownProps) => ({

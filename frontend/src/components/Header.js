@@ -17,14 +17,14 @@ import Logo from '../images/logo.png';
 
 class Header extends Component {
 
-  componentDidMount() {
+  componentDidMount = () => {
     $(document).ready(() => {
       $('ul.nav.navbar-nav li').on('click', (e) => {
         $('li.active').removeClass('active');
         $(e.target).parent().addClass('active');
       });
     });
-  }
+  };
 
   render = () => {
     return (
@@ -46,7 +46,7 @@ class Header extends Component {
             >
             <Glyphicon glyph="log-out" /> Đăng xuất</a></li>
           <LinkContainer to="/" exact><li><a>Bảng điều khiển</a></li></LinkContainer>
-          <li>
+          <LinkContainer to="/manage"><li>
             <a>Quản lý</a>
             <ul>
               <LinkContainer to="/classroom"><li><a>Lớp học</a></li></LinkContainer>
@@ -54,12 +54,13 @@ class Header extends Component {
               <LinkContainer to="/assistant"><li><a>GVHD</a></li></LinkContainer>
               <LinkContainer to="/supporter"><li><a>Trợ giảng</a></li></LinkContainer>
             </ul>
-          </li>
+          </li></LinkContainer>
+          <LinkContainer to="/mailtemplate" exact><li><a>Mẫu mail</a></li></LinkContainer>
         </ul>
 
       </div>
     );
-  }
+  };
 }
 
 export default withRouter(Header);

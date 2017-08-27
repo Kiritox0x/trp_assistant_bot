@@ -22,23 +22,23 @@ class ModalEdit extends Component {
     this.setState({
       [event.target.id]: event.target.value
     });
-  }
+  };
 
   onChangeDate = (event, id) => {
     this.setState({
       [id]: event.toDate()
     });
-  }
+  };
 
-  componentWillReceiveProps() {
-    this.setState(this.props.teacher.selected);
-  }
-
-  clickClose() {
+  clickClose = () => {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_TEACHER);
-  }
+  };
+  
+  componentWillReceiveProps = () => {
+    this.setState(this.props.teacher.selected);
+  };
 
-  render() {
+  render = () => {
     const { 
       id, name, code,
       topica_email, personal_email, phone_number,
@@ -163,9 +163,8 @@ class ModalEdit extends Component {
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 }
-
 
 const mapStateToProps = (state, ownProps) => ({
   teacher: state.teacher,

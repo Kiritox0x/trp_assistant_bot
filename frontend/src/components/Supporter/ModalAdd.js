@@ -30,11 +30,11 @@ class ModalAdd extends Component {
     });
   }
 
-  clickClose() {
+  clickClose = () => {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_ADD_SUPPORTER);
   }
 
-  render() {
+  render = () => {
     const { 
       id, name, account, email
     } = this.state;

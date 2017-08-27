@@ -7,9 +7,6 @@ import store from './store';
 import './index.css';
 import App from './containers/App';
 
-import axios from 'axios';
-// axios.defaults.headers.common['Content-Type'] = 'application/json';
-
 ReactDOM.render((
   <Provider store={store}>
     <Router>

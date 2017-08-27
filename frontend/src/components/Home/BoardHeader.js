@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Col, Row, Glyphicon
+  Col, Row
 } from 'react-bootstrap';
 import { Icon } from 'react-fa';
 
@@ -16,5 +16,5 @@ export default class BoardHeader extends Component {
         </Col>
       </Row>
     );
-  }
+  };
 }

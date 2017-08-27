@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Modal, Button,
-  FormGroup, ControlLabel, FormControl
+  Modal, Button
 } from 'react-bootstrap';
 
 import { toggleModal } from '../../actions';
@@ -14,14 +13,15 @@ class ModalDelete extends Component {
     this.state = {};
   }
 
-  componentWillReceiveProps() {
-    this.setState(this.props.supporter.selected);
-  }
-
-  clickClose() {
+  clickClose = () => {
     this.props.toggleModal(false, actionsType.TOGGLE_MODAL_DELETE_SUPPORTER)
   }
-  render() {
+
+  componentWillReceiveProps = () => {
+    this.setState(this.props.supporter.selected);
+  }
+  
+  render = () => {
     const {
       id, name, account, email
     } = this.state;
