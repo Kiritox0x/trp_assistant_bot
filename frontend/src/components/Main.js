@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { 
-  Grid, Col, Button
+  Grid, Col, Button, Glyphicon
 } from 'react-bootstrap';
 import { Switch, Redirect } from 'react-router-dom';
 
@@ -40,19 +40,39 @@ class Main extends Component {
     setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_DELETE);}, 100);
   };
 
-  getData = (API, type) => {
+
+  clickPreview = (index, type) => {
+    this.props.select(index, type.SELECT);
+    setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_PREVIEW);}, 100);
+  };
+
+
+  getData = (API, type, preview = false) => {
     getList(API)
     .then((data) => {
       let index = 0;
       const body = data.map((item) => {
-        return {
+        return ! preview ? ({
           ...item,
-          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index, type)}>
-          <span className="glyphicon glyphicon-pencil"></span></Button>,
-          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++, type)}>
-          <span className="glyphicon glyphicon-trash"></span></Button>
-        }
-      })
+          edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index, type)}>
+                      <Glyphicon glyph="pencil" /> Chỉnh sửa
+                    </Button>,
+          delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index, type)}>
+                      <Glyphicon glyph="trash" /> Xóa
+                    </Button>
+        }) : ({
+          ...item,
+          edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index, type)}>
+                      <Glyphicon glyph="pencil" /> Chỉnh sửa
+                    </Button>,
+          delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index, type)}>
+                      <Glyphicon glyph="trash" /> Xóa
+                    </Button>,
+          preview:  <Button bsStyle="success" bsSize="xsmall" onClick={() => this.clickPreview(index++, type)}>
+                      <Glyphicon glyph="search" /> Xem trước
+                    </Button>
+        })
+      });
       this.props.set(body, type.SET_BODY);
       setTimeout(() => this.props.set(false, type.SET_FETCHING), 100);
     })
@@ -64,7 +84,7 @@ class Main extends Component {
     this.getData(API.ASSISTANTS, ASSISTANT);
     this.getData(API.TEACHERS, TEACHER);
     this.getData(API.SUPPORTERS, SUPPORTER);
-    this.getData(API.MAILTEMPLATES, MAILTEMPLATE);
+    this.getData(API.MAILTEMPLATES, MAILTEMPLATE, true);
   };
 
   render = () => {

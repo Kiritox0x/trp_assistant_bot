@@ -49,7 +49,7 @@ class Assistant extends Component {
   }
 
   clickAdd = () => {
-    // this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_ASSISTANT);
+    this.props.toggleModal(true, actionsType.ASSISTANT.TOGGLE_MODAL_ADD);
   };
 
   search = (event) => {

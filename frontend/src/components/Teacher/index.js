@@ -49,7 +49,7 @@ class Teacher extends Component {
   }
 
   clickAdd = () => {
-    // this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_TEACHER);
+    this.props.toggleModal(true, actionsType.TEACHER.TOGGLE_MODAL_ADD);
   };
 
   search = (event) => {
