@@ -41,12 +41,7 @@ class Supporter extends Component {
   }
 
   clickAdd = () => {
-    // this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_MAILTEMPLATE);
-  };
-
-  clickPreview = (index) => {
-    // this.selectIndex(index);
-    // setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_PREVIEW_MAILTEMPLATE);}, 1);
+    this.props.toggleModal(true, actionsType.MAILTEMPLATE.TOGGLE_MODAL_ADD);
   };
 
   search = (event) => {

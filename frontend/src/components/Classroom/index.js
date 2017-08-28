@@ -51,7 +51,7 @@ class Classroom extends Component {
   }
 
   clickAdd = () => {
-    // this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
+    this.props.toggleModal(true, actionsType.CLASSROOM.TOGGLE_MODAL_ADD);
   }
 
   search = (event) => {

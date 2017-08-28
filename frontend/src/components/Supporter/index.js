@@ -41,7 +41,7 @@ class Supporter extends Component {
   }
 
   clickAdd = () => {
-    // this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_SUPPORTER);
+    this.props.toggleModal(true, actionsType.SUPPORTER.TOGGLE_MODAL_ADD);
   }
 
   search = (event) => {
