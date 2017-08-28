@@ -31,7 +31,7 @@ class ModalAdd extends Component {
   };
 
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_ADD_TEACHER);
+    this.props.toggleModal(false, actionsType.TEACHER.TOGGLE_MODAL_ADD);
   };
 
   render = () => {

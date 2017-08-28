@@ -25,7 +25,7 @@ class ModalEdit extends Component {
   };
   
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_MAILTEMPLATE);
+    this.props.toggleModal(false, actionsType.MAILTEMPLATE.TOGGLE_MODAL_EDIT);
   };
   
   componentWillReceiveProps = () => {

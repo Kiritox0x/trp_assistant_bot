@@ -1,5 +1,5 @@
 // file: src/reducers/classroom.js
-import * as actionType from '../actions/types';
+import { SUPPORTER } from '../actions/types';
 import InitialState from './InitialSate';
 
 // const assistantInitialState = {
@@ -11,13 +11,17 @@ import InitialState from './InitialSate';
 const supporterInitialState = new InitialState();
 export default (state = supporterInitialState, action) => {
   switch(action.type) {
-    case actionType.SELECT_SUPPORTER:
-      return {...state, selected: action.data};
-    case actionType.TOGGLE_MODAL_ADD_SUPPORTER:
+    case SUPPORTER.SELECT:
+      return {...state, selected: state.allItems[action.data]};
+    case SUPPORTER.SET_BODY:
+      return {...state, allItems: action.data};
+    case SUPPORTER.SET_FETCHING:
+      return {...state, isFetching: action.data};  
+    case SUPPORTER.TOGGLE_MODAL_ADD:
       return {...state, showModalAdd: action.data};
-    case actionType.TOGGLE_MODAL_EDIT_SUPPORTER:
+    case SUPPORTER.TOGGLE_MODAL_EDIT:
       return {...state, showModalEdit: action.data};
-    case actionType.TOGGLE_MODAL_DELETE_SUPPORTER:
+    case SUPPORTER.TOGGLE_MODAL_DELETE:
       return {...state, showModalDelete: action.data};
     default:
       return state;

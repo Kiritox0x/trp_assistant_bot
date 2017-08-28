@@ -18,10 +18,17 @@ export const unsetToken = () => {
   }
 };
 
-export const select = (classroom, type) => {
+export const set = (data, type) => {
   return {
     type,
-    data: classroom
+    data: data
+  }
+};
+
+export const select = (item, type) => {
+  return {
+    type,
+    data: item
   }
 };
 
