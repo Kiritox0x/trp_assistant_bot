@@ -46,34 +46,19 @@ class Classroom extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: [],
-      filtered: [],
-      fetching: true
+      filtered: []
     };
   }
 
-  selectIndex = (index) => {
-    this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
-  };
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
-  }
-
-  clickEdit = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_CLASSROOM);}, 1);
-  };
-
-  clickDelete = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM);}, 1);
+    // this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
   }
 
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.state.body
+        filtered: this.props.classroom.allItems
       });
     }
     this.setState({
@@ -83,35 +68,24 @@ class Classroom extends Component {
     });
   };
 
+  componentWillReceiveProps = () => {
+    this.setState({
+      filtered: this.props.classroom.allItems
+    });
+  };
+
   componentDidMount = () => {
     document.title = "Classroom";
-    getList(API.CLASSROOMS)
-    .then((data) => {
-      let index = 0;
-      const body = data.map((teacher) => {
-        return {
-          ...teacher,
-          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
-          <span className="glyphicon glyphicon-pencil"></span>
-        </Button>,
-          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++)}>
-          <span className="glyphicon glyphicon-trash"></span></Button>
-        }
-      })
-      this.setState({
-        body,
-        filtered: [...body],
-        fetching: false
-      });
-    })
-    .catch(error => console.log(error));
+    this.setState({
+      filtered: [...this.props.classroom.allItems]
+    });
   };
 
   render = () => {  
     const body = [...this.state.filtered];
-    const { fetching } = this.state;
+    const { isFetching } = this.props.classroom;
     return (
-      fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
+      isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
         <h2 className="text-center">Quản lý lớp học</h2>
         <ModalAdd />

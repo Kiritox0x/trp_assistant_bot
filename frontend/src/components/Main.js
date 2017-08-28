@@ -1,8 +1,21 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { 
-  Grid, Col
+  Grid, Col, Button
 } from 'react-bootstrap';
 import { Switch, Redirect } from 'react-router-dom';
+
+import { 
+  set, select, toggleModal
+} from '../actions';
+
+import * as API from "../config/Api";
+import { getList } from '../util/ApiClient';
+
+import {
+  CLASSROOM, ASSISTANT,
+  TEACHER, SUPPORTER , MAILTEMPLATE
+} from '../actions/types';
 
 import Route from '../routes/AuthRoute';
 import Header from './Header';
@@ -13,9 +26,46 @@ import Assistant from './Assistant/index';
 import Supporter from './Supporter/index';
 import MailTemplate from './MailTemplate/index';
 
-export default class Main extends Component {
+class Main extends Component {
 
   static isPrivate = true;
+
+  clickEdit = (index, type) => {
+    this.props.select(index, type.SELECT);
+    setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_EDIT);}, 100);
+  };
+
+  clickDelete = (index, type) => {
+    this.props.select(index, type.SELECT);
+    setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_DELETE);}, 100);
+  };
+
+  getData = (API, type) => {
+    getList(API)
+    .then((data) => {
+      let index = 0;
+      const body = data.map((item) => {
+        return {
+          ...item,
+          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index, type)}>
+          <span className="glyphicon glyphicon-pencil"></span></Button>,
+          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++, type)}>
+          <span className="glyphicon glyphicon-trash"></span></Button>
+        }
+      })
+      this.props.set(body, type.SET_BODY);
+      setTimeout(() => this.props.set(false, type.SET_FETCHING), 100);
+    })
+    .catch(error => console.log(error));
+  };
+
+  componentWillMount = () => {
+    this.getData(API.CLASSROOMS, CLASSROOM);
+    this.getData(API.ASSISTANTS, ASSISTANT);
+    this.getData(API.TEACHERS, TEACHER);
+    this.getData(API.SUPPORTERS, SUPPORTER);
+    this.getData(API.MAILTEMPLATES, MAILTEMPLATE);
+  };
 
   render = () => {
     return (
@@ -37,3 +87,23 @@ export default class Main extends Component {
     );
   };
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  assistant: state.assistant,
+  classroom: state.classroom,
+  supporter: state.supporter,
+  teacher: state.teacher,
+  mailtemplate: state.mailtemplate
+});
+
+const mapDispatchToProps = {
+  set,
+  select,
+  toggleModal
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);
+

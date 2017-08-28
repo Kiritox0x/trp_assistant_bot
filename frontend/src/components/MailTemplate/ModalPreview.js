@@ -14,7 +14,7 @@ class ModalPreview extends Component {
   }
 
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_PREVIEW_MAILTEMPLATE);
+    this.props.toggleModal(false, actionsType.MAILTEMPLATE.TOGGLE_MODAL_PREVIEW);
   };
 
   componentWillReceiveProps = () => {

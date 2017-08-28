@@ -36,40 +36,24 @@ class Supporter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: [],
-      filtered: [],
-      fetching: true
+      filtered: []
     };
   }
 
-  selectIndex = (index) => {
-    this.props.select(this.state.body[index], actionsType.SELECT_MAILTEMPLATE);
-  };
-
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_MAILTEMPLATE);
-  };
-
-  clickEdit = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_MAILTEMPLATE);}, 1);
-  };
-
-  clickDelete = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_MAILTEMPLATE);}, 1);
+    // this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_MAILTEMPLATE);
   };
 
   clickPreview = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_PREVIEW_MAILTEMPLATE);}, 1);
+    // this.selectIndex(index);
+    // setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_PREVIEW_MAILTEMPLATE);}, 1);
   };
 
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.state.body
+        filtered: this.props.mailtemplate.allItems
       });
     }
     this.setState({
@@ -79,39 +63,24 @@ class Supporter extends Component {
     });
   };
 
+  componentWillReceiveProps = () => {
+    this.setState({
+      filtered: this.props.mailtemplate.allItems
+    });
+  };
+
   componentDidMount = () => {
     document.title = "Mail template";
-    getList(API.MAILTEMPLATES)
-    .then((data) => {
-      let index = 0;
-      const body = data.map((mailtemplate) => {
-        return {
-          ...mailtemplate,
-          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
-                  <Glyphicon glyph="pencil" /> Chỉnh sửa
-                </Button>,
-          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index)}>
-                    <Glyphicon glyph="trash" /> Xóa
-                  </Button>,
-          preview:  <Button bsStyle="success" bsSize="xsmall" onClick={() => this.clickPreview(index++)}>
-                      <Glyphicon glyph="search" /> Xem trước
-                    </Button>
-        }
-      })
-      this.setState({
-        body,
-        filtered: [...body],
-        fetching: false
-      });
-    })
-    .catch(error => console.log(error));
+    this.setState({
+      filtered: [...this.props.mailtemplate.allItems]
+    });
   }
 
   render = () => {
     const body = [...this.state.filtered];
-    const { fetching } = this.state;
+    const { isFetching } = this.props.mailtemplate;
     return (
-      fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
+      isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
         <Col md={8} mdOffset={2} sm={10} smOffset={1}>
           <h2 className="text-center">Quản lý mẫu mail</h2>

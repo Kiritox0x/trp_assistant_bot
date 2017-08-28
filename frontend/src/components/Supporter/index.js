@@ -36,35 +36,19 @@ class Supporter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: [],
-      filtered: [],
-      fetching: true
+      filtered: []
     };
   }
 
-  selectIndex = (index) => {
-    this.props.select(this.state.body[index], actionsType.SELECT_SUPPORTER);
-  };
-
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_SUPPORTER);
-  }
-
-  clickEdit = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_SUPPORTER);}, 1);
-  }
-
-  clickDelete = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_SUPPORTER);}, 1);
+    // this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_SUPPORTER);
   }
 
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.state.body
+        filtered: this.props.supporter.allItems
       });
     }
     this.setState({
@@ -74,36 +58,24 @@ class Supporter extends Component {
     });
   }
 
+  componentWillReceiveProps = () => {
+    this.setState({
+      filtered: this.props.supporter.allItems
+    });
+  };
+
   componentDidMount= () => {
     document.title = "Supporter";
-    getList(API.SUPPORTERS)
-    .then((data) => {
-      let index = 0;
-      const body = data.map((supporter) => {
-        return {
-          ...supporter,
-          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
-          <span className="glyphicon glyphicon-pencil"></span>
-        </Button>,
-          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++)}>
-          <span className="glyphicon glyphicon-trash"></span></Button>
-        }
-      })
-      this.setState({
-        body,
-        filtered: [...body],
-        fetching: false
-      });
-    })
-    .catch(error => console.log(error));
-    
+    this.setState({
+      filtered: [...this.props.supporter.allItems]
+    });
   }
 
   render = () => {  
     const body = [...this.state.filtered];
-    const { fetching } = this.state;
+    const { isFetching } = this.props.supporter;
     return (
-      fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
+      isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
         <Col md={10} mdOffset={1}>
           <h2 className="text-center">Quản lý trợ giảng</h2>
@@ -141,7 +113,7 @@ class Supporter extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  teacher: state.teacher,
+  supporter: state.supporter,
 });
 
 const mapDispatchToProps = {

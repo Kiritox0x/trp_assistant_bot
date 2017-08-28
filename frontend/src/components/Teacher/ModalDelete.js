@@ -14,7 +14,7 @@ class ModalDelete extends Component {
   }
 
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_DELETE_TEACHER)
+    this.props.toggleModal(false, actionsType.TEACHER.TOGGLE_MODAL_DELETE);
   };
 
   componentWillReceiveProps = () => {

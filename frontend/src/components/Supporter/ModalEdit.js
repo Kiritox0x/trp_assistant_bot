@@ -31,7 +31,7 @@ class ModalEdit extends Component {
   }
 
   clickClose() {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_EDIT_SUPPORTER);
+    this.props.toggleModal(false, actionsType.SUPPORTER.TOGGLE_MODAL_EDIT);
   }
 
   componentWillReceiveProps = () => {
