@@ -1,0 +1,5 @@
+rm **/*.pyc
+rm db.sqlite3
+rm -rf open_course/migrations/
+rm -rf mail_sender/migrations/
+rm -rf template_editor/migrations/
