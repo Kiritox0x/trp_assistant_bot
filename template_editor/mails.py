@@ -28,8 +28,9 @@ class EmailSender:
 			raise Exception("Classroom not exist")
 
 		try:
-			template = MailTemplate.objects.get(pk = template_id):
-		except 
+			template = MailTemplate.objects.get(pk = template_id)
+		except MailTemplate.DoesNotExist:
+			raise Exception("Mail Template does not exist")
 
 		content = model_to_dict(classroom)
 		targets = []
@@ -51,3 +52,14 @@ class EmailSender:
 				content.pop(key)
 
 		return send_message(template.title, template.context, targets, title_dict=content, content_dict=content)
+
+
+# class ClrWelcomeReminder:
+# 	def get_instances(self):
+# 		try:
+# 			classrooms = Classroom.objects.all()
+# 		except Classroom.DoesNotExist as e:
+# 			raise Exception(e)
+# 		return classrooms
+
+# 	def 
