@@ -17,7 +17,7 @@ class EmailSender:
 			receivers.append(targets)
 		else:
 			receivers = targets 
-		email = EmailMessage(title, content, receivers)
+		email = EmailMessage(title, content, to=receivers)
 		return email.send()
 
 	@classmethod
@@ -50,7 +50,7 @@ class EmailSender:
 		for key in content:
 			if content[key] == None:
 				content.pop(key)
-
+		print('Sent email to ' + str(targets))
 		return send_message(template.title, template.context, targets, title_dict=content, content_dict=content)
 
 
