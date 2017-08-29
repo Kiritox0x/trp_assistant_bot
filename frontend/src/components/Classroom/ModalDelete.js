@@ -37,7 +37,7 @@ class ModalDelete extends Component {
           Xác nhận xóa lớp {class_name}?
         </Modal.Body>
         <Modal.Footer>
-        <Button bsStyle="primary">Đồng ý</Button>
+        <Button bsStyle="danger">Xóa lớp</Button>
         <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>

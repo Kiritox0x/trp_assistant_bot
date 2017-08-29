@@ -4,6 +4,7 @@ import {
   Grid, Col, Button, Glyphicon
 } from 'react-bootstrap';
 import { Switch, Redirect } from 'react-router-dom';
+import $ from 'jquery';
 
 import { 
   set, select, toggleModal
@@ -52,23 +53,24 @@ class Main extends Component {
     .then((data) => {
       let index = 0;
       const body = data.map((item) => {
+        index++;
         return ! preview ? ({
           ...item,
-          edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index, type)}>
+          edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index - 1, type)}>
                       <Glyphicon glyph="pencil" /> Chỉnh sửa
                     </Button>,
-          delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index, type)}>
+          delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index - 1, type)}>
                       <Glyphicon glyph="trash" /> Xóa
                     </Button>
         }) : ({
           ...item,
-          edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index, type)}>
+          edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index - 1, type)}>
                       <Glyphicon glyph="pencil" /> Chỉnh sửa
                     </Button>,
-          delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index, type)}>
+          delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index - 1, type)}>
                       <Glyphicon glyph="trash" /> Xóa
                     </Button>,
-          preview:  <Button bsStyle="success" bsSize="xsmall" onClick={() => this.clickPreview(index++, type)}>
+          preview:  <Button bsStyle="success" bsSize="xsmall" onClick={() => this.clickPreview(index - 1, type)}>
                       <Glyphicon glyph="search" /> Xem trước
                     </Button>
         })
@@ -85,6 +87,23 @@ class Main extends Component {
     this.getData(API.TEACHERS, TEACHER);
     this.getData(API.SUPPORTERS, SUPPORTER);
     this.getData(API.MAILTEMPLATES, MAILTEMPLATE, true);
+  };
+
+  componentDidMount = () => {
+    // $.fn.modal.Constructor.prototype.enforceFocus = function() {
+    //   $( document )
+    //     .off( 'focusin.bs.modal' ) // guard against infinite focus loop
+    //     .on( 'focusin.bs.modal', $.proxy( function( e ) {
+    //       if (
+    //         this.$element[ 0 ] !== e.target && !this.$element.has( e.target ).length
+    //         // CKEditor compatibility fix start.
+    //         && !$( e.target ).closest( '.cke_dialog, .cke' ).length
+    //         // CKEditor compatibility fix end.
+    //       ) {
+    //         this.$element.trigger( 'focus' );
+    //       }
+    //     }, this ) );
+    // };
   };
 
   render = () => {

@@ -37,7 +37,7 @@ class ModalDelete extends Component {
           Xác nhận xóa GVHD {name}?
         </Modal.Body>
         <Modal.Footer>
-        <Button bsStyle="primary">Đồng ý</Button>
+        <Button bsStyle="danger">Xóa GVHD</Button>
         <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>

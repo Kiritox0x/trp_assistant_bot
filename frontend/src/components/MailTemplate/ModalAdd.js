@@ -19,11 +19,16 @@ class ModalAdd extends Component {
   }
 
   onChange = (event) => {
-    console.log(event.target.value);
     this.setState({
       [event.target.id]: event.target.value
     });
   };
+
+  changeValueTemplate = (newValue) => {
+    this.setState({
+      context: newValue
+    });
+  }
 
   clickClose = () => {
     this.props.toggleModal(false, actionsType.MAILTEMPLATE.TOGGLE_MODAL_ADD);
@@ -34,27 +39,31 @@ class ModalAdd extends Component {
       title, context
     } = this.state;
     return (
-      <Modal show={this.props.mailtemplate.showModalAdd} onHide={() => this.clickClose()}>
-        <Modal.Header closeButton>
-          <Modal.Title>Thêm mẫu mail</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormGroup> {/* Tên mẫu mail */}
-            <ControlLabel>Tên mẫu mail</ControlLabel>
-            <FormControl 
-              id="title"
-              type="text"
-              label="Text"
-              onChange={(event) => { this.onChange(event);}}
-            />
-          </FormGroup>
-          <CKEditor id="context" activeClass="p10" content="" onChange={this.onChange} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button bsStyle="success">Thêm</Button>
-          <Button onClick={() => this.clickClose()}>Đóng</Button>
-        </Modal.Footer>
-      </Modal>
+      this.props.mailtemplate.showModalAdd ? 
+      <div className="w3-modal show-modal">
+        <div className="w3-modal-content clearfix">
+          <div className="w3-container">
+            <span className="w3-button w3-display-topright" onClick={() => this.clickClose()}>&times;</span>
+            <span className="w3-padding-large w3-display-topleft">Thêm mẫu mail mới</span>
+            <FormGroup> {/* Tên mẫu mail */}
+              <ControlLabel>Tên mẫu mail</ControlLabel>
+              <FormControl 
+                id="title"
+                type="text"
+                label="Text"
+                value={title}
+                onChange={(event) => { this.onChange(event);}}
+              />
+            </FormGroup>
+            <CKEditor activeClass="p10" onChange={this.changeValueTemplate.bind(this)} />
+          </div>
+          <div className="w3-modal-footer pull-right">
+            <Button bsStyle="success">Thêm</Button>
+            <Button onClick={() => this.clickClose()}>Hủy</Button>
+          </div>
+        </div>
+      </div>
+      : null
     );
   };
 }

@@ -26,7 +26,7 @@ class ModalPreview extends Component {
       title, context
     } = this.state;
     return (
-      <Modal show={this.props.mailtemplate.showModalPreview} onHide={() => this.clickClose()}>
+      <Modal className="modal-preview" show={this.props.mailtemplate.showModalPreview} onHide={() => this.clickClose()}>
         <Modal.Header closeButton>
           <Modal.Title>Xem trước mẫu mail {title}</Modal.Title>
         </Modal.Header>

@@ -31,13 +31,13 @@ class ModalDelete extends Component {
     return (
       <Modal show={this.props.teacher.showModalDelete} onHide={() => this.clickClose()}>
         <Modal.Header closeButton>
-          <Modal.Title>Xóa giảng viên</Modal.Title>
+          <Modal.Title>Xóa GVCM</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Xác nhận xóa giảng viên {name}?
+          Xác nhận xóa GVCM {name}?
         </Modal.Body>
         <Modal.Footer>
-        <Button bsStyle="primary">Đồng ý</Button>
+        <Button bsStyle="danger">Xóa GVCM</Button>
         <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>

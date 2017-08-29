@@ -58,13 +58,17 @@ class Classroom extends Component {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.props.classroom.allItems
+        filtered: this.props.classroom.allItems,
+        searching: false,
+        keyWord
       });
     }
     this.setState({
-      filtered: this.state.body.filter((classroom) => {
+      filtered: this.props.classroom.allItems.filter((classroom) => {
         return Object.values(classroom).join('//').toLowerCase().indexOf(keyWord) > -1;
-      })
+      }),
+      searching: true,
+      keyWord
     });
   };
 
@@ -83,6 +87,7 @@ class Classroom extends Component {
 
   render = () => {  
     const body = [...this.state.filtered];
+    const { searching, keyWord } = this.state;
     const { isFetching } = this.props.classroom;
     return (
       isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
@@ -96,7 +101,7 @@ class Classroom extends Component {
         </Button>
         <br /><br />
         <FormGroup>    
-          <ControlLabel>Tìm kiếm</ControlLabel>
+          <ControlLabel>Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }</ControlLabel>
           <FormControl 
             id="txtSearch"
             type="text"

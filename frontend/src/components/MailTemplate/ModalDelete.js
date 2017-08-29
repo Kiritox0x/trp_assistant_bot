@@ -34,7 +34,7 @@ class ModalDelete extends Component {
           Xác nhận xóa mẫu mail {title}?
         </Modal.Body>
         <Modal.Footer>
-        <Button bsStyle="primary">Đồng ý</Button>
+        <Button bsStyle="danger">Xóa mẫu mail</Button>
         <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>

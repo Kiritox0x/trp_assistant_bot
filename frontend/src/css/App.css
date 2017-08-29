@@ -207,6 +207,33 @@ a:hover {
   word-wrap: break-word;
 }
 
+.show-modal {
+  display: block;
+  padding-top: 30px;
+}
+.show-modal .w3-modal-content {
+  padding: 10px 0 10px 10px;
+  border-radius: 10px;
+  min-width: calc(100vw - 50px);
+}
+
+.show-modal .w3-modal-content .w3-button.w3-display-topright{
+  border-top-right-radius: 10px;
+}
+
+.show-modal .w3-container {
+  margin-top: 28px;
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height: calc(100vh - 160px);
+  padding: 0;
+}
+
+.show-modal .w3-modal-footer {
+  padding: 10px 10px 0 0;
+}
+
+
 .modal-body {
   max-height: calc(100vh - 200px);
   overflow-y: scroll;
@@ -218,11 +245,23 @@ a:hover {
 }
 
 /* CSS FOR MODAL PREVIEW */
-.modal-body-preview {
+.modal-preview .modal-dialog {
+  min-width: calc(100vw - 50px);
+}
+.modal-preview .modal-body {
   padding: 0;
+  min-height: calc(100vh - 190px);
+}
+
+.modal-edit .modal-body {
+  padding: 5px;
 }
 
 .iframe-preview {
   width: 100%;
   border: 0;
+}
+
+.cke_contents.cke_reset {
+  height: calc(100vh - 300px) !important;
 }

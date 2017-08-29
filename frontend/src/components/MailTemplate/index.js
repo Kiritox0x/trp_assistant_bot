@@ -48,13 +48,17 @@ class Supporter extends Component {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.props.mailtemplate.allItems
+        filtered: this.props.mailtemplate.allItems,
+        searching: false,
+        keyWord
       });
     }
     this.setState({
-      filtered: this.state.body.filter((mailtemplate) => {
+      filtered: this.props.mailtemplate.allItems.filter((mailtemplate) => {
         return Object.values(mailtemplate).join('//').toLowerCase().indexOf(keyWord) > -1;
-      })
+      }),
+      searching: true,
+      keyWord
     });
   };
 
@@ -73,6 +77,7 @@ class Supporter extends Component {
 
   render = () => {
     const body = [...this.state.filtered];
+    const { searching, keyWord } = this.state;
     const { isFetching } = this.props.mailtemplate;
     return (
       isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
@@ -89,7 +94,7 @@ class Supporter extends Component {
           <br /><br />
           <FormGroup>
             
-            <ControlLabel>Tìm kiếm</ControlLabel>
+            <ControlLabel>Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }</ControlLabel>
             <FormControl 
               id="txtSearch"
               type="text"
