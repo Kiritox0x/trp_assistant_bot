@@ -11,12 +11,13 @@ class ContextRender:
 		return ''
 
 	@classmethod
-	def context_render(self, content, dict):
+	def context_render(self, content, content_dict):
 		keys = re.findall(self.REGEX_PREFIX, content)
 		for key in keys:
-			val = dict[key]
-			regex = self.closure(key)
-			regex = re.compile(regex)
-			content = re.sub(regex, val, content)
+			if content_dict.has_key(key):
+				val = content_dict[key]
+				regex = self.closure(key)
+				regex = re.compile(regex)
+				content = re.sub(regex, val, content)
 		return content
 

@@ -243,4 +243,5 @@ GitHub.sublime-settings
 open_course/migrations/
 database_loader/migrations/
 view_loader/migrations/
+template_editor/migrations/
 frontend/node_modules
