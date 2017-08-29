@@ -11,7 +11,7 @@ import {
 } from '../actions';
 
 import * as API from "../config/Api";
-import { getList } from '../util/ApiClient';
+import { getData } from '../util/ApiClient';
 
 import {
   CLASSROOM, ASSISTANT,
@@ -31,62 +31,62 @@ class Main extends Component {
 
   static isPrivate = true;
 
-  clickEdit = (index, type) => {
-    this.props.select(index, type.SELECT);
-    setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_EDIT);}, 100);
-  };
+  // clickEdit = (index, type) => {
+  //   this.props.select(index, type.SELECT);
+  //   setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_EDIT);}, 100);
+  // };
 
-  clickDelete = (index, type) => {
-    this.props.select(index, type.SELECT);
-    setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_DELETE);}, 100);
-  };
-
-
-  clickPreview = (index, type) => {
-    this.props.select(index, type.SELECT);
-    setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_PREVIEW);}, 100);
-  };
+  // clickDelete = (index, type) => {
+  //   this.props.select(index, type.SELECT);
+  //   setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_DELETE);}, 100);
+  // };
 
 
-  getData = (API, type, preview = false) => {
-    getList(API)
-    .then((data) => {
-      let index = 0;
-      const body = data.map((item) => {
-        index++;
-        return ! preview ? ({
-          ...item,
-          edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index - 1, type)}>
-                      <Glyphicon glyph="pencil" /> Chỉnh sửa
-                    </Button>,
-          delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index - 1, type)}>
-                      <Glyphicon glyph="trash" /> Xóa
-                    </Button>
-        }) : ({
-          ...item,
-          edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index - 1, type)}>
-                      <Glyphicon glyph="pencil" /> Chỉnh sửa
-                    </Button>,
-          delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index - 1, type)}>
-                      <Glyphicon glyph="trash" /> Xóa
-                    </Button>,
-          preview:  <Button bsStyle="success" bsSize="xsmall" onClick={() => this.clickPreview(index - 1, type)}>
-                      <Glyphicon glyph="search" /> Xem trước
-                    </Button>
-        })
-      });
-      this.props.set(body, type.SET_BODY);
-      setTimeout(() => this.props.set(false, type.SET_FETCHING), 100);
-    })
-    .catch(error => console.log(error));
-  };
+  // clickPreview = (index, type) => {
+  //   this.props.select(index, type.SELECT);
+  //   setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_PREVIEW);}, 100);
+  // };
+
+
+  // getData = (API, type, preview = false) => {
+  //   getList(API)
+  //   .then((data) => {
+  //     let index = 0;
+  //     const body = data.map((item) => {
+  //       index++;
+  //       return ! preview ? ({
+  //         ...item,
+  //         edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index - 1, type)}>
+  //                     <Glyphicon glyph="pencil" /> Chỉnh sửa
+  //                   </Button>,
+  //         delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index - 1, type)}>
+  //                     <Glyphicon glyph="trash" /> Xóa
+  //                   </Button>
+  //       }) : ({
+  //         ...item,
+  //         edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index - 1, type)}>
+  //                     <Glyphicon glyph="pencil" /> Chỉnh sửa
+  //                   </Button>,
+  //         delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index - 1, type)}>
+  //                     <Glyphicon glyph="trash" /> Xóa
+  //                   </Button>,
+  //         preview:  <Button bsStyle="success" bsSize="xsmall" onClick={() => this.clickPreview(index - 1, type)}>
+  //                     <Glyphicon glyph="search" /> Xem trước
+  //                   </Button>
+  //       })
+  //     });
+  //     this.props.set(body, type.SET_BODY);
+  //     setTimeout(() => this.props.set(false, type.SET_FETCHING), 100);
+  //   })
+  //   .catch(error => console.log(error));
+  // };
 
   componentWillMount = () => {
-    this.getData(API.CLASSROOMS, CLASSROOM);
-    this.getData(API.ASSISTANTS, ASSISTANT);
-    this.getData(API.TEACHERS, TEACHER);
-    this.getData(API.SUPPORTERS, SUPPORTER);
-    this.getData(API.MAILTEMPLATES, MAILTEMPLATE, true);
+    getData(API.CLASSROOMS, CLASSROOM);
+    getData(API.ASSISTANTS, ASSISTANT);
+    getData(API.TEACHERS, TEACHER);
+    getData(API.SUPPORTERS, SUPPORTER);
+    getData(API.MAILTEMPLATES, MAILTEMPLATE, true);
   };
 
   componentDidMount = () => {

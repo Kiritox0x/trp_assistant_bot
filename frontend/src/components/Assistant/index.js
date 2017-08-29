@@ -18,7 +18,7 @@ import {
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
-import { getList } from '../../util/ApiClient';
+import { getData } from '../../util/ApiClient';
 import * as API from '../../config/Api';
 
 const header = [
@@ -50,6 +50,10 @@ class Assistant extends Component {
 
   clickAdd = () => {
     this.props.toggleModal(true, actionsType.ASSISTANT.TOGGLE_MODAL_ADD);
+  };
+
+  clickRefresh = () => {
+    getData(API.ASSISTANTS, actionsType.ASSISTANT);
   };
 
   search = (event) => {
@@ -96,6 +100,9 @@ class Assistant extends Component {
         <ModalDelete />
         <Button bsStyle="success" onClick={() => this.clickAdd()}>
           <Glyphicon glyph="plus" /> Thêm GVHD mới
+        </Button>
+        <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+          <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
         </Button>
         <br /><br />
         <FormGroup>

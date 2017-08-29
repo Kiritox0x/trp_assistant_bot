@@ -18,7 +18,7 @@ import {
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
-import { getList } from '../../util/ApiClient';
+import { getData } from '../../util/ApiClient';
 import * as API from '../../config/Api';
 
 const header = [
@@ -50,6 +50,10 @@ class Teacher extends Component {
 
   clickAdd = () => {
     this.props.toggleModal(true, actionsType.TEACHER.TOGGLE_MODAL_ADD);
+  };
+
+  clickRefresh = () => {
+    getData(API.TEACHERS, actionsType.TEACHER);
   };
 
   search = (event) => {
@@ -96,6 +100,9 @@ class Teacher extends Component {
         <ModalDelete />
         <Button bsStyle="success" onClick={() => this.clickAdd()}>
           <Glyphicon glyph="plus" /> Thêm GVCM mới
+        </Button>
+        <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+          <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
         </Button>
         <br /><br />
         <FormGroup>

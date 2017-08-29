@@ -19,7 +19,7 @@ import {
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
-import { getList } from '../../util/ApiClient';
+import { getData } from '../../util/ApiClient';
 import * as API from '../../config/Api';
 
 const header = [
@@ -42,6 +42,10 @@ class Supporter extends Component {
 
   clickAdd = () => {
     this.props.toggleModal(true, actionsType.MAILTEMPLATE.TOGGLE_MODAL_ADD);
+  };
+
+  clickRefresh = () => {
+    getData(API.MAILTEMPLATES, actionsType.MAILTEMPLATE);
   };
 
   search = (event) => {
@@ -90,6 +94,9 @@ class Supporter extends Component {
           <ModalPreview />
           <Button bsStyle="success" onClick={() => this.clickAdd()}>
             <Glyphicon glyph="plus" /> Thêm mẫu mail mới
+          </Button>
+          <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+            <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
           </Button>
           <br /><br />
           <FormGroup>
