@@ -22,16 +22,19 @@ class EmailSender:
 		return email.send()
 
 	@classmethod
-	def invitation_letter(self, class_id, template_id):
+	def invitation_letter(self, class_id, template_id_or_content, Customize=False):
 		try:
 			classroom = Classroom.objects.get(pk = class_id)
 		except Classroom.DoesNotExist:
 			logging.exception("Classroom not exist")
 
-		try:
-			template = MailTemplate.objects.get(pk = template_id)
-		except MailTemplate.DoesNotExist:
-			logging.exception("Mail Template does not exist")
+		if not Customize:
+			try:
+				template = MailTemplate.objects.get(pk = template_id_or_content)
+			except MailTemplate.DoesNotExist:
+				logging.exception("Mail Template does not exist")
+		else:
+			template = template_id_or_content
 
 		content = model_to_dict(classroom)
 		targets = []
@@ -54,13 +57,6 @@ class EmailSender:
 		print('Sent email to ' + str(targets))
 		return self.send_message(template.title, template.context, targets, title_dict=content, content_dict=content)
 
-class WelcomeLetterSender:
-	@classmethod
-	def get_instances(self):
-		try:
-			classrooms = Classroom.objects.all()
-		except Classroom.DoesNotExist as e:
-			logging.exception(e)
-		return classrooms
+
 
 		

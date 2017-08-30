@@ -15,11 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url, include 
 from django.contrib import admin
+from trp_assistant_bot.settings import URL_API_PREFIX
+from rest_framework.authtoken.views import obtain_auth_token
+from open_course.views import TokenValidate
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('open_course.urls')),
-    url(r'^', include('database_loader.urls')),
-	url(r'^', include('view_loader.urls')),
-	url(r'^', include('template_editor.urls')),    
+    url(r'^', include('view_loader.urls')),
+    url(URL_API_PREFIX+r'courses/', include('open_course.urls')),
+    url(URL_API_PREFIX+r'database_loader/', include('database_loader.urls')),
+	url(URL_API_PREFIX+r'template_editor/', include('template_editor.urls')),
+	url(URL_API_PREFIX+r'auth-token/', obtain_auth_token),
+	url(URL_API_PREFIX+r'token/$', TokenValidate.as_view()),    
 ]
