@@ -17,6 +17,7 @@ urlpatterns = [
 	url(URL_API_PREFIX+r'supporters/$', oc_views.SupporterList.as_view()),
 	url(URL_API_PREFIX+r'supporters/(?P<pk>[0-9]+)/$', oc_views.SupporterDetail.as_view()),
 	url(URL_API_PREFIX+r'auth-token/', tkviews.obtain_auth_token),
+	url(URL_API_PREFIX+r'token/$', oc_views.TokenValidate.as_view())
 ]
 
 

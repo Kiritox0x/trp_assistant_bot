@@ -55,6 +55,7 @@ class EmailSender:
 		return self.send_message(template.title, template.context, targets, title_dict=content, content_dict=content)
 
 class WelcomeLetterSender:
+	@classmethod
 	def get_instances(self):
 		try:
 			classrooms = Classroom.objects.all()
