@@ -16,7 +16,6 @@ export const login = ({username, password}) => {
         token: response.data.token,
         isLogined: true
       }));
-      axios.defaults.headers.common['Authorization'] = "Token " + response.data.token;
     })
     .catch(function (error) {
       throw error;
@@ -33,7 +32,7 @@ export const syncIsLogined = () => {
     'POST', URL + CHECKTOKEN, {
     json: { token }
   });
-  if (res.statusCode === 200) {
+  if (res.status === 200) {
     const body = JSON.parse(res.body);
     store.dispatch(setToken({
       token: body.token,

@@ -36,7 +36,6 @@ const clickPreview = (index, type) => {
   setTimeout(() => {store.dispatch(toggleModal(true, type.TOGGLE_MODAL_PREVIEW));}, 100);
 };
 
-
 export const getData = (API, type, preview = false) => {
   store.dispatch(set(true, type.SET_FETCHING));
   getList(API)
@@ -69,4 +68,16 @@ export const getData = (API, type, preview = false) => {
     setTimeout(() => store.dispatch(set(false, type.SET_FETCHING), 100));
   })
   .catch(error => console.log(error));
+};
+
+export const deleteData = (ENDPOINTS, id) => {
+  return axios.delete(`${URL}${ENDPOINTS}${id}/`,{
+    headers: {'Authorization': 'Token ' + store.getState().token.token }
+  })
+  .then((response) => {
+    return response;
+  })
+  .catch((error) => {
+    return error;
+  });
 };

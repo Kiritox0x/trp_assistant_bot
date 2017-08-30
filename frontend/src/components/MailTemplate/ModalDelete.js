@@ -6,6 +6,8 @@ import {
 
 import { toggleModal } from '../../actions';
 import * as actionsType from '../../actions/types';
+import { getData, deleteData } from '../../util/ApiClient';
+import * as API from '../../config/Api';
 class ModalDelete extends Component {
 
   constructor(props) {
@@ -15,6 +17,23 @@ class ModalDelete extends Component {
 
   clickClose = () => {
     this.props.toggleModal(false, actionsType.MAILTEMPLATE.TOGGLE_MODAL_DELETE);
+  };
+
+  clickDelete = () => {
+    deleteData(API.MAILTEMPLATES, this.state.id)
+    .then(res => {
+      if (res.status === 204) {
+        this.clickClose();
+        getData(API.MAILTEMPLATES, actionsType.MAILTEMPLATE, true);
+      } else {
+        alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+        console.log(res);
+      }
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      console.log(err);
+    });
   };
 
   componentWillReceiveProps = () => {
@@ -34,7 +53,7 @@ class ModalDelete extends Component {
           Xác nhận xóa mẫu mail {title}?
         </Modal.Body>
         <Modal.Footer>
-        <Button bsStyle="danger">Xóa mẫu mail</Button>
+        <Button bsStyle="danger" onClick={() => this.clickDelete()}>Xóa mẫu mail</Button>
         <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>

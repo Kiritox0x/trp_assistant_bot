@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Modal, Button,
-  FormGroup, ControlLabel, FormControl
+  Form, FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 import CKEditor from "react-ckeditor-component";
 
@@ -43,23 +43,22 @@ class ModalAdd extends Component {
       <div className="w3-modal show-modal">
         <div className="w3-modal-content clearfix">
           <div className="w3-container">
-            <span className="w3-button w3-display-topright" onClick={() => this.clickClose()}>&times;</span>
-            <span className="w3-padding-large w3-display-topleft">Thêm mẫu mail mới</span>
-            <FormGroup> {/* Tên mẫu mail */}
-              <ControlLabel>Tên mẫu mail</ControlLabel>
-              <FormControl 
-                id="title"
-                type="text"
-                label="Text"
-                value={title}
-                onChange={(event) => { this.onChange(event);}}
-              />
-            </FormGroup>
-            <CKEditor activeClass="p10" onChange={this.changeValueTemplate.bind(this)} />
-          </div>
-          <div className="w3-modal-footer pull-right">
-            <Button bsStyle="success">Thêm</Button>
-            <Button onClick={() => this.clickClose()}>Hủy</Button>
+            <Form inline>
+              <FormGroup> {/* Tên mẫu mail */}
+                <ControlLabel>Thêm mẫu mail: </ControlLabel>
+                <FormControl 
+                  id="title"
+                  type="text"
+                  label="Text"
+                  placeholder="Tên mẫu mail"
+                  value={title}
+                  onChange={(event) => { this.onChange(event);}}
+                />
+                <Button bsStyle="success">Thêm</Button>
+                <Button onClick={() => this.clickClose()}>Hủy</Button>
+              </FormGroup>
+              <CKEditor scriptUrl="https://cdn.ckeditor.com/4.7.2/full-all/ckeditor.js" activeClass="p10" onChange={this.changeValueTemplate.bind(this)} />
+            </Form>
           </div>
         </div>
       </div>

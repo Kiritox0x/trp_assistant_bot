@@ -182,6 +182,11 @@ a:hover {
   display: none;
 }
 
+.main-content > button,
+.main-content > div > button {
+  margin-right: 5px;
+}
+
 @media (min-width: 992px) {
   .main-content .col-md-4.col-xs-12:nth-child(2) {
     width: 66.66666667%;
@@ -207,12 +212,21 @@ a:hover {
   word-wrap: break-word;
 }
 
+/* CSS FOR ALL MODAL */
+
+.modal-body {
+  max-height: calc(100vh - 190px);
+  overflow-y: scroll;
+}
+
+/* CSS FOR MODAL PREVIEW MAIL TEMPLATE */
+
 .show-modal {
   display: block;
   padding-top: 30px;
 }
 .show-modal .w3-modal-content {
-  padding: 10px 0 10px 10px;
+  padding: 10px 10px 10px 10px;
   border-radius: 10px;
   min-width: calc(100vw - 50px);
 }
@@ -222,10 +236,7 @@ a:hover {
 }
 
 .show-modal .w3-container {
-  margin-top: 28px;
-  overflow: scroll;
-  overflow-x: hidden;
-  max-height: calc(100vh - 160px);
+  height: 100%;
   padding: 0;
 }
 
@@ -234,34 +245,42 @@ a:hover {
 }
 
 
-.modal-body {
-  max-height: calc(100vh - 200px);
-  overflow-y: scroll;
+.modal-preview .modal-dialog {
+  min-width: calc(100vw - 50px);
 }
+.modal-preview .modal-body {
+  padding: 0;
+  height: calc(100vh - 190px);
+  box-sizing: border-box;
+  overflow-y: hidden;
+}
+
 .modal-body textarea {
   max-width: 100%;
   min-height: 100px;
   max-height: 200px;
 }
 
-/* CSS FOR MODAL PREVIEW */
-.modal-preview .modal-dialog {
-  min-width: calc(100vw - 50px);
-}
-.modal-preview .modal-body {
-  padding: 0;
-  min-height: calc(100vh - 190px);
+.iframe-preview {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  vertical-align: bottom;
 }
 
 .modal-edit .modal-body {
   padding: 5px;
 }
 
-.iframe-preview {
-  width: 100%;
-  border: 0;
+.cke_contents.cke_reset {
+  min-height: calc(100vh - 255px) !important;
 }
 
-.cke_contents.cke_reset {
-  height: calc(100vh - 300px) !important;
+.form-inline .form-group {
+  margin-bottom: 5px; 
+}
+
+.form-inline .btn,
+.form-inline .form-control {
+  margin-left: 5px;
 }

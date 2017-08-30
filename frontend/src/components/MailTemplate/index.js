@@ -45,7 +45,7 @@ class Supporter extends Component {
   };
 
   clickRefresh = () => {
-    getData(API.MAILTEMPLATES, actionsType.MAILTEMPLATE);
+    getData(API.MAILTEMPLATES, actionsType.MAILTEMPLATE, true);
   };
 
   search = (event) => {
