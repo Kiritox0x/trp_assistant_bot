@@ -18,7 +18,7 @@ import {
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
-import { getList } from '../../util/ApiClient';
+import { getData } from '../../util/ApiClient';
 import * as API from '../../config/Api';
 
 const header = [
@@ -52,17 +52,25 @@ class Assistant extends Component {
     this.props.toggleModal(true, actionsType.ASSISTANT.TOGGLE_MODAL_ADD);
   };
 
+  clickRefresh = () => {
+    getData(API.ASSISTANTS, actionsType.ASSISTANT);
+  };
+
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.props.assistant.allItems
+        filtered: this.props.assistant.allItems,
+        searching: false,
+        keyWord
       });
     }
     this.setState({
-      filtered: this.state.body.filter((assistant) => {
+      filtered: this.props.assistant.allItems.filter((assistant) => {
         return Object.values(assistant).join('//').toLowerCase().indexOf(keyWord) > -1;
-      })
+      }),
+      searching: true,
+      keyWord
     });
   };
 
@@ -81,6 +89,7 @@ class Assistant extends Component {
 
   render = () => {  
     const body = [...this.state.filtered];
+    const { searching, keyWord } = this.state;
     const { isFetching } = this.props.assistant;
     return (
       isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
@@ -92,9 +101,12 @@ class Assistant extends Component {
         <Button bsStyle="success" onClick={() => this.clickAdd()}>
           <Glyphicon glyph="plus" /> Thêm GVHD mới
         </Button>
+        <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+          <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
+        </Button>
         <br /><br />
         <FormGroup>
-          <ControlLabel>Tìm kiếm</ControlLabel>
+          <ControlLabel>Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }</ControlLabel>
           <FormControl 
             id="txtSearch"
             type="text"

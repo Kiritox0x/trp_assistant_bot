@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Modal, Button,
-  FormGroup, ControlLabel, FormControl
+  Form, FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 import CKEditor from "react-ckeditor-component";
 
@@ -19,11 +19,16 @@ class ModalAdd extends Component {
   }
 
   onChange = (event) => {
-    console.log(event.target.value);
     this.setState({
       [event.target.id]: event.target.value
     });
   };
+
+  changeValueTemplate = (newValue) => {
+    this.setState({
+      context: newValue
+    });
+  }
 
   clickClose = () => {
     this.props.toggleModal(false, actionsType.MAILTEMPLATE.TOGGLE_MODAL_ADD);
@@ -34,27 +39,30 @@ class ModalAdd extends Component {
       title, context
     } = this.state;
     return (
-      <Modal show={this.props.mailtemplate.showModalAdd} onHide={() => this.clickClose()}>
-        <Modal.Header closeButton>
-          <Modal.Title>Thêm mẫu mail</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormGroup> {/* Tên mẫu mail */}
-            <ControlLabel>Tên mẫu mail</ControlLabel>
-            <FormControl 
-              id="title"
-              type="text"
-              label="Text"
-              onChange={(event) => { this.onChange(event);}}
-            />
-          </FormGroup>
-          <CKEditor id="context" activeClass="p10" content="" onChange={this.onChange} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button bsStyle="success">Thêm</Button>
-          <Button onClick={() => this.clickClose()}>Đóng</Button>
-        </Modal.Footer>
-      </Modal>
+      this.props.mailtemplate.showModalAdd ? 
+      <div className="w3-modal show-modal">
+        <div className="w3-modal-content clearfix">
+          <div className="w3-container">
+            <Form inline>
+              <FormGroup> {/* Tên mẫu mail */}
+                <ControlLabel>Thêm mẫu mail: </ControlLabel>
+                <FormControl 
+                  id="title"
+                  type="text"
+                  label="Text"
+                  placeholder="Tên mẫu mail"
+                  value={title}
+                  onChange={(event) => { this.onChange(event);}}
+                />
+                <Button bsStyle="success">Thêm</Button>
+                <Button onClick={() => this.clickClose()}>Hủy</Button>
+              </FormGroup>
+              <CKEditor scriptUrl="https://cdn.ckeditor.com/4.7.2/full-all/ckeditor.js" activeClass="p10" onChange={this.changeValueTemplate.bind(this)} />
+            </Form>
+          </div>
+        </div>
+      </div>
+      : null
     );
   };
 }

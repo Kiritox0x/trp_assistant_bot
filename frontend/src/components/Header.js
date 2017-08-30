@@ -41,7 +41,8 @@ class Header extends Component {
         <ul className="nav navbar-nav">
           <li><a onClick={() => {
               store.dispatch(unsetToken());
-              this.props.history.replace('/');
+              {/* this.props.history.replace('/'); */}
+              window.location = '/';
             }}
             >
             <Glyphicon glyph="log-out" /> Đăng xuất</a></li>

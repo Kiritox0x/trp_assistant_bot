@@ -18,7 +18,7 @@ import {
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
-import { getList } from '../../util/ApiClient';
+import { getData } from '../../util/ApiClient';
 import * as API from '../../config/Api';
 
 const header = [
@@ -44,17 +44,25 @@ class Supporter extends Component {
     this.props.toggleModal(true, actionsType.SUPPORTER.TOGGLE_MODAL_ADD);
   }
 
+  clickRefresh = () => {
+    getData(API.SUPPORTERS, actionsType.SUPPORTER);
+  };
+
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.props.supporter.allItems
+        filtered: this.props.supporter.allItems,
+        searching: false,
+        keyWord
       });
     }
     this.setState({
-      filtered: this.state.body.filter((supporter) => {
+      filtered: this.props.supporter.allItems.filter((supporter) => {
         return Object.values(supporter).join('//').toLowerCase().indexOf(keyWord) > -1;
-      })
+      }),
+      searching: true,
+      keyWord
     });
   }
 
@@ -73,6 +81,7 @@ class Supporter extends Component {
 
   render = () => {  
     const body = [...this.state.filtered];
+    const { searching, keyWord } = this.state;
     const { isFetching } = this.props.supporter;
     return (
       isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
@@ -85,10 +94,13 @@ class Supporter extends Component {
           <Button bsStyle="success" onClick={() => this.clickAdd()}>
             <Glyphicon glyph="plus" /> Thêm trợ giảng mới
           </Button>
+          <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+            <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
+          </Button>
           <br /><br />
           <FormGroup>
             
-            <ControlLabel>Tìm kiếm</ControlLabel>
+            <ControlLabel>Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }</ControlLabel>
             <FormControl 
               id="txtSearch"
               type="text"

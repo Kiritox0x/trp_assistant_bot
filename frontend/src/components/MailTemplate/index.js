@@ -19,7 +19,7 @@ import {
 } from '../../actions';
 import * as actionsType from '../../actions/types';
 
-import { getList } from '../../util/ApiClient';
+import { getData } from '../../util/ApiClient';
 import * as API from '../../config/Api';
 
 const header = [
@@ -44,17 +44,25 @@ class Supporter extends Component {
     this.props.toggleModal(true, actionsType.MAILTEMPLATE.TOGGLE_MODAL_ADD);
   };
 
+  clickRefresh = () => {
+    getData(API.MAILTEMPLATES, actionsType.MAILTEMPLATE, true);
+  };
+
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.props.mailtemplate.allItems
+        filtered: this.props.mailtemplate.allItems,
+        searching: false,
+        keyWord
       });
     }
     this.setState({
-      filtered: this.state.body.filter((mailtemplate) => {
+      filtered: this.props.mailtemplate.allItems.filter((mailtemplate) => {
         return Object.values(mailtemplate).join('//').toLowerCase().indexOf(keyWord) > -1;
-      })
+      }),
+      searching: true,
+      keyWord
     });
   };
 
@@ -73,6 +81,7 @@ class Supporter extends Component {
 
   render = () => {
     const body = [...this.state.filtered];
+    const { searching, keyWord } = this.state;
     const { isFetching } = this.props.mailtemplate;
     return (
       isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
@@ -86,10 +95,13 @@ class Supporter extends Component {
           <Button bsStyle="success" onClick={() => this.clickAdd()}>
             <Glyphicon glyph="plus" /> Thêm mẫu mail mới
           </Button>
+          <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+            <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
+          </Button>
           <br /><br />
           <FormGroup>
             
-            <ControlLabel>Tìm kiếm</ControlLabel>
+            <ControlLabel>Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }</ControlLabel>
             <FormControl 
               id="txtSearch"
               type="text"
