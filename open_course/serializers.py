@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from open_course.models import Classroom, Teacher, Assistant, Supporter
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 class TeacherSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -32,4 +33,10 @@ class UserSerializer(serializers.ModelSerializer):
 class SupporterSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Supporter
-		fields = ('id', 'name', 'account', 'email')		
+		fields = ('id', 'name', 'account', 'email')
+
+
+class TokenSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Token
+		fields = ('key', 'user')

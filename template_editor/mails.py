@@ -4,6 +4,7 @@ from template_editor.services import ContextRender
 from open_course.models import Classroom, Teacher, Assistant
 from template_editor.models import MailTemplate
 import datetime
+import logging
 
 class EmailSender:
 	@classmethod
@@ -21,16 +22,19 @@ class EmailSender:
 		return email.send()
 
 	@classmethod
-	def invitation_letter(self, class_id, template_id):
+	def invitation_letter(self, class_id, template_id_or_content, Customize=False):
 		try:
 			classroom = Classroom.objects.get(pk = class_id)
 		except Classroom.DoesNotExist:
-			raise Exception("Classroom not exist")
+			logging.exception("Classroom not exist")
 
-		try:
-			template = MailTemplate.objects.get(pk = template_id)
-		except MailTemplate.DoesNotExist:
-			raise Exception("Mail Template does not exist")
+		if not Customize:
+			try:
+				template = MailTemplate.objects.get(pk = template_id_or_content)
+			except MailTemplate.DoesNotExist:
+				logging.exception("Mail Template does not exist")
+		else:
+			template = template_id_or_content
 
 		content = model_to_dict(classroom)
 		targets = []
@@ -39,27 +43,20 @@ class EmailSender:
 			content['start_date'] = classroom.start_date.isoformat()
 		if isinstance(classroom.finish_date, datetime.date):
 			content['finish_date'] = classroom.finish_date.isoformat()
-		if isinstance(classroom.teacher, open_course.models.Teacher):
+		if isinstance(classroom.teacher, Teacher):
 			content['teacher'] = classroom.teacher.name
 			targets.append(classroom.teacher.topica_email)
 		else:
-			raise Exception("Teacher not exist")
-		if isinstance(classroom.assistant, open_course.models.Assistant):
+			logging.exception("Teacher not exist")
+		if isinstance(classroom.assistant, Assistant):
 			content['assistant'] = classroom.assistant.name
 
-		for key in content:
+		for key in content.keys():
 			if content[key] == None:
 				content.pop(key)
 		print('Sent email to ' + str(targets))
-		return send_message(template.title, template.context, targets, title_dict=content, content_dict=content)
+		return self.send_message(template.title, template.context, targets, title_dict=content, content_dict=content)
 
 
-# class ClrWelcomeReminder:
-# 	def get_instances(self):
-# 		try:
-# 			classrooms = Classroom.objects.all()
-# 		except Classroom.DoesNotExist as e:
-# 			raise Exception(e)
-# 		return classrooms
 
-# 	def 
+		
