@@ -15,8 +15,8 @@ body {
   left: calc(50% + 90px - 35px);
 }
 .logo {
-  width: 200px;
-  height: 200px;
+  width: 168px;
+  height: 168px;
 }
 a:hover {
   text-decoration: none;

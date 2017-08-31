@@ -64,9 +64,11 @@ class Supporter extends Component {
   };
 
   componentWillReceiveProps = () => {
-    this.setState({
-      filtered: this.props.mailtemplate.allItems
-    });
+    if (!this.state.keyWord || this.props.mailtemplate.isFetching) {
+      this.setState({
+        filtered: this.props.mailtemplate.allItems
+      });
+    }
   };
 
   componentDidMount = () => {
@@ -103,6 +105,7 @@ class Supporter extends Component {
               type="text"
               label="Text"
               placeholder="Từ khóa"
+              value={keyWord}
               onChange={event => this.search(event)}
             />
           </FormGroup>

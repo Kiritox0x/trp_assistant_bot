@@ -37,7 +37,7 @@ class Header extends Component {
             <img src={Logo} alt="logo-uni" />
           </div>
           <div className="profile-info">
-            <p title="username">username</p>
+            <p title="username">{store.getState().token.username}</p>
             <p title="Normal user">Normal user</p>
           </div>
         </div>

@@ -15,6 +15,7 @@ export const login = ({username, password}) => {
     .then(function (response) {
       store.dispatch(actions.setToken({
         token: response.data.token,
+        username,
         isLogined: true
       }));
     })
@@ -28,15 +29,15 @@ export const syncIsLogined = () => {
   const { token, isLogined } = store.getState().token;
   if (!token) return false;
   if (isLogined) return true;
-  return false;// eslint-disable-next-line
   const res = syncRequest(
     'POST', API.URL + API.CHECKTOKEN, {
     json: { token }
   });
-  if (res.status === 200) {
+  if (res.statusCode === 200) {
     const body = JSON.parse(res.body);
     store.dispatch(actions.setToken({
       token: body.token,
+      username: body.username,
       isLogined: true
     }));
     return true;

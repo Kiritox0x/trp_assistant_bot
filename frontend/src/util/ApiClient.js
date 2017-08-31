@@ -78,29 +78,31 @@ export const getData = (endpoints, type, options = 0) => {
 };
 
 export const addData = (ENDPOINTS, item) => {
-  return axios.post(`${API.URL}${ENDPOINTS}`, item, {
-    headers: {'Authorization': 'Token ' + store.getState().token.token }
-  })
-  .then(response => response)
-  .catch(error => error);
+  return new Promise((resolve, reject) => {
+    axios.post(`${API.URL}${ENDPOINTS}`, item, {
+      headers: {'Authorization': 'Token ' + store.getState().token.token }
+    })
+    .then(response => resolve(response))
+    .catch(error => reject(error));
+  });
 };
 
 export const saveData = (ENDPOINTS, item) => {
-  return axios.put(`${API.URL}${ENDPOINTS}${item.id}/`, item, {
-    headers: {'Authorization': 'Token ' + store.getState().token.token }
-  })
-  .then(response => response)
-  .catch(error => error);
+  return new Promise((resolve, reject) => {
+    axios.put(`${API.URL}${ENDPOINTS}${item.id}/`, item, {
+      headers: {'Authorization': 'Token ' + store.getState().token.token }
+    })
+    .then(response => resolve(response))
+    .catch(error => reject(error));
+  });
 };
 
 export const deleteData = (ENDPOINTS, id) => {
-  return axios.delete(`${API.URL}${ENDPOINTS}${id}/`,{
-    headers: {'Authorization': 'Token ' + store.getState().token.token }
-  })
-  .then((response) => {
-    return response;
-  })
-  .catch((error) => {
-    return error;
+  return new Promise((resolve, reject) => {
+    axios.delete(`${API.URL}${ENDPOINTS}${id}/`,{
+      headers: {'Authorization': 'Token ' + store.getState().token.token }
+    })
+    .then(response => resolve(response))
+    .catch(error => reject(error));
   });
 };

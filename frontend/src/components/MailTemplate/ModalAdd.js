@@ -20,6 +20,9 @@ class ModalAdd extends Component {
     this.state = {
       dateFormat: 'DD/MM/YYYY',
       timeFormat: false,
+      name: '',
+      title: '',
+      context: ''
     };
   }
 
@@ -35,11 +38,27 @@ class ModalAdd extends Component {
     });
   }
 
+  validate = () => {
+    const {
+      context, name, title
+    } = this.state;
+    let mess = name.length === 0 ? 'Name is required\n' : '';
+    mess += title.length === 0 ? 'Title is required\n' : '';
+    mess += context.length === 0 ? 'Context is required' : '';
+    if (mess.length === 0) return {success: true};
+    return {success: false, mess};
+  };
+
   clickClose = () => {
     this.props.toggleModal(false, actionsTypes.MAILTEMPLATE.TOGGLE_MODAL_ADD);
   };
 
   clickAdd = () => {
+    const check = this.validate();
+    if (!check.success) {
+      alert(check.mess);
+      return;
+    }
     this.setState({
       isLoading: true
     });
@@ -48,23 +67,16 @@ class ModalAdd extends Component {
     } = this.state;
     ApiClient.addData(API.MAILTEMPLATES, { id, name, title, context })
     .then(res => {
-      if (res.status === 201) {
-        this.clickClose();
-        ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, true);
-      } else {
-        alert("Có lỗi xuất hiện, vui lòng thử lại sau");
-        console.log(res);        
-      }
-      this.setState({
-        isLoading: false
-      })
+      ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
+      console.log(res);        
+      this.clickClose();
     })
     .catch(err => {
-      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      alert("Tên mẫu mail đã tồn tại");
       console.log(err);
       this.setState({
         isLoading: false
-      })      
+      })
     });
   }
 

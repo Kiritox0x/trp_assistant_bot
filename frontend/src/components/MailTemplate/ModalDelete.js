@@ -9,6 +9,7 @@ import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
 import * as API from '../../config/Api';
 import * as ApiClient from '../../util/ApiClient';
+import * as constants from '../../config/constant';
 
 class ModalDelete extends Component {
 
@@ -27,23 +28,16 @@ class ModalDelete extends Component {
     })
     ApiClient.deleteData(API.MAILTEMPLATES, this.state.id)
     .then(res => {
-      if (res.status === 204) {
-        this.clickClose();
-        ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, true);
-      } else {
-        alert("Có lỗi xuất hiện, vui lòng thử lại sau");
-        console.log(res);
-      }
-      this.setState({
-        isLoading: false
-      })
+      ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
+      console.log(res);
+      this.clickClose();
     })
     .catch(err => {
       alert("Có lỗi xuất hiện, vui lòng thử lại sau");
       console.log(err);
       this.setState({
         isLoading: false
-      })
+      });
     });
   };
 

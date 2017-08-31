@@ -70,7 +70,7 @@ class Teacher extends Component {
   };
 
   componentWillReceiveProps = () => {
-    if (!this.state.keyWord) {
+    if (!this.state.keyWord || this.props.teacher.isFetching) {
       this.setState({
         filtered: this.props.teacher.allItems
       });
@@ -111,6 +111,7 @@ class Teacher extends Component {
             type="text"
             label="Text"
             placeholder="Từ khóa"
+            value={keyWord}
             onChange={event => this.search(event)}
           />
         </FormGroup>
