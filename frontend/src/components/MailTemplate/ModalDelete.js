@@ -3,36 +3,47 @@ import { connect } from 'react-redux';
 import {
   Modal, Button
 } from 'react-bootstrap';
+import { Icon } from 'react-fa';
 
-import { toggleModal } from '../../actions';
-import * as actionsType from '../../actions/types';
-import { getData, deleteData } from '../../util/ApiClient';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
 import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
+
 class ModalDelete extends Component {
 
   constructor(props) {
     super(props);
     this.state = {};
   }
-
+  
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.MAILTEMPLATE.TOGGLE_MODAL_DELETE);
+    this.props.toggleModal(false, actionsTypes.MAILTEMPLATE.TOGGLE_MODAL_DELETE);
   };
 
   clickDelete = () => {
-    deleteData(API.MAILTEMPLATES, this.state.id)
+    this.setState({
+      isLoading: true
+    })
+    ApiClient.deleteData(API.MAILTEMPLATES, this.state.id)
     .then(res => {
       if (res.status === 204) {
         this.clickClose();
-        getData(API.MAILTEMPLATES, actionsType.MAILTEMPLATE, true);
+        ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, true);
       } else {
         alert("Có lỗi xuất hiện, vui lòng thử lại sau");
         console.log(res);
       }
+      this.setState({
+        isLoading: false
+      })
     })
     .catch(err => {
       alert("Có lỗi xuất hiện, vui lòng thử lại sau");
       console.log(err);
+      this.setState({
+        isLoading: false
+      })
     });
   };
 
@@ -42,7 +53,7 @@ class ModalDelete extends Component {
 
   render = () => {
     const {
-      id, title
+      title, isLoading
     } = this.state;
     return (
       <Modal show={this.props.mailtemplate.showModalDelete} onHide={() => this.clickClose()}>
@@ -53,7 +64,9 @@ class ModalDelete extends Component {
           Xác nhận xóa mẫu mail {title}?
         </Modal.Body>
         <Modal.Footer>
-        <Button bsStyle="danger" onClick={() => this.clickDelete()}>Xóa mẫu mail</Button>
+        <Button bsStyle="danger" onClick={() => this.clickDelete()}>
+          { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Xóa mẫu mail
+        </Button>
         <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>
@@ -61,13 +74,12 @@ class ModalDelete extends Component {
   };
 }
 
-
 const mapStateToProps = (state, ownProps) => ({
   mailtemplate: state.mailtemplate,
 });
 
 const mapDispatchToProps = {
-  toggleModal,
+  toggleModal: actions.toggleModal,
 };
 
 export default connect(

@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { 
-  Grid, Col, Button, Glyphicon
+  Grid
 } from 'react-bootstrap';
 import { Switch, Redirect } from 'react-router-dom';
-import $ from 'jquery';
-
-import { 
-  set, select, toggleModal
-} from '../actions';
 
 import * as API from "../config/Api";
-import { getData } from '../util/ApiClient';
-
-import {
-  CLASSROOM, ASSISTANT,
-  TEACHER, SUPPORTER , MAILTEMPLATE
-} from '../actions/types';
+import * as ApiClient from '../util/ApiClient';
+import * as actions from '../actions';
+import * as actionsTypes from '../actions/types';
+import * as constants from '../config/constant';
 
 import Route from '../routes/AuthRoute';
 import Header from './Header';
@@ -31,79 +24,16 @@ class Main extends Component {
 
   static isPrivate = true;
 
-  // clickEdit = (index, type) => {
-  //   this.props.select(index, type.SELECT);
-  //   setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_EDIT);}, 100);
-  // };
-
-  // clickDelete = (index, type) => {
-  //   this.props.select(index, type.SELECT);
-  //   setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_DELETE);}, 100);
-  // };
-
-
-  // clickPreview = (index, type) => {
-  //   this.props.select(index, type.SELECT);
-  //   setTimeout(() => {this.props.toggleModal(true, type.TOGGLE_MODAL_PREVIEW);}, 100);
-  // };
-
-
-  // getData = (API, type, preview = false) => {
-  //   getList(API)
-  //   .then((data) => {
-  //     let index = 0;
-  //     const body = data.map((item) => {
-  //       index++;
-  //       return ! preview ? ({
-  //         ...item,
-  //         edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index - 1, type)}>
-  //                     <Glyphicon glyph="pencil" /> Chỉnh sửa
-  //                   </Button>,
-  //         delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index - 1, type)}>
-  //                     <Glyphicon glyph="trash" /> Xóa
-  //                   </Button>
-  //       }) : ({
-  //         ...item,
-  //         edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index - 1, type)}>
-  //                     <Glyphicon glyph="pencil" /> Chỉnh sửa
-  //                   </Button>,
-  //         delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index - 1, type)}>
-  //                     <Glyphicon glyph="trash" /> Xóa
-  //                   </Button>,
-  //         preview:  <Button bsStyle="success" bsSize="xsmall" onClick={() => this.clickPreview(index - 1, type)}>
-  //                     <Glyphicon glyph="search" /> Xem trước
-  //                   </Button>
-  //       })
-  //     });
-  //     this.props.set(body, type.SET_BODY);
-  //     setTimeout(() => this.props.set(false, type.SET_FETCHING), 100);
-  //   })
-  //   .catch(error => console.log(error));
-  // };
-
   componentWillMount = () => {
-    getData(API.CLASSROOMS, CLASSROOM);
-    getData(API.ASSISTANTS, ASSISTANT);
-    getData(API.TEACHERS, TEACHER);
-    getData(API.SUPPORTERS, SUPPORTER);
-    getData(API.MAILTEMPLATES, MAILTEMPLATE, true);
+    ApiClient.getData(API.CLASSROOMS, actionsTypes.CLASSROOM, constants.HAS_SEND_MAIL);
+    ApiClient.getData(API.TEACHERS, actionsTypes.TEACHER);
+    ApiClient.getData(API.ASSISTANTS, actionsTypes.ASSISTANT);
+    ApiClient.getData(API.SUPPORTERS, actionsTypes.SUPPORTER);
+    ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
   };
 
   componentDidMount = () => {
-    // $.fn.modal.Constructor.prototype.enforceFocus = function() {
-    //   $( document )
-    //     .off( 'focusin.bs.modal' ) // guard against infinite focus loop
-    //     .on( 'focusin.bs.modal', $.proxy( function( e ) {
-    //       if (
-    //         this.$element[ 0 ] !== e.target && !this.$element.has( e.target ).length
-    //         // CKEditor compatibility fix start.
-    //         && !$( e.target ).closest( '.cke_dialog, .cke' ).length
-    //         // CKEditor compatibility fix end.
-    //       ) {
-    //         this.$element.trigger( 'focus' );
-    //       }
-    //     }, this ) );
-    // };
+
   };
 
   render = () => {
@@ -136,9 +66,9 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  set,
-  select,
-  toggleModal
+  set: actions.set,
+  select: actions.select,
+  toggleModal: actions.toggleModal
 };
 
 export default connect(

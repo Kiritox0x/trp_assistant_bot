@@ -2,12 +2,6 @@
 import { TEACHER } from '../actions/types';
 import InitialState from './InitialSate';
 
-// const teacherInitialState = {
-//   allTeachers: [],
-//   selected: {},
-//   showModalEdit: false,
-//   showModalDelete: false
-// };
 const teacherInitialState = new InitialState();
 export default (state = teacherInitialState, action) => {
   switch(action.type) {

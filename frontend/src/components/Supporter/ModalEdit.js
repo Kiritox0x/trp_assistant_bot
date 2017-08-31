@@ -4,34 +4,25 @@ import {
   Modal, Button,
   FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
-import Datetime from 'react-datetime';
 
-import { toggleModal } from '../../actions';
-import * as actionsType from '../../actions/types';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+
 class ModalEdit extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      dateFormat: 'DD/MM/YYYY',
-      timeFormat: false,
-    };
+    this.state = {};
   }
-
+  
   onChange = (event) => {
     this.setState({
       [event.target.id]: event.target.value
     });
   }
 
-  onChangeDate = (event, id) => {
-    this.setState({
-      [id]: event.toDate()
-    });
-  }
-
   clickClose() {
-    this.props.toggleModal(false, actionsType.SUPPORTER.TOGGLE_MODAL_EDIT);
+    this.props.toggleModal(false, actionsTypes.SUPPORTER.TOGGLE_MODAL_EDIT);
   }
 
   componentWillReceiveProps = () => {
@@ -40,7 +31,7 @@ class ModalEdit extends Component {
 
   render = () => {
     const { 
-      id, name, account, email
+      name, account, email
     } = this.state;
     return (
       <Modal show={this.props.supporter.showModalEdit} onHide={() => this.clickClose()}>
@@ -55,7 +46,7 @@ class ModalEdit extends Component {
               type="text"
               label="Text"
               value={name}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Tài khoản */}
@@ -65,7 +56,7 @@ class ModalEdit extends Component {
               type="text"
               label="Text"
               value={account}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Email */}
@@ -75,7 +66,7 @@ class ModalEdit extends Component {
               type="text"
               label="Text"
               value={email}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
         </Modal.Body>
@@ -85,16 +76,15 @@ class ModalEdit extends Component {
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 }
-
 
 const mapStateToProps = (state, ownProps) => ({
   supporter: state.supporter,
 });
 
 const mapDispatchToProps = {
-  toggleModal,
+  toggleModal: actions.toggleModal,
 };
 
 export default connect(

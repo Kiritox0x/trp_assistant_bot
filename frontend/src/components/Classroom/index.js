@@ -8,18 +8,19 @@ import {
 import Datatable from 'react-bs-datatable';
 import { Icon } from 'react-fa';
 
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
+import * as constants from '../../config/constant';
+
 import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
 import ModalDelete from './ModalDelete';
-import { 
-  toggleModal, select 
-} from '../../actions';
-import * as actionsType from '../../actions/types';
-
-import { getData } from '../../util/ApiClient';
-import * as API from '../../config/Api';
+import ModalSendmail from './ModalSendmail';
 
 const header = [
+  { title: 'Gửi mail', prop: 'sendmail', sortable: false },
   { title: 'Sửa', prop: 'edit', sortable: false },
   { title: 'Xóa', prop: 'delete', sortable: false },
   { title: 'Trường', prop: 'school', sortable: true },
@@ -37,8 +38,6 @@ const header = [
   { title: 'Trợ giảng', prop: 'supporter', sortable: true },
 ];
 
-
-
 class Classroom extends Component {
 
   static isPrivate = true; 
@@ -51,11 +50,11 @@ class Classroom extends Component {
   }
 
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.CLASSROOM.TOGGLE_MODAL_ADD);
+    this.props.toggleModal(true, actionsTypes.CLASSROOM.TOGGLE_MODAL_ADD);
   }
 
   clickRefresh = () => {
-    getData(API.CLASSROOMS, actionsType.CLASSROOM);
+    ApiClient.getData(API.CLASSROOMS, actionsTypes.CLASSROOM, constants.HAS_SEND_MAIL);
   };
 
   search = (event) => {
@@ -77,9 +76,11 @@ class Classroom extends Component {
   };
 
   componentWillReceiveProps = () => {
-    this.setState({
-      filtered: this.props.classroom.allItems
-    });
+    if (!this.state.keyWord) {
+      this.setState({
+        filtered: this.props.classroom.allItems
+      });
+    }
   };
 
   componentDidMount = () => {
@@ -100,6 +101,7 @@ class Classroom extends Component {
         <ModalAdd />
         <ModalEdit />
         <ModalDelete />
+        <ModalSendmail />
         <Button bsStyle="success" onClick={() => this.clickAdd()}>
           <Glyphicon glyph="plus" /> Thêm lớp học mới
         </Button>
@@ -108,13 +110,15 @@ class Classroom extends Component {
         </Button>
         <br /><br />
         <FormGroup>    
-          <ControlLabel>Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }</ControlLabel>
+          <ControlLabel>
+            Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }
+          </ControlLabel>
           <FormControl 
             id="txtSearch"
             type="text"
             label="Text"
             placeholder="Từ khóa"
-            onChange={(event) => { this.search(event);}}
+            onChange={event => this.search(event)}
           />
         </FormGroup>
         <Datatable
@@ -135,8 +139,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModal,
-  select
+  select: actions.select,
+  toggleModal: actions.toggleModal
 };
 
 export default connect(

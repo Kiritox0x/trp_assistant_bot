@@ -4,6 +4,7 @@ const tokenInitialState = {
   token: sessionStorage.getItem('token') || null,
   isLogined: false
 };
+
 export default (state = tokenInitialState, action) => {
   switch(action.type) {
     case actionType.SET_TOKEN:

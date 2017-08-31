@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Modal, Button,
+  Button,
   Form, FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 import CKEditor from "react-ckeditor-component";
-import $ from 'jquery';
+import { Icon } from 'react-fa';
 
-import { toggleModal } from '../../actions';
-import * as actionsType from '../../actions/types';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
+import * as constants from '../../config/constant';
 
 class ModalEdit extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      dateFormat: 'DD/MM/YYYY',
-      timeFormat: false,
-    };
+    this.state = {};
   }
 
   onChange = (event) => {
@@ -33,23 +33,45 @@ class ModalEdit extends Component {
   }
   
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.MAILTEMPLATE.TOGGLE_MODAL_EDIT);
+    this.props.toggleModal(false, actionsTypes.MAILTEMPLATE.TOGGLE_MODAL_EDIT);
+  };
+
+  clickSave = () => {
+    this.setState({
+      isLoading: true
+    });
+    const {
+      id, name, title, context
+    } = this.state;
+    ApiClient.saveData(API.MAILTEMPLATES, {id, name, title, context})
+    .then(res => {
+      if (res.status === 200) {
+        this.clickClose();
+        ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
+      } else {
+        alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+        console.log(res);        
+      }
+      this.setState({
+        isLoading: false
+      });
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      console.log(err);
+      this.setState({
+        isLoading: false
+      });
+    });
   };
   
   componentWillReceiveProps = () => {
-    this.setState(this.props.mailtemplate.selected, () => {
-      console.log((this.state));
-    });
-
-  };
-
-  componentDidMount = () => {
-
+    this.setState(this.props.mailtemplate.selected);
   };
 
   render() {
     const { 
-      id, title, context
+      name, title, context, isLoading
     } = this.state;
     return (
       this.props.mailtemplate.showModalEdit ? 
@@ -60,16 +82,30 @@ class ModalEdit extends Component {
               <FormGroup> {/* Tên mẫu mail */}
                 <ControlLabel>Sửa mẫu mail: </ControlLabel>
                 <FormControl 
+                  id="name"
+                  type="text"
+                  label="Text"
+                  value={name}
+                  onChange={event => this.onChange(event)}
+                />
+                <ControlLabel>Tiêu đề: </ControlLabel>
+                <FormControl 
                   id="title"
                   type="text"
                   label="Text"
                   value={title}
-                  onChange={(event) => { this.onChange(event);}}
+                  onChange={event => this.onChange(event)}
                 />
-                <Button bsStyle="primary">Lưu lại</Button>
+                <Button bsStyle="primary" onClick={() => this.clickSave()}>
+                  { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Lưu lại
+                </Button>
                 <Button onClick={() => this.clickClose()}>Hủy</Button>
               </FormGroup>
-              <CKEditor scriptUrl="https://cdn.ckeditor.com/4.7.2/full-all/ckeditor.js" activeClass="p10" content={context} onChange={this.changeValueTemplate.bind(this)} />
+              <CKEditor 
+                scriptUrl={constants.CKEDITOR_SCRIPT} 
+                activeClass="p10" content={context} 
+                onChange={this.changeValueTemplate.bind(this)} 
+              />
             </Form>
           </div>
         </div>
@@ -84,7 +120,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModal,
+  toggleModal: actions.toggleModal,
 };
 
 export default connect(

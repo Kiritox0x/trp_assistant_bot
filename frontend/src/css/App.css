@@ -3,7 +3,13 @@ body {
   min-width: 650px;
 }
 
-.fa-spin {
+.scroll-top {
+  overflow-x: scroll;
+  width: calc(100% - 30px);
+  margin-left: 15px;
+}
+
+.container > .fa-spin {
   position: absolute;
   top: calc(50% - 35px);
   left: calc(50% + 90px - 35px);
@@ -128,6 +134,12 @@ a:hover {
   width: 179px;
 }
 
+@media (max-width: 767px) {
+  .nav.navbar-nav {
+    margin: 0;
+  }
+}
+
 /* CSS FOR DASHBOARD */
 .panel-body {
   padding: 10px;
@@ -223,7 +235,7 @@ a:hover {
 
 .show-modal {
   display: block;
-  padding-top: 30px;
+  padding-top: 15px;
 }
 .show-modal .w3-modal-content {
   padding: 10px 10px 10px 10px;
@@ -276,11 +288,13 @@ a:hover {
   min-height: calc(100vh - 255px) !important;
 }
 
-.form-inline .form-group {
+.form-inline .form-group,
+.form-inline .control-label {
   margin-bottom: 5px; 
 }
 
 .form-inline .btn,
-.form-inline .form-control {
+.form-inline .form-control,
+.form-inline .checkbox-inline {
   margin-left: 5px;
 }

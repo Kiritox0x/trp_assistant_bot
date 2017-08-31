@@ -4,17 +4,18 @@ import {
   Modal, Button
 } from 'react-bootstrap';
 
-import { toggleModal } from '../../actions';
-import * as actionsType from '../../actions/types';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+
 class ModalPreview extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {};
   }
-
+  
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.MAILTEMPLATE.TOGGLE_MODAL_PREVIEW);
+    this.props.toggleModal(false, actionsTypes.MAILTEMPLATE.TOGGLE_MODAL_PREVIEW);
   };
 
   componentWillReceiveProps = () => {
@@ -41,13 +42,12 @@ class ModalPreview extends Component {
   };
 }
 
-
 const mapStateToProps = (state, ownProps) => ({
   mailtemplate: state.mailtemplate,
 });
 
 const mapDispatchToProps = {
-  toggleModal,
+  toggleModal: actions.toggleModal,
 };
 
 export default connect(

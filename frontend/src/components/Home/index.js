@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { 
-  Grid, Col, Row, Button, Panel
+  Col, Row
 } from 'react-bootstrap';
 import { Icon } from 'react-fa';
-import { Link } from 'react-router-dom';
 
 import Board from './Board';
 
@@ -34,29 +33,29 @@ export default class Home extends Component {
           </Col>
         </Row>
         <Row>
-          <Board 
+          <Board // eslint-disable-next-line
             style={"primary"}
             icon="graduation-cap" 
             number={1000} 
             text="Lớp học" 
             link="/classroom"
           />
-          <Board 
-            style={"success"} 
+          <Board // eslint-disable-next-line
+            style={"success"}
             icon="user-circle" 
             number={1000} 
             text="GV chuyên môn" 
             link="/teacher"
           />
-          <Board 
+          <Board // eslint-disable-next-line
             style={"warning"} 
             icon="user-o" 
             number={1000} 
             text="GV hướng dẫn" 
             link="/assistant"
           />
-          <Board 
-            style={"danger"}
+          <Board // eslint-disable-next-line
+            style={"danger"} 
             icon="support" 
             number={1000} 
             text="Trợ giảng" 

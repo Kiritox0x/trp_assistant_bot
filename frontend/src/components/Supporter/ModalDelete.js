@@ -4,17 +4,18 @@ import {
   Modal, Button
 } from 'react-bootstrap';
 
-import { toggleModal } from '../../actions';
-import * as actionsType from '../../actions/types';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+
 class ModalDelete extends Component {
 
   constructor(props) {
     super(props);
     this.state = {};
   }
-
+  
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.SUPPORTER.TOGGLE_MODAL_DELETE);
+    this.props.toggleModal(false, actionsTypes.SUPPORTER.TOGGLE_MODAL_DELETE);
   }
 
   componentWillReceiveProps = () => {
@@ -23,7 +24,7 @@ class ModalDelete extends Component {
   
   render = () => {
     const {
-      id, name, account, email
+      name, account
     } = this.state;
     return (
       <Modal show={this.props.supporter.showModalDelete} onHide={() => this.clickClose()}>
@@ -31,7 +32,7 @@ class ModalDelete extends Component {
           <Modal.Title>Xóa trợ giảng</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Xác nhận xóa trợ giảng {name}?
+          Xác nhận xóa trợ giảng {name}, tài khoản: {account}?
         </Modal.Body>
         <Modal.Footer>
         <Button bsStyle="danger">Xóa trợ giảng</Button>
@@ -39,16 +40,15 @@ class ModalDelete extends Component {
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 }
-
 
 const mapStateToProps = (state, ownProps) => ({
   supporter: state.supporter,
 });
 
 const mapDispatchToProps = {
-  toggleModal,
+  toggleModal: actions.toggleModal,
 };
 
 export default connect(

@@ -2,12 +2,6 @@
 import { MAILTEMPLATE } from '../actions/types';
 import InitialState from './InitialSate';
 
-// const assistantInitialState = {
-//   allAssistants: [],
-//   selected: {},
-//   showModalEdit: false,
-//   showModalDelete: false
-// };
 let mailtemplateInitialState = new InitialState();
 mailtemplateInitialState.showModalPreview = false;
 export default (state = mailtemplateInitialState, action) => {
