@@ -192,8 +192,6 @@ class SupporterDetail(APIView):
 		return Response(status = status.HTTP_204_NO_CONTENT)
 
 class TokenValidate(APIView):
-	# permission_classes = (permissions.IsAuthenticated,)
-	
 	def get_instance(self, token):
 		try:
 			return Token.objects.get(key=token)
