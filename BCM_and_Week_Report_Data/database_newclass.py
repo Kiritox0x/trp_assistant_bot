@@ -22,18 +22,15 @@ def user_info(userId):
 	headers = {
 	    'cache-control': "no-cache",
 	    }
-	print querystring
 	response = requests.request("GET", url, headers=headers, params=querystring)
 	response = json.loads(response.text)
 	return response["data"][0]
 
 # Get list of activatingi classes
-now = datetime.now(pytz.utc)
-now = now.strftime('%m/%d/%Y')
-def get_activating_class():
+def get_activating_class(start_date, end_date):
 	url = "http://elearning.hou2.topica.vn/api/apittm/api_post_bcm.php"
 	
-	querystring = {"start_date": now,"end_date": now}
+	querystring = {"start_date": start_date,"end_date": end_date}
 	headers = {
 	    'cache-control': "no-cache",
 	    }
@@ -44,16 +41,27 @@ def get_activating_class():
 
 
 def create_BCM(newclass_report):
-	teacher_email = user_info(newclass_report["id_gvcm"])["email"]
 	if len(Bcm_room.objects.filter(subject_code = newclass_report["subject_code"])) == 0:
 		classroom = Bcm_room.objects.create()
 
-		# check if teacher and assistant exist in open_course database
-		if len(Teacher.objects.filter(topica_email = teacher_email)) != 0:
-			classroom.teacher = Teacher.objects.filter(topica_email = teacher_email)[0]
-		else: 
-			classroom.delete()
-			return
+		# check if subject has name
+		if newclass_report["subject_name"] != None:
+			classroom.subject_name = newclass_report["subject_name"]
+		else:
+		    classroom.subject_name = "No subject name"
+
+		# check if teacher exist in open_course database, if not exist return null
+		if newclass_report["id_gvcm"] != None:
+			teacher_email = user_info(newclass_report["id_gvcm"])["email"]
+			if len(Teacher.objects.filter(topica_email = teacher_email)) != 0:
+				classroom.teacher = Teacher.objects.filter(topica_email = teacher_email)[0]
+		
+		# check if assistant exist in open_course database, if not exist return null
+		if newclass_report["id_gvhd"] != None:
+			assistant_email = user_info(newclass_report["id_gvhd"])["email"]
+			if len(Assistant.objects.filter(topica_email = assistant_email)) !=0:
+				classroom.assistant  = Assistant.objects.filter(topica_email = assistant_email)[0]
+
 		classroom.subject_name = newclass_report["subject_name"]
 		classroom.subject_code = newclass_report["subject_code"] 
 		classroom.class_link = newclass_report["class_link"]
@@ -70,16 +78,35 @@ def create_BCM(newclass_report):
 			classroom.date_post_BCM = datetime.strptime(newclass_report["date_post_bcm"], '%d-%m-%Y')
 			classroom.date_post_BCM = classroom.date_post_BCM.replace(tzinfo = pytz.UTC)
 		# check if class have assistant
-		if newclass_report["id_gvhd"] != None:
-			assistant_email = user_info(newclass_report["id_gvhd"])["email"]
-			if len(Assistant.objects.filter(topica_email = assistant_email)) !=0:
-				classroom.assistant  = Assistant.objects.filter(topica_email = assistant_email)[0]
 		classroom.save()
 	
 	else:
 		classroom = Bcm_room.objects.filter(subject_code = newclass_report["subject_code"])
 		classroom = classroom.get()
+
+		# check if subject has name
+		if newclass_report["subject_name"] != None:
+			classroom.subject_name = newclass_report["subject_name"]
+		else:
+		    classroom.subject_name = "No subject name"
+
+		# check if teacher exist in open_course database, if not exist return null
+		if newclass_report["id_gvcm"] != None:
+			teacher_email = user_info(newclass_report["id_gvcm"])["email"]
+			if len(Teacher.objects.filter(topica_email = teacher_email)) != 0:
+				classroom.teacher = Teacher.objects.filter(topica_email = teacher_email)[0]
+		
+		# check if assistant exist in open_course database, if not exist return null
+		if newclass_report["id_gvhd"] != None:
+			assistant_email = user_info(newclass_report["id_gvhd"])["email"]
+			if len(Assistant.objects.filter(topica_email = assistant_email)) !=0:
+				classroom.assistant  = Assistant.objects.filter(topica_email = assistant_email)[0]
+
 		classroom.subject_name = newclass_report["subject_name"]
+		classroom.subject_code = newclass_report["subject_code"] 
+		classroom.class_link = newclass_report["class_link"]
+		classroom.document_link = newclass_report["document_link"]
+		
 		classroom.subject_code = newclass_report["subject_code"] 
 		classroom.class_link = newclass_report["class_link"]
 		classroom.document = newclass_report["document_link"]
@@ -95,7 +122,9 @@ def create_BCM(newclass_report):
 			classroom.date_post_BCM = classroom.date_post_BCM.replace(tzinfo = pytz.UTC)
 		classroom.save()
 
-database = get_activating_class()
+now = datetime.now(pytz.utc)
+now = now.strftime('%m/%d/%Y')
+database = get_activating_class(now,now)
 
 for obj in database:
 	create_BCM(obj)

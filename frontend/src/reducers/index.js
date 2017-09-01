@@ -8,7 +8,6 @@ import assistant from './assistantReducer';
 import supporter from './supporterReducer';
 import mailtemplate from './mailtemplateReducer';
 
-
 const rootReducer = combineReducers({
   token,
   classroom,

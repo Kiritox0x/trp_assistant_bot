@@ -7,8 +7,9 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics, permissions
+from rest_framework.authtoken.models import Token
 from open_course.models import Classroom, Teacher, Assistant, Supporter
-from open_course.serializers import ClassroomSerializer, UserSerializer, TeacherSerializer, AssistantSerializer, SupporterSerializer
+from open_course.serializers import ClassroomSerializer, UserSerializer, TeacherSerializer, AssistantSerializer, SupporterSerializer, TokenSerializer
 from open_course.permissions import IsOwnerOrReadOnly
 # Create your views here.
 
@@ -22,6 +23,8 @@ class TeacherList(APIView):
 
 	def post(self, request, format=None):
 		serializer = TeacherSerializer(data = request.data)
+		print type(request.data)
+		print request.data
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data,
@@ -188,6 +191,26 @@ class SupporterDetail(APIView):
 		supporter.delete()
 		return Response(status = status.HTTP_204_NO_CONTENT)
 
+class TokenValidate(APIView):
+	# permission_classes = (permissions.IsAuthenticated,)
+	
+	def get_instance(self, token):
+		try:
+			return Token.objects.get(key=token)
+		except Token.DoesNotExist:
+			raise Http404
+
+	def post(self, request, format = None):
+		if 'token' in request.data:
+			token = self.get_instance(request.data['token'])
+			response = {}
+			response['token'] = token.key
+			response['username'] = token.user.username
+			response['firstname'] = token.user.first_name
+			return JsonResponse(response, status=200)
+		else:
+			return Response("Params are not corrected", status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserList(generics.ListAPIView):
 	permission_classes = (permissions.IsAuthenticated,permissions.IsAdminUser,)
@@ -201,4 +224,3 @@ class UserDetail(generics.RetrieveAPIView):
 
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
-

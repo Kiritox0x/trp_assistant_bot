@@ -6,8 +6,9 @@ import {
 } from 'react-bootstrap';
 import Datetime from 'react-datetime';
 
-import { toggleModal } from '../../actions';
-import * as actionsType from '../../actions/types';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+
 class ModalAdd extends Component {
 
   constructor(props) {
@@ -31,15 +32,12 @@ class ModalAdd extends Component {
   };
 
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
+    this.props.toggleModal(false, actionsTypes.CLASSROOM.TOGGLE_MODAL_ADD);
   };
 
   render = () => {
     const {
-      school, subject, subject_code, 
-      class_name, class_subject, estimated_students,
-      start_date, finish_date, examination_date,
-      teacher, assistant, change_note, supporter,
+      teacher, assistant, supporter,
       dateFormat, timeFormat
     } = this.state;
     return (
@@ -54,7 +52,7 @@ class ModalAdd extends Component {
               id="school"
               type="text"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Tên môn */}
@@ -63,7 +61,7 @@ class ModalAdd extends Component {
               id="subject"
               type="text"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Mã môn */}
@@ -72,7 +70,7 @@ class ModalAdd extends Component {
               id="subject_code"
               type="text"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Tên lớp */}
@@ -81,7 +79,7 @@ class ModalAdd extends Component {
               id="class_name"
               type="text"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Lớp môn */}
@@ -90,7 +88,7 @@ class ModalAdd extends Component {
               id="class_subject"
               type="text"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* SL học viên */}
@@ -99,7 +97,7 @@ class ModalAdd extends Component {
               id="estimated_students"
               type="number"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Ngày bắt đầu */}
@@ -108,7 +106,7 @@ class ModalAdd extends Component {
               id="start_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
-              onChange={(event) => { this.onChangeDate(event, 'start_date');}}
+              onChange={event => this.onChangeDate(event, 'start_date')}
             />
           </FormGroup>
           <FormGroup> {/* Ngày kết thúc */}
@@ -117,7 +115,7 @@ class ModalAdd extends Component {
               id="finish_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
-              onChange={(event) => { this.onChangeDate(event, 'finish_date');}}
+              onChange={event => this.onChangeDate(event, 'finish_date')}
             />
           </FormGroup>
           <FormGroup> {/* Ngày thi */}
@@ -126,7 +124,7 @@ class ModalAdd extends Component {
               id="examination_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
-              onChange={(event) => { this.onChangeDate(event, 'examination_date');}}
+              onChange={event => this.onChangeDate(event, 'examination_date')}
             />
           </FormGroup>
           <FormGroup> {/* GVCM */}
@@ -135,12 +133,9 @@ class ModalAdd extends Component {
               id="teacher"
               componentClass="select" 
               placeholder="GVCM"
-              onChange={(event) => { this.onChange(event)}}
+              onChange={event => this.onChange(event)}
             >
               <option value={teacher}>{teacher}</option>
-              <option value={teacher}>{teacher}1</option>
-              <option value={teacher}>{teacher}2</option>
-              <option value={teacher}>{teacher}3</option>
             </FormControl>
           </FormGroup>
           <FormGroup> {/* GVHD */}
@@ -149,12 +144,9 @@ class ModalAdd extends Component {
               id="assistant"
               componentClass="select" 
               placeholder="GVHD"
-              onChange={(event) => { this.onChange(event)}}
+              onChange={event => this.onChange(event)}
             >
               <option value={assistant}>{assistant}</option>
-              <option value={assistant}>{assistant}1</option>
-              <option value={assistant}>{assistant}2</option>
-              <option value={assistant}>{assistant}3</option>
             </FormControl>
           </FormGroup>
           <FormGroup> {/* VHTT thay đổi */}
@@ -163,7 +155,7 @@ class ModalAdd extends Component {
               id="change_note"
               componentClass="textarea" 
               placeholder="textarea"
-              onChange={(event) => { this.onChange(event)}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Trợ giảng */}
@@ -172,12 +164,9 @@ class ModalAdd extends Component {
               id="supporter"
               componentClass="select" 
               placeholder="Trợ giảng"
-              onChange={(event) => { this.onChange(event)}}
+              onChange={event => this.onChange(event)}
             >
               <option value={supporter}>{supporter}</option>
-              <option value={supporter}>{supporter}1</option>
-              <option value={supporter}>{supporter}2</option>
-              <option value={supporter}>{supporter}3</option>
             </FormControl>
           </FormGroup>
         </Modal.Body>
@@ -190,13 +179,12 @@ class ModalAdd extends Component {
   };
 }
 
-
 const mapStateToProps = (state, ownProps) => ({
   classroom: state.classroom,
 });
 
 const mapDispatchToProps = {
-  toggleModal,
+  toggleModal: actions.toggleModal,
 };
 
 export default connect(

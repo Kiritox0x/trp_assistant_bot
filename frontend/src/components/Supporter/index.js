@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { 
-  Col, Row, Modal, Table, FormGroup,
-  ControlLabel, FormControl, Button, Glyphicon,
+  Col, Button, Glyphicon,
+  FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 import Datatable from 'react-bs-datatable';
 import { Icon } from 'react-fa';
 
-import store from '../../store';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
 
 import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
 import ModalDelete from './ModalDelete';
-import { 
-  toggleModal, select 
-} from '../../actions';
-import * as actionsType from '../../actions/types';
-
-import { getList } from '../../util/ApiClient';
-import * as API from '../../config/Api';
 
 const header = [
   { title: 'Sửa', prop: 'edit', sortable: false },
@@ -36,74 +31,57 @@ class Supporter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: [],
-      filtered: [],
-      fetching: true
+      filtered: []
     };
   }
 
-  selectIndex = (index) => {
-    this.props.select(this.state.body[index], actionsType.SELECT_SUPPORTER);
-  };
-
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_SUPPORTER);
+    this.props.toggleModal(true, actionsTypes.SUPPORTER.TOGGLE_MODAL_ADD);
   }
 
-  clickEdit = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_SUPPORTER);}, 1);
-  }
-
-  clickDelete = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_SUPPORTER);}, 1);
-  }
+  clickRefresh = () => {
+    ApiClient.getData(API.SUPPORTERS, actionsTypes.SUPPORTER);
+  };
 
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.state.body
+        filtered: this.props.supporter.allItems,
+        searching: false,
+        keyWord
       });
     }
     this.setState({
-      filtered: this.state.body.filter((supporter) => {
+      filtered: this.props.supporter.allItems.filter((supporter) => {
         return Object.values(supporter).join('//').toLowerCase().indexOf(keyWord) > -1;
-      })
+      }),
+      searching: true,
+      keyWord
     });
   }
 
+  componentWillReceiveProps = () => {
+    if (!this.state.keyWord) {
+      this.setState({
+        filtered: this.props.supporter.allItems
+      });
+    }
+  };
+
   componentDidMount= () => {
     document.title = "Supporter";
-    getList(API.SUPPORTERS)
-    .then((data) => {
-      let index = 0;
-      const body = data.map((supporter) => {
-        return {
-          ...supporter,
-          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
-          <span className="glyphicon glyphicon-pencil"></span>
-        </Button>,
-          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++)}>
-          <span className="glyphicon glyphicon-trash"></span></Button>
-        }
-      })
-      this.setState({
-        body,
-        filtered: [...body],
-        fetching: false
-      });
-    })
-    .catch(error => console.log(error));
-    
+    this.setState({
+      filtered: [...this.props.supporter.allItems]
+    });
   }
 
   render = () => {  
     const body = [...this.state.filtered];
-    const { fetching } = this.state;
+    const { searching, keyWord } = this.state;
+    const { isFetching } = this.props.supporter;
     return (
-      fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
+      isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
         <Col md={10} mdOffset={1}>
           <h2 className="text-center">Quản lý trợ giảng</h2>
@@ -113,16 +91,20 @@ class Supporter extends Component {
           <Button bsStyle="success" onClick={() => this.clickAdd()}>
             <Glyphicon glyph="plus" /> Thêm trợ giảng mới
           </Button>
+          <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+            <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
+          </Button>
           <br /><br />
-          <FormGroup>
-            
-            <ControlLabel>Tìm kiếm</ControlLabel>
+          <FormGroup>  
+            <ControlLabel>
+              Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }
+            </ControlLabel>
             <FormControl 
               id="txtSearch"
               type="text"
               label="Text"
               placeholder="Từ khóa"
-              onChange={(event) => { this.search(event);}}
+              onChange={event => this.search(event)}
             />
           </FormGroup>
           <Datatable
@@ -136,17 +118,16 @@ class Supporter extends Component {
         </Col>
       </div>
     );
-  }
-
+  };
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  teacher: state.teacher,
+  supporter: state.supporter,
 });
 
 const mapDispatchToProps = {
-  toggleModal,
-  select
+  toggleModal: actions.toggleModal,
+  select: actions.select
 };
 
 export default connect(

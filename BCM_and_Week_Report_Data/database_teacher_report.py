@@ -29,12 +29,10 @@ def user_info(userId):
 
 
 # Get list of activatingi classes
-now = datetime.now(pytz.utc)
-now = now.strftime('%m/%d/%Y')
-def get_activating_class():
+def get_activating_class(start_date, end_date):
 	url = "http://elearning.hou2.topica.vn/api/apittm/api_gvcm_post_nxdh.php"
 	
-	querystring = {"start_date": now,"end_date": now}
+	querystring = {"start_date": start_date,"end_date": end_date}
 	headers = {
 	    'cache-control': "no-cache",
 	    }
@@ -72,7 +70,9 @@ def create_week_teacher(teacher_report):
 		classroom.total_post = teacher_report["total_post"]
 		classroom.save()
 
-database = get_activating_class()
+now = datetime.now(pytz.utc)
+now = now.strftime('%m/%d/%Y')
+database = get_activating_class(now, now)
 
 for obj in database:
 	create_week_teacher(obj)

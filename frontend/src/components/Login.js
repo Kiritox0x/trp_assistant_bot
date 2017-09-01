@@ -5,6 +5,7 @@ import {
   ControlLabel
 } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
+import { Icon } from 'react-fa';
 
 import * as Auth from '../util/Auth';
 import Logo from '../images/logo.png';
@@ -23,15 +24,26 @@ class Login extends Component {
   }
 
   login = () => {
+    if (! this.validateForm()) {
+      alert("Tài khoản và mật khẩu không được để trống");
+      return;
+    }
+    this.setState({
+      isLoading: true
+    });
     Auth.login({
       username: this.state.username,
       password: this.state.password
     })
     .then(() => {
       this.props.history.replace('/');
+      this.setState({
+        isLoading: true
+      });
     })
     .catch((err) => {
-      alert('error');
+      console.log(err);
+      alert('Thông tin đăng nhập không chính xác');
     });
   };
 
@@ -47,6 +59,7 @@ class Login extends Component {
   };
 
   render = () => {
+    const { isLoading } = this.state;
     return (
       <Grid>
         <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={8} xsOffset={2}>
@@ -78,7 +91,7 @@ class Login extends Component {
                   this.login();
                 }}
                 type="submit">
-                Login
+                { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Login
               </Button>
             </FormGroup>
           </Form>

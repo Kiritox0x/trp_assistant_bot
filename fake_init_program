@@ -1,0 +1,8 @@
+python manage.py makemigrations open_course
+python manage.py makemigrations mail_sender 
+python manage.py makemigrations template_editor
+python manage.py migrate
+python generate_fake_email.py
+python ./BCM_and_Week_Report_Data/fake_newclass.py
+python ./BCM_and_Week_Report_Data/fake_assistant.py
+python ./BCM_and_Week_Report_Data/fake_teacher.py

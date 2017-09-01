@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { 
-  Grid, Col
+  Grid
 } from 'react-bootstrap';
 import { Switch, Redirect } from 'react-router-dom';
+
+import * as API from "../config/Api";
+import * as ApiClient from '../util/ApiClient';
+import * as actions from '../actions';
+import * as actionsTypes from '../actions/types';
+import * as constants from '../config/constant';
 
 import Route from '../routes/AuthRoute';
 import Header from './Header';
@@ -13,9 +20,21 @@ import Assistant from './Assistant/index';
 import Supporter from './Supporter/index';
 import MailTemplate from './MailTemplate/index';
 
-export default class Main extends Component {
+class Main extends Component {
 
   static isPrivate = true;
+
+  componentWillMount = () => {
+    ApiClient.getData(API.CLASSROOMS, actionsTypes.CLASSROOM, constants.HAS_SEND_MAIL);
+    ApiClient.getData(API.TEACHERS, actionsTypes.TEACHER);
+    ApiClient.getData(API.ASSISTANTS, actionsTypes.ASSISTANT);
+    ApiClient.getData(API.SUPPORTERS, actionsTypes.SUPPORTER);
+    ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
+  };
+
+  componentDidMount = () => {
+
+  };
 
   render = () => {
     return (
@@ -37,3 +56,23 @@ export default class Main extends Component {
     );
   };
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  assistant: state.assistant,
+  classroom: state.classroom,
+  supporter: state.supporter,
+  teacher: state.teacher,
+  mailtemplate: state.mailtemplate
+});
+
+const mapDispatchToProps = {
+  set: actions.set,
+  select: actions.select,
+  toggleModal: actions.toggleModal
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);
+

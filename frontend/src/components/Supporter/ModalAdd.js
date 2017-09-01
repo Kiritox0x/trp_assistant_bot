@@ -4,19 +4,11 @@ import {
   Modal, Button,
   FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
-// import Datetime from 'react-datetime';
 
-import { toggleModal } from '../../actions';
-import * as actionsType from '../../actions/types';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+
 class ModalAdd extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      dateFormat: 'DD/MM/YYYY',
-      timeFormat: false,
-    };
-  }
 
   onChange = (event) => {
     this.setState({
@@ -24,20 +16,11 @@ class ModalAdd extends Component {
     });
   }
 
-  onChangeDate = (event, id) => {
-    this.setState({
-      [id]: event.toDate()
-    });
-  }
-
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.TOGGLE_MODAL_ADD_SUPPORTER);
+    this.props.toggleModal(false, actionsTypes.SUPPORTER.TOGGLE_MODAL_ADD);
   }
 
   render = () => {
-    const { 
-      id, name, account, email
-    } = this.state;
     return (
       <Modal show={this.props.supporter.showModalAdd} onHide={() => this.clickClose()}>
         <Modal.Header closeButton>
@@ -50,7 +33,7 @@ class ModalAdd extends Component {
               id="name"
               type="text"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Tài khoản */}
@@ -59,7 +42,7 @@ class ModalAdd extends Component {
               id="account"
               type="text"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Email */}
@@ -68,7 +51,7 @@ class ModalAdd extends Component {
               id="email"
               type="text"
               label="Text"
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
         </Modal.Body>
@@ -78,16 +61,15 @@ class ModalAdd extends Component {
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 }
-
 
 const mapStateToProps = (state, ownProps) => ({
   supporter: state.supporter,
 });
 
 const mapDispatchToProps = {
-  toggleModal,
+  toggleModal: actions.toggleModal,
 };
 
 export default connect(

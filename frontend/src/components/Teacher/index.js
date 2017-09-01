@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { 
-  Col, Row, Modal, Table, FormGroup,
-  ControlLabel, FormControl, Button, Glyphicon,
+  FormGroup, Button, Glyphicon,
+  ControlLabel, FormControl
 } from 'react-bootstrap';
 import Datatable from 'react-bs-datatable';
 import { Icon } from 'react-fa';
 
-import store from '../../store';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
 
 import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
 import ModalDelete from './ModalDelete';
-import { 
-  toggleModal, select 
-} from '../../actions';
-import * as actionsType from '../../actions/types';
-
-import { getList } from '../../util/ApiClient';
-import * as API from '../../config/Api';
 
 const header = [
   { title: 'Sửa', prop: 'edit', sortable: false },
@@ -44,73 +39,57 @@ class Teacher extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: [],
-      filtered: [],
-      fetching: true
+      filtered: []
     };
   }
 
-  selectIndex = (index) => {
-    this.props.select(this.state.body[index], actionsType.SELECT_TEACHER);
-  };
-
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_TEACHER);
+    this.props.toggleModal(true, actionsTypes.TEACHER.TOGGLE_MODAL_ADD);
   };
 
-  clickEdit = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_TEACHER);}, 1);
-  };
-
-  clickDelete = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_TEACHER);}, 1);
+  clickRefresh = () => {
+    ApiClient.getData(API.TEACHERS, actionsTypes.TEACHER);
   };
 
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.state.body
+        filtered: this.props.teacher.allItems,
+        searching: false,
+        keyWord
       });
     }
     this.setState({
-      filtered: this.state.body.filter((teacher) => {
+      filtered: this.props.teacher.allItems.filter((teacher) => {
         return Object.values(teacher).join('//').toLowerCase().indexOf(keyWord) > -1;
-      })
+      }),
+      searching: true,
+      keyWord
     });
+  };
+
+  componentWillReceiveProps = () => {
+    if (!this.state.keyWord || this.props.teacher.isFetching) {
+      this.setState({
+        filtered: this.props.teacher.allItems
+      });
+    }
   };
 
   componentDidMount = () => {
     document.title = "Teacher";
-    getList(API.TEACHERS)
-    .then((data) => {
-      let index = 0;
-      const body = data.map((teacher) => {
-        return {
-          ...teacher,
-          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
-          <span className="glyphicon glyphicon-pencil"></span>
-        </Button>,
-          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++)}>
-          <span className="glyphicon glyphicon-trash"></span></Button>
-        }
-      })
-      this.setState({
-        body,
-        filtered: [...body],
-        fetching: false
-      });
-    })
-    .catch(error => console.log(error));   
+    this.setState({
+      filtered: [...this.props.teacher.allItems]
+    });
   };
 
   render = () => {  
     const body = [...this.state.filtered];
-    const { fetching } = this.state;
+    const { searching, keyWord } = this.state;
+    const { isFetching } = this.props.teacher;
     return (
-      fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
+      isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
         <h2 className="text-center">Quản lý GVCM</h2>
         <ModalAdd />
@@ -119,16 +98,21 @@ class Teacher extends Component {
         <Button bsStyle="success" onClick={() => this.clickAdd()}>
           <Glyphicon glyph="plus" /> Thêm GVCM mới
         </Button>
+        <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+          <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
+        </Button>
         <br /><br />
         <FormGroup>
-          
-          <ControlLabel>Tìm kiếm</ControlLabel>
+          <ControlLabel>
+            Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }
+          </ControlLabel>
           <FormControl 
             id="txtSearch"
             type="text"
             label="Text"
             placeholder="Từ khóa"
-            onChange={(event) => { this.search(event);}}
+            value={keyWord}
+            onChange={event => this.search(event)}
           />
         </FormGroup>
         <Datatable
@@ -149,8 +133,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModal,
-  select
+  select: actions.select,
+  toggleModal: actions.toggleModal
 };
 
 export default connect(

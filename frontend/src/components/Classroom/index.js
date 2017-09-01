@@ -8,18 +8,19 @@ import {
 import Datatable from 'react-bs-datatable';
 import { Icon } from 'react-fa';
 
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
+import * as constants from '../../config/constant';
+
 import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
 import ModalDelete from './ModalDelete';
-import { 
-  toggleModal, select 
-} from '../../actions';
-import * as actionsType from '../../actions/types';
-
-import { getList } from '../../util/ApiClient';
-import * as API from '../../config/Api';
+import ModalSendmail from './ModalSendmail';
 
 const header = [
+  { title: 'Gửi mail', prop: 'sendmail', sortable: false },
   { title: 'Sửa', prop: 'edit', sortable: false },
   { title: 'Xóa', prop: 'delete', sortable: false },
   { title: 'Trường', prop: 'school', sortable: true },
@@ -37,8 +38,6 @@ const header = [
   { title: 'Trợ giảng', prop: 'supporter', sortable: true },
 ];
 
-
-
 class Classroom extends Component {
 
   static isPrivate = true; 
@@ -46,89 +45,80 @@ class Classroom extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: [],
-      filtered: [],
-      fetching: true
+      filtered: []
     };
   }
 
-  selectIndex = (index) => {
-    this.props.select(this.state.body[index], actionsType.SELECT_CLASSROOM);
-  };
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.TOGGLE_MODAL_ADD_CLASSROOM);
+    this.props.toggleModal(true, actionsTypes.CLASSROOM.TOGGLE_MODAL_ADD);
   }
 
-  clickEdit = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_EDIT_CLASSROOM);}, 1);
+  clickRefresh = () => {
+    ApiClient.getData(API.CLASSROOMS, actionsTypes.CLASSROOM, constants.HAS_SEND_MAIL);
   };
-
-  clickDelete = (index) => {
-    this.selectIndex(index);
-    setTimeout(() => {this.props.toggleModal(true, actionsType.TOGGLE_MODAL_DELETE_CLASSROOM);}, 1);
-  }
 
   search = (event) => {
     const keyWord = event.target.value.toLowerCase();
     if (keyWord.length === 0) {
       return this.setState({
-        filtered: this.state.body
+        filtered: this.props.classroom.allItems,
+        searching: false,
+        keyWord
       });
     }
     this.setState({
-      filtered: this.state.body.filter((classroom) => {
+      filtered: this.props.classroom.allItems.filter((classroom) => {
         return Object.values(classroom).join('//').toLowerCase().indexOf(keyWord) > -1;
-      })
+      }),
+      searching: true,
+      keyWord
     });
+  };
+
+  componentWillReceiveProps = () => {
+    if (!this.state.keyWord) {
+      this.setState({
+        filtered: this.props.classroom.allItems
+      });
+    }
   };
 
   componentDidMount = () => {
     document.title = "Classroom";
-    getList(API.CLASSROOMS)
-    .then((data) => {
-      let index = 0;
-      const body = data.map((teacher) => {
-        return {
-          ...teacher,
-          edit: <Button bsStyle="primary" bsSize="xsmall" onClick={() => this.clickEdit(index)}>
-          <span className="glyphicon glyphicon-pencil"></span>
-        </Button>,
-          delete: <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.clickDelete(index++)}>
-          <span className="glyphicon glyphicon-trash"></span></Button>
-        }
-      })
-      this.setState({
-        body,
-        filtered: [...body],
-        fetching: false
-      });
-    })
-    .catch(error => console.log(error));
+    this.setState({
+      filtered: [...this.props.classroom.allItems]
+    });
   };
 
   render = () => {  
     const body = [...this.state.filtered];
-    const { fetching } = this.state;
+    const { searching, keyWord } = this.state;
+    const { isFetching } = this.props.classroom;
     return (
-      fetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
+      isFetching ? <Icon spin={true} name="circle-o-notch" size="5x" /> :
       <div className="main-content">
         <h2 className="text-center">Quản lý lớp học</h2>
         <ModalAdd />
         <ModalEdit />
         <ModalDelete />
+        <ModalSendmail />
         <Button bsStyle="success" onClick={() => this.clickAdd()}>
           <Glyphicon glyph="plus" /> Thêm lớp học mới
         </Button>
+        <Button bsStyle="primary" onClick={() => this.clickRefresh()}>
+          <Glyphicon glyph="refresh" /> Cập nhật dữ liệu
+        </Button>
         <br /><br />
         <FormGroup>    
-          <ControlLabel>Tìm kiếm</ControlLabel>
+          <ControlLabel>
+            Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }
+          </ControlLabel>
           <FormControl 
             id="txtSearch"
             type="text"
             label="Text"
             placeholder="Từ khóa"
-            onChange={(event) => { this.search(event);}}
+            onChange={event => this.search(event)}
           />
         </FormGroup>
         <Datatable
@@ -149,8 +139,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModal,
-  select
+  select: actions.select,
+  toggleModal: actions.toggleModal
 };
 
 export default connect(

@@ -154,12 +154,12 @@ class Weekreport_AssistantList(APIView):
 	permission_classes = (permissions.IsAuthenticated,)
 	
 	def get(self, request, format = None):
-	      classrooms = Weekreport_Teacher.objects.all()
-	      serializer = Weekreport_TeacherSerializer(classrooms, many = True)
+	      classrooms = Weekreport_Assistant.objects.all()
+	      serializer = Weekreport_AssistantSerializer(classrooms, many = True)
 	      return Response(serializer.data)
 	
 	def post(self, request, format=None):
-	    serializer = Weekreport_TeacherSerializer(data = request.data)
+	    serializer = Weekreport_AssistantSerializer(data = request.data)
 	    if serializer.is_valid():
 	        serializer.save()
 	        return Response(serializer.data, status=status.HTTP_201_CREATED)
