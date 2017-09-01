@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { 
-  Col, Row, Modal, Table, FormGroup,
-  ControlLabel, FormControl, Button, Glyphicon,
+  FormGroup, Button, Glyphicon,
+  ControlLabel, FormControl
 } from 'react-bootstrap';
 import Datatable from 'react-bs-datatable';
 import { Icon } from 'react-fa';
 
-import store from '../../store';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
 
 import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
 import ModalDelete from './ModalDelete';
-import { 
-  toggleModal, select 
-} from '../../actions';
-import * as actionsType from '../../actions/types';
-
-import { getData } from '../../util/ApiClient';
-import * as API from '../../config/Api';
 
 const header = [
   { title: 'Sửa', prop: 'edit', sortable: false },
@@ -49,11 +44,11 @@ class Teacher extends Component {
   }
 
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.TEACHER.TOGGLE_MODAL_ADD);
+    this.props.toggleModal(true, actionsTypes.TEACHER.TOGGLE_MODAL_ADD);
   };
 
   clickRefresh = () => {
-    getData(API.TEACHERS, actionsType.TEACHER);
+    ApiClient.getData(API.TEACHERS, actionsTypes.TEACHER);
   };
 
   search = (event) => {
@@ -75,9 +70,11 @@ class Teacher extends Component {
   };
 
   componentWillReceiveProps = () => {
-    this.setState({
-      filtered: this.props.teacher.allItems
-    });
+    if (!this.state.keyWord || this.props.teacher.isFetching) {
+      this.setState({
+        filtered: this.props.teacher.allItems
+      });
+    }
   };
 
   componentDidMount = () => {
@@ -106,14 +103,16 @@ class Teacher extends Component {
         </Button>
         <br /><br />
         <FormGroup>
-          
-          <ControlLabel>Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }</ControlLabel>
+          <ControlLabel>
+            Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }
+          </ControlLabel>
           <FormControl 
             id="txtSearch"
             type="text"
             label="Text"
             placeholder="Từ khóa"
-            onChange={(event) => { this.search(event);}}
+            value={keyWord}
+            onChange={event => this.search(event)}
           />
         </FormGroup>
         <Datatable
@@ -134,8 +133,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModal,
-  select
+  select: actions.select,
+  toggleModal: actions.toggleModal
 };
 
 export default connect(

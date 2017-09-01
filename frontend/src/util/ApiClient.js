@@ -4,12 +4,14 @@ import axios from 'axios';
 import {
   Button, Glyphicon
 } from 'react-bootstrap';
+
 import store from '../store';
-import { URL } from '../config/Api';
-import { select, get, set, toggleModal } from '../actions';
+import * as API from '../config/Api';
+import * as actions from '../actions';
+import * as constants from '../config/constant';
 
 const getList = (ENDPOINTS) => {
-  return axios.get(URL + ENDPOINTS, {
+  return axios.get(API.URL + ENDPOINTS, {
     headers: {'Authorization': 'Token ' + store.getState().token.token }
   })
     .then((response) => {
@@ -21,63 +23,86 @@ const getList = (ENDPOINTS) => {
 };
 
 const clickEdit = (index, type) => {
-  store.dispatch(select(index, type.SELECT));
-  setTimeout(() => {store.dispatch(toggleModal(true, type.TOGGLE_MODAL_EDIT));}, 100);
+  store.dispatch(actions.select(index, type.SELECT));
+  setTimeout(() => {store.dispatch(actions.toggleModal(true, type.TOGGLE_MODAL_EDIT));}, 100);
 };
 
 const clickDelete = (index, type) => {
-  store.dispatch(select(index, type.SELECT));
-  setTimeout(() => {store.dispatch(toggleModal(true, type.TOGGLE_MODAL_DELETE));}, 100);
+  store.dispatch(actions.select(index, type.SELECT));
+  setTimeout(() => {store.dispatch(actions.toggleModal(true, type.TOGGLE_MODAL_DELETE));}, 100);
 };
-
 
 const clickPreview = (index, type) => {
-  store.dispatch(select(index, type.SELECT));
-  setTimeout(() => {store.dispatch(toggleModal(true, type.TOGGLE_MODAL_PREVIEW));}, 100);
+  store.dispatch(actions.select(index, type.SELECT));
+  setTimeout(() => {store.dispatch(actions.toggleModal(true, type.TOGGLE_MODAL_PREVIEW));}, 100);
 };
 
-export const getData = (API, type, preview = false) => {
-  store.dispatch(set(true, type.SET_FETCHING));
-  getList(API)
+const clickSendmail = (index, type) => {
+  store.dispatch(actions.select(index, type.SELECT));
+  setTimeout(() => {store.dispatch(actions.toggleModal(true, type.TOGGLE_MODAL_SENDMAIL));}, 100);
+};
+
+export const getData = (endpoints, type, options = 0) => {
+  store.dispatch(actions.set(true, type.SET_FETCHING));
+  getList(endpoints)
   .then((data) => {
-    let index = 0;
-    const body = data.map((item) => {
-      index++;
-      return ! preview ? ({
+    const body = data.map((item, index) => {
+      let row = {
         ...item,
-        edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => clickEdit(index - 1, type)}>
+        edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => clickEdit(index, type)}>
                     <Glyphicon glyph="pencil" /> Chỉnh sửa
                   </Button>,
-        delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => clickDelete(index - 1, type)}>
+        delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => clickDelete(index, type)}>
                     <Glyphicon glyph="trash" /> Xóa
                   </Button>
-      }) : ({
-        ...item,
-        edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => clickEdit(index - 1, type)}>
-                    <Glyphicon glyph="pencil" /> Chỉnh sửa
-                  </Button>,
-        delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => clickDelete(index - 1, type)}>
-                    <Glyphicon glyph="trash" /> Xóa
-                  </Button>,
-        preview:  <Button bsStyle="success" bsSize="xsmall" onClick={() => clickPreview(index - 1, type)}>
-                    <Glyphicon glyph="search" /> Xem trước
-                  </Button>
-      })
+      };
+      switch (options) {
+        case constants.HAS_PREVIEW:
+          row.preview = <Button bsStyle="success" bsSize="xsmall" onClick={() => clickPreview(index, type)}>
+                          <Glyphicon glyph="search" /> Xem trước
+                        </Button>
+          break;
+        case constants.HAS_SEND_MAIL:
+          row.sendmail =  <Button bsStyle="success" bsSize="xsmall" onClick={() => clickSendmail(index, type)}>
+                            <Glyphicon glyph="send" /> Gửi mail
+                          </Button>
+          break;
+        default : break;
+      }
+      return row;
     });
-    store.dispatch(set(body, type.SET_BODY));
-    setTimeout(() => store.dispatch(set(false, type.SET_FETCHING), 100));
+    store.dispatch(actions.set(body, type.SET_BODY));
+    setTimeout(() => store.dispatch(actions.set(false, type.SET_FETCHING), 100));
   })
   .catch(error => console.log(error));
 };
 
+export const addData = (ENDPOINTS, item) => {
+  return new Promise((resolve, reject) => {
+    axios.post(`${API.URL}${ENDPOINTS}`, item, {
+      headers: {'Authorization': 'Token ' + store.getState().token.token }
+    })
+    .then(response => resolve(response))
+    .catch(error => reject(error));
+  });
+};
+
+export const saveData = (ENDPOINTS, item) => {
+  return new Promise((resolve, reject) => {
+    axios.put(`${API.URL}${ENDPOINTS}${item.id}/`, item, {
+      headers: {'Authorization': 'Token ' + store.getState().token.token }
+    })
+    .then(response => resolve(response))
+    .catch(error => reject(error));
+  });
+};
+
 export const deleteData = (ENDPOINTS, id) => {
-  return axios.delete(`${URL}${ENDPOINTS}${id}/`,{
-    headers: {'Authorization': 'Token ' + store.getState().token.token }
-  })
-  .then((response) => {
-    return response;
-  })
-  .catch((error) => {
-    return error;
+  return new Promise((resolve, reject) => {
+    axios.delete(`${API.URL}${ENDPOINTS}${id}/`,{
+      headers: {'Authorization': 'Token ' + store.getState().token.token }
+    })
+    .then(response => resolve(response))
+    .catch(error => reject(error));
   });
 };

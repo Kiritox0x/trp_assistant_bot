@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Grid, Col, Row, Button, Panel, Glyphicon
+  Col, Panel, Glyphicon
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import BoardHeader from './BoardHeader';

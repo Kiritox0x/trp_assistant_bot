@@ -6,8 +6,9 @@ import {
 } from 'react-bootstrap';
 import Datetime from 'react-datetime';
 
-import { toggleModal } from '../../actions';
-import * as actionsType from '../../actions/types';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+
 class ModalEdit extends Component {
 
   constructor(props) {
@@ -31,7 +32,7 @@ class ModalEdit extends Component {
   };
 
   clickClose = () => {
-    this.props.toggleModal(false, actionsType.CLASSROOM.TOGGLE_MODAL_EDIT)
+    this.props.toggleModal(false, actionsTypes.CLASSROOM.TOGGLE_MODAL_EDIT)
   };
 
   componentWillReceiveProps = () => {
@@ -59,7 +60,7 @@ class ModalEdit extends Component {
               type="text"
               label="Text"
               value={school}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Tên môn */}
@@ -69,7 +70,7 @@ class ModalEdit extends Component {
               type="text"
               label="Text"
               value={subject}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Mã môn */}
@@ -79,7 +80,7 @@ class ModalEdit extends Component {
               type="text"
               label="Text"
               value={subject_code}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Tên lớp */}
@@ -89,7 +90,7 @@ class ModalEdit extends Component {
               type="text"
               label="Text"
               value={class_name}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Lớp môn */}
@@ -99,7 +100,7 @@ class ModalEdit extends Component {
               type="text"
               label="Text"
               value={class_subject}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* SL học viên */}
@@ -109,7 +110,7 @@ class ModalEdit extends Component {
               type="number"
               label="Text"
               value={estimated_students}
-              onChange={(event) => { this.onChange(event);}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Ngày bắt đầu */}
@@ -119,7 +120,7 @@ class ModalEdit extends Component {
               dateFormat={dateFormat}
               timeFormat={timeFormat}
               value={new Date(start_date)}
-              onChange={(event) => { this.onChangeDate(event, 'start_date');}}
+              onChange={event => this.onChangeDate(event, 'start_date')}
             />
           </FormGroup>
           <FormGroup> {/* Ngày kết thúc */}
@@ -129,7 +130,7 @@ class ModalEdit extends Component {
               dateFormat={dateFormat}
               timeFormat={timeFormat}
               value={new Date(finish_date)}
-              onChange={(event) => { this.onChangeDate(event, 'finish_date');}}
+              onChange={event => this.onChangeDate(event, 'finish_date')}
             />
           </FormGroup>
           <FormGroup> {/* Ngày thi */}
@@ -139,7 +140,7 @@ class ModalEdit extends Component {
               dateFormat={dateFormat}
               timeFormat={timeFormat}
               value={new Date(examination_date)}
-              onChange={(event) => { this.onChangeDate(event, 'examination_date');}}
+              onChange={event => this.onChangeDate(event, 'examination_date')}
             />
           </FormGroup>
           <FormGroup> {/* GVCM */}
@@ -148,12 +149,9 @@ class ModalEdit extends Component {
               id="teacher"
               componentClass="select" 
               placeholder="GVCM"
-              onChange={(event) => { this.onChange(event)}}
+              onChange={event => this.onChange(event)}
             >
               <option value={teacher}>{teacher}</option>
-              <option value={teacher}>{teacher}1</option>
-              <option value={teacher}>{teacher}2</option>
-              <option value={teacher}>{teacher}3</option>
             </FormControl>
           </FormGroup>
           <FormGroup> {/* GVHD */}
@@ -162,12 +160,9 @@ class ModalEdit extends Component {
               id="assistant"
               componentClass="select" 
               placeholder="GVHD"
-              onChange={(event) => { this.onChange(event)}}
+              onChange={event => this.onChange(event)}
             >
               <option value={assistant}>{assistant}</option>
-              <option value={assistant}>{assistant}1</option>
-              <option value={assistant}>{assistant}2</option>
-              <option value={assistant}>{assistant}3</option>
             </FormControl>
           </FormGroup>
           <FormGroup> {/* VHTT thay đổi */}
@@ -177,7 +172,7 @@ class ModalEdit extends Component {
               componentClass="textarea" 
               placeholder="textarea" 
               value={change_note}
-              onChange={(event) => { this.onChange(event)}}
+              onChange={event => this.onChange(event)}
             />
           </FormGroup>
           <FormGroup> {/* Trợ giảng */}
@@ -186,12 +181,9 @@ class ModalEdit extends Component {
               id="supporter"
               componentClass="select" 
               placeholder="Trợ giảng"
-              onChange={(event) => { this.onChange(event)}}
+              onChange={event => this.onChange(event)}
             >
               <option value={supporter}>{supporter}</option>
-              <option value={supporter}>{supporter}1</option>
-              <option value={supporter}>{supporter}2</option>
-              <option value={supporter}>{supporter}3</option>
             </FormControl>
           </FormGroup>
         </Modal.Body>
@@ -201,16 +193,15 @@ class ModalEdit extends Component {
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 }
-
 
 const mapStateToProps = (state, ownProps) => ({
   classroom: state.classroom,
 });
 
 const mapDispatchToProps = {
-  toggleModal,
+  toggleModal: actions.toggleModal,
 };
 
 export default connect(

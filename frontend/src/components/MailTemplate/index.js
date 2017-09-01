@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { 
-  Col, Row, Modal, Table, FormGroup,
-  ControlLabel, FormControl, Button, Glyphicon,
+  Col, Button, Glyphicon,
+  FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 import Datatable from 'react-bs-datatable';
 import { Icon } from 'react-fa';
 
-import store from '../../store';
+import * as actions from '../../actions';
+import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
+import * as constants from '../../config/constant';
 
 import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
 import ModalDelete from './ModalDelete';
 import ModalPreview from './ModalPreview';
-import { 
-  toggleModal, select 
-} from '../../actions';
-import * as actionsType from '../../actions/types';
-
-import { getData } from '../../util/ApiClient';
-import * as API from '../../config/Api';
 
 const header = [
-  { title: 'Tên mẫu mail', prop: 'title', sortable: true },
+  { title: 'Tên mẫu mail', prop: 'name', sortable: true },
+  { title: 'Tiêu đề', prop: 'title', sortable: true },
   { title: '', prop: 'preview', sortable: false },
   { title: '', prop: 'edit', sortable: false },
   { title: '', prop: 'delete', sortable: false },
@@ -41,11 +38,11 @@ class Supporter extends Component {
   }
 
   clickAdd = () => {
-    this.props.toggleModal(true, actionsType.MAILTEMPLATE.TOGGLE_MODAL_ADD);
+    this.props.toggleModal(true, actionsTypes.MAILTEMPLATE.TOGGLE_MODAL_ADD);
   };
 
   clickRefresh = () => {
-    getData(API.MAILTEMPLATES, actionsType.MAILTEMPLATE, true);
+    ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
   };
 
   search = (event) => {
@@ -67,9 +64,11 @@ class Supporter extends Component {
   };
 
   componentWillReceiveProps = () => {
-    this.setState({
-      filtered: this.props.mailtemplate.allItems
-    });
+    if (!this.state.keyWord || this.props.mailtemplate.isFetching) {
+      this.setState({
+        filtered: this.props.mailtemplate.allItems
+      });
+    }
   };
 
   componentDidMount = () => {
@@ -100,14 +99,14 @@ class Supporter extends Component {
           </Button>
           <br /><br />
           <FormGroup>
-            
             <ControlLabel>Tìm kiếm: { searching ? `Có ${body.length} kết quả cho từ khóa "${keyWord}"` : null }</ControlLabel>
             <FormControl 
               id="txtSearch"
               type="text"
               label="Text"
               placeholder="Từ khóa"
-              onChange={(event) => { this.search(event);}}
+              value={keyWord}
+              onChange={event => this.search(event)}
             />
           </FormGroup>
           <Datatable
@@ -129,8 +128,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModal,
-  select
+  select: actions.select,
+  toggleModal: actions.toggleModal
 };
 
 export default connect(
