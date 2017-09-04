@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { 
   Col, Row
 } from 'react-bootstrap';
@@ -6,7 +7,7 @@ import { Icon } from 'react-fa';
 
 import Board from './Board';
 
-export default class Home extends Component {
+class Home extends Component {
 
   static isPrivate = true;
 
@@ -18,7 +19,7 @@ export default class Home extends Component {
   }
 
   componentDidMount = () => {
-    document.title = "Bảng điều khiển";
+    document.title = "Quản lý";
   };
 
   render = () => {
@@ -28,7 +29,7 @@ export default class Home extends Component {
       <div>
         <Row>
           <Col md={12} sm={12} xs={12}>
-            <h1>Bảng điều khiển</h1>
+          <h1>Quản lý</h1>
             <hr />
           </Col>
         </Row>
@@ -36,28 +37,28 @@ export default class Home extends Component {
           <Board // eslint-disable-next-line
             style={"primary"}
             icon="graduation-cap" 
-            number={1000} 
+            data={this.props.classroom} 
             text="Lớp học" 
             link="/classroom"
           />
           <Board // eslint-disable-next-line
             style={"success"}
             icon="user-circle" 
-            number={1000} 
+            data={this.props.teacher} 
             text="GV chuyên môn" 
             link="/teacher"
           />
           <Board // eslint-disable-next-line
             style={"warning"} 
             icon="user-o" 
-            number={1000} 
+            data={this.props.assistant} 
             text="GV hướng dẫn" 
             link="/assistant"
           />
           <Board // eslint-disable-next-line
             style={"danger"} 
             icon="support" 
-            number={1000} 
+            data={this.props.supporter} 
             text="Trợ giảng" 
             link="/supporter"
           />
@@ -66,3 +67,19 @@ export default class Home extends Component {
     );
   };
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  assistant: state.assistant,
+  classroom: state.classroom,
+  supporter: state.supporter,
+  teacher: state.teacher,
+  mailtemplate: state.mailtemplate
+});
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);
+

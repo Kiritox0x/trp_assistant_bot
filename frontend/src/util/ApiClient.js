@@ -10,18 +10,6 @@ import * as API from '../config/Api';
 import * as actions from '../actions';
 import * as constants from '../config/constant';
 
-const getList = (ENDPOINTS) => {
-  return axios.get(API.URL + ENDPOINTS, {
-    headers: {'Authorization': 'Token ' + store.getState().token.token }
-  })
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      return error;
-    });
-};
-
 const clickEdit = (index, type) => {
   store.dispatch(actions.select(index, type.SELECT));
   setTimeout(() => {store.dispatch(actions.toggleModal(true, type.TOGGLE_MODAL_EDIT));}, 100);
@@ -40,6 +28,18 @@ const clickPreview = (index, type) => {
 const clickSendmail = (index, type) => {
   store.dispatch(actions.select(index, type.SELECT));
   setTimeout(() => {store.dispatch(actions.toggleModal(true, type.TOGGLE_MODAL_SENDMAIL));}, 100);
+};
+
+const getList = (ENDPOINTS) => {
+  return axios.get(API.URL + ENDPOINTS, {
+    headers: {'Authorization': 'Token ' + store.getState().token.token }
+  })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
 };
 
 export const getData = (endpoints, type, options = 0) => {
@@ -78,23 +78,27 @@ export const getData = (endpoints, type, options = 0) => {
 };
 
 export const addData = (ENDPOINTS, item) => {
-  return new Promise((resolve, reject) => {
-    axios.post(`${API.URL}${ENDPOINTS}`, item, {
-      headers: {'Authorization': 'Token ' + store.getState().token.token }
+  return fetch(`${API.URL}${ENDPOINTS}`, { 
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Token ' + store.getState().token.token,
+      },
+      body: JSON.stringify(item),
     })
-    .then(response => resolve(response))
-    .catch(error => reject(error));
-  });
+    .then(res => res.json());
 };
 
 export const saveData = (ENDPOINTS, item) => {
-  return new Promise((resolve, reject) => {
-    axios.put(`${API.URL}${ENDPOINTS}${item.id}/`, item, {
-      headers: {'Authorization': 'Token ' + store.getState().token.token }
+  return fetch(`${API.URL}${ENDPOINTS}${item.id}/`, {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Token ' + store.getState().token.token,
+      },
+      body: JSON.stringify(item),
     })
-    .then(response => resolve(response))
-    .catch(error => reject(error));
-  });
+    .then(res => res.json());
 };
 
 export const deleteData = (ENDPOINTS, id) => {
@@ -106,3 +110,33 @@ export const deleteData = (ENDPOINTS, id) => {
     .catch(error => reject(error));
   });
 };
+
+// export const addData = (ENDPOINTS, item) => {
+//   return new Promise((resolve, reject) => {
+//     axios.post(`${API.URL}${ENDPOINTS}`, item, {
+//       headers: {'Authorization': 'Token ' + store.getState().token.token }
+//     })
+//     .then(response => resolve(response))
+//     .catch(error => reject(error));
+//   });
+// };
+
+// export const saveData = (ENDPOINTS, item) => {
+//   return new Promise((resolve, reject) => {
+//     axios.put(`${API.URL}${ENDPOINTS}${item.id}/`, item, {
+//       headers: {'Authorization': 'Token ' + store.getState().token.token }
+//     })
+//     .then(response => resolve(response))
+//     .catch(error => reject(error));
+//   });
+// };
+
+// export const deleteData = (ENDPOINTS, id) => {
+//   return new Promise((resolve, reject) => {
+//     axios.delete(`${API.URL}${ENDPOINTS}${id}/`,{
+//       headers: {'Authorization': 'Token ' + store.getState().token.token }
+//     })
+//     .then(response => resolve(response))
+//     .catch(error => reject(error));
+//   });
+// };

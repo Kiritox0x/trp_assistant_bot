@@ -78,7 +78,7 @@ class Teacher extends Component {
   };
 
   componentDidMount = () => {
-    document.title = "Teacher";
+    document.title = "Giảng viên CM";
     this.setState({
       filtered: [...this.props.teacher.allItems]
     });

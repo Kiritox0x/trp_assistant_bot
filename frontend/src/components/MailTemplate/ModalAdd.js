@@ -63,17 +63,24 @@ class ModalAdd extends Component {
       isLoading: true
     });
     const {
-      id, name, title, context
+      name, title, context
     } = this.state;
-    ApiClient.addData(API.MAILTEMPLATES, { id, name, title, context })
+    ApiClient.addData(API.MAILTEMPLATES, { name, title, context })
     .then(res => {
-      ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
-      console.log(res);        
-      this.clickClose();
+      if (res.id) {
+        ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);      
+        this.clickClose();
+        alert("Thêm thành công");
+        return;
+      }
+      const mes = Object.values(res).join('\n');
+      alert(mes);
+      this.setState({
+        isLoading: false
+      });
     })
     .catch(err => {
-      alert("Tên mẫu mail đã tồn tại");
-      console.log(err);
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
       this.setState({
         isLoading: false
       })

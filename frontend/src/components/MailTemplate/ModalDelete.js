@@ -29,12 +29,12 @@ class ModalDelete extends Component {
     ApiClient.deleteData(API.MAILTEMPLATES, this.state.id)
     .then(res => {
       ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
-      console.log(res);
       this.clickClose();
+      alert("Xoá thành công");
+      return;
     })
     .catch(err => {
       alert("Có lỗi xuất hiện, vui lòng thử lại sau");
-      console.log(err);
       this.setState({
         isLoading: false
       });

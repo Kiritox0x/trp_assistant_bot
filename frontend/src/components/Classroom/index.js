@@ -84,7 +84,7 @@ class Classroom extends Component {
   };
 
   componentDidMount = () => {
-    document.title = "Classroom";
+    document.title = "Lớp học";
     this.setState({
       filtered: [...this.props.classroom.allItems]
     });
