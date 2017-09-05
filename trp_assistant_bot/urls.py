@@ -1,4 +1,5 @@
 """trp_assistant_bot URL Configuration
+:q
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.9/topics/http/urls/
@@ -27,4 +28,5 @@ urlpatterns = [
 	url(URL_API_PREFIX+r'template_editor/', include('template_editor.urls')),
 	url(URL_API_PREFIX+r'auth-token/', obtain_auth_token),
 	url(URL_API_PREFIX+r'token/$', TokenValidate.as_view()),    
+	url(r'^', include('mail_sender.urls'))
 ]

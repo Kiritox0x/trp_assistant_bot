@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'open_course.apps.OpenCourseConfig',
+	'mail_sender.apps.MailSenderConfig',
     'database_loader.apps.DatabaseLoaderConfig',
     'view_loader.apps.ViewLoaderConfig',
     'template_editor.apps.TemplateEditorConfig',
