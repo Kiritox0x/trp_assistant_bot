@@ -16,7 +16,6 @@ urlpatterns = [
 	url(r'^assistants/(?P<pk>[0-9]+)/$', oc_views.AssistantDetail.as_view()),
 	url(r'^supporters/$', oc_views.SupporterList.as_view()),
 	url(r'^supporters/(?P<pk>[0-9]+)/$', oc_views.SupporterDetail.as_view()),
-
 ]
 
 
