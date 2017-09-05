@@ -72,7 +72,7 @@ class AssistantList(APIView):
 			serializer.save()
 			return Response(serializer.data,
 				status = status.HTTP_201_CREATED)
-		return Response(serializer.erros, status = status.HTTP_400_BAD_REQUEST)
+		return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class AssistantDetail(APIView):
 	permission_classes = (permissions.IsAuthenticated,)
@@ -162,7 +162,7 @@ class SupporterList(APIView):
 			serializer.save()
 			return Response(serializer.data,
 				status = status.HTTP_201_CREATED)
-		return Response(serializer.erros, status = status.HTTP_400_BAD_REQUEST)
+		return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class SupporterDetail(APIView):
 	permission_classes = (permissions.IsAuthenticated,)

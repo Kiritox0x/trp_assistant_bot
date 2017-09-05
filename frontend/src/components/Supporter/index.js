@@ -70,7 +70,7 @@ class Supporter extends Component {
   };
 
   componentDidMount= () => {
-    document.title = "Supporter";
+    document.title = "Trợ giảng";
     this.setState({
       filtered: [...this.props.supporter.allItems]
     });

@@ -291,6 +291,7 @@ a:hover {
 .form-inline .form-group,
 .form-inline .control-label {
   margin-bottom: 5px; 
+  margin-left: 5px;
 }
 
 .form-inline .btn,

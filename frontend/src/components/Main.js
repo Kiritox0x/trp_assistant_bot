@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { 
   Grid
 } from 'react-bootstrap';
@@ -7,12 +6,12 @@ import { Switch, Redirect } from 'react-router-dom';
 
 import * as API from "../config/Api";
 import * as ApiClient from '../util/ApiClient';
-import * as actions from '../actions';
 import * as actionsTypes from '../actions/types';
 import * as constants from '../config/constant';
 
 import Route from '../routes/AuthRoute';
 import Header from './Header';
+import Dashboard from './Dashboard/index';
 import Home from './Home/index';
 import Classroom from './Classroom/index';
 import Teacher from './Teacher/index';
@@ -20,7 +19,7 @@ import Assistant from './Assistant/index';
 import Supporter from './Supporter/index';
 import MailTemplate from './MailTemplate/index';
 
-class Main extends Component {
+export default class Main extends Component {
 
   static isPrivate = true;
 
@@ -42,7 +41,7 @@ class Main extends Component {
         <Header />
         <Grid>
           <Switch>
-            <Route path='/' exact component={Home}/>
+            <Route path='/' exact component={Dashboard}/>
             <Route path='/manage' component={Home}/>
             <Route path='/classroom' component={Classroom}/>
             <Route path='/teacher' component={Teacher}/>
@@ -56,23 +55,4 @@ class Main extends Component {
     );
   };
 }
-
-const mapStateToProps = (state, ownProps) => ({
-  assistant: state.assistant,
-  classroom: state.classroom,
-  supporter: state.supporter,
-  teacher: state.teacher,
-  mailtemplate: state.mailtemplate
-});
-
-const mapDispatchToProps = {
-  set: actions.set,
-  select: actions.select,
-  toggleModal: actions.toggleModal
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Main);
 

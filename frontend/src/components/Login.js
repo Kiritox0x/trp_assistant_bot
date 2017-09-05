@@ -58,6 +58,10 @@ class Login extends Component {
     });
   };
 
+  componentDidMount = () => {
+    document.title = "Đăng nhập vào hệ thống";
+  };
+
   render = () => {
     const { isLoading } = this.state;
     return (
@@ -76,7 +80,7 @@ class Login extends Component {
                 onChange={(event) => { this.handleChange(event); }} />
             </FormGroup>
             <FormGroup controlId="password">
-              <ControlLabel>Password</ControlLabel>
+              <ControlLabel>Mật khẩu</ControlLabel>
               <FormControl
                 type="password"
                 value={this.state.password}
@@ -91,7 +95,7 @@ class Login extends Component {
                   this.login();
                 }}
                 type="submit">
-                { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Login
+                { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Đăng nhập
               </Button>
             </FormGroup>
           </Form>

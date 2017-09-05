@@ -80,7 +80,7 @@ class Assistant extends Component {
   };
 
   componentDidMount = () => {
-    document.title = "Assistant";
+    document.title = "Giảng viên HD";
     this.setState({
       filtered: [...this.props.assistant.allItems]
     });
