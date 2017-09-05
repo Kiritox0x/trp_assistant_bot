@@ -86,11 +86,38 @@ class MailSenderCustom(APIView):
 			raise Http404
 
 	def post(self, request, format = None):
-		if ( 'class_id' not in request.data ) or ( 'template' not in request.data ):
-			return Response("Params class_id and template are required", status = status.HTTP_400_BAD_REQUEST)
+		if ( 'class_id' not in request.data ) or ( 'template_title' not in request.data ) or ( 'template_content' not in request.data ):
+			return Response("Params class_id, template_title, template_content are required", status = status.HTTP_400_BAD_REQUEST)
 		class_id = request.data['class_id']
-		template = request.data['template']
+		template = {}
+		template['template_title'] = request.data['template_title']
+		template['template_content'] = request.data['template_content']
 		if EmailSender.invitation_letter(class_id, template, Customize=True):
 			return JsonResponse({'status' : 'Mail was sended successfull'}, status=200)
 		else:
 			return JsonResponse({'status' : 'Unknown errors happened'}, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomMailPreview(APIView):
+	permission_classes = (permissions.IsAuthenticated,)
+
+	def post(self, request, format = None):
+		if ( 'class_id' not in request.data ) or ( 'template_title' not in request.data ) or ( 'template_content' not in request.data ):
+			return Response("Params class_id, template_title, template_content are required", status = status.HTTP_400_BAD_REQUEST)
+		class_id = request.data['class_id']
+		template = {}
+		template['template_title'] = request.data['template_title']
+		template['template_content'] = request.data['template_content']
+		preview_email = EmailSender.preview(class_id, template, Customize=True)
+		return Response(preview_email, status=200)
+
+class MailPreview(APIView):
+	permission_classes = (permissions.IsAuthenticated,)
+
+	def post(self, request, format = None):
+		if ( 'class_id' not in request.data ) or ( 'template_id' not in request.data ):
+			return Response("Params class_id, template_id are required", status = status.HTTP_400_BAD_REQUEST)
+		class_id = request.data['class_id']
+		template_id = request.data['template_id']
+		preview_email = EmailSender.preview(class_id, template_id, Customize=False)
+		return Response(preview_email, status=200)
+

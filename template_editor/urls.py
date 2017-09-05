@@ -8,6 +8,8 @@ urlpatterns = [
 	url(r'^mailtemplates/(?P<pk>[0-9]+)/$', views.MailTemplateDetail.as_view()),
 	url(r'^mailsender/$', views.MailSender.as_view()),
 	url(r'^mailcustom/$', views.MailSenderCustom.as_view()),
+	url(r'^previewmailcustom/$', views.CustomMailPreview.as_view()),
+	url(r'^previewmail/$', views.MailPreview.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
