@@ -61,16 +61,23 @@ class ModalEdit extends Component {
     } = this.state;
     ApiClient.saveData(API.MAILTEMPLATES, {id, name, title, context})
     .then(res => {
-      ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);
-      console.log(res);        
-      this.clickClose();
-    })
-    .catch(err => {
-      alert("Tên mẫu mail đã tồn tại");
-      console.log(err);
+      if (res.id) {
+        ApiClient.getData(API.MAILTEMPLATES, actionsTypes.MAILTEMPLATE, constants.HAS_PREVIEW);      
+        this.clickClose();
+        alert("Sửa thành công");
+        return;
+      }
+      const mes = Object.values(res).join('\n');
+      alert(mes);
       this.setState({
         isLoading: false
       });
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      this.setState({
+        isLoading: false
+      })
     });
   };
   

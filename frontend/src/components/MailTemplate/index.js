@@ -72,7 +72,7 @@ class Supporter extends Component {
   };
 
   componentDidMount = () => {
-    document.title = "Mail template";
+    document.title = "Mẫu mail";
     this.setState({
       filtered: [...this.props.mailtemplate.allItems]
     });

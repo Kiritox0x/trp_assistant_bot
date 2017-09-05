@@ -72,7 +72,8 @@ class TAParser:
 	def load_data(self,filename):
 		try:
 			data = pd.read_excel(filename)
-		except Exception:
+		except Exception as ex:
+			print ex
 			raise Exception("File " + filename + " does not exist or damaged")
 		else:
 			num_instance = len(data)-1

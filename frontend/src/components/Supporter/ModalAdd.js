@@ -4,11 +4,23 @@ import {
   Modal, Button,
   FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
+import { Icon } from 'react-fa';
 
 import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
 
 class ModalAdd extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      account: '',
+      email: ''
+    };
+  }
 
   onChange = (event) => {
     this.setState({
@@ -16,11 +28,59 @@ class ModalAdd extends Component {
     });
   }
 
+  validate = () => {
+    const {
+      name, account, email
+    } = this.state;
+    let mess = name.length === 0 ? 'Name is required\n' : '';
+    mess += account.length === 0 ? 'Account is required\n' : '';
+    mess += email.length === 0 ? 'Email is required' : '';
+    if (mess.length === 0) return {success: true};
+    return {success: false, mess};
+  };
+
   clickClose = () => {
     this.props.toggleModal(false, actionsTypes.SUPPORTER.TOGGLE_MODAL_ADD);
   }
+  
+  clickAdd = () => {
+    const check = this.validate();
+    if (!check.success) {
+      alert(check.mess);
+      return;
+    }
+    this.setState({
+      isLoading: true
+    });
+    const {
+      name, account, email
+    } = this.state;
+    ApiClient.addData(API.SUPPORTERS, { name, account, email })
+    .then(res => {
+      if (res.id) {
+        ApiClient.getData(API.SUPPORTERS, actionsTypes.SUPPORTER);      
+        this.clickClose();
+        alert("Thêm thành công");
+        return;
+      }
+      const mes = Object.values(res).join('\n');
+      alert(mes);
+      this.setState({
+        isLoading: false
+      });
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      this.setState({
+        isLoading: false
+      });
+    });
+  }
 
   render = () => {
+    const {
+      isLoading
+    } = this.state;
     return (
       <Modal show={this.props.supporter.showModalAdd} onHide={() => this.clickClose()}>
         <Modal.Header closeButton>
@@ -56,7 +116,9 @@ class ModalAdd extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle="success">Thêm</Button>
+          <Button bsStyle="success" onClick={() => this.clickAdd()}>
+            { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Thêm
+          </Button>
           <Button onClick={() => this.clickClose()}>Đóng</Button>
         </Modal.Footer>
       </Modal>
