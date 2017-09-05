@@ -5,16 +5,20 @@ import {
   FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 import Datetime from 'react-datetime';
+import { Icon } from 'react-fa';
 
 import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
+import * as Validater from '../../util/Validater';
 
 class ModalEdit extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      dateFormat: 'DD/MM/YYYY',
+      dateFormat: 'YYYY-MM-DD',
       timeFormat: false,
     };
   }
@@ -27,12 +31,52 @@ class ModalEdit extends Component {
 
   onChangeDate = (event, id) => {
     this.setState({
-      [id]: event.toDate()
+      [id]: event.toISOString().split('T')[0]
     });
   };
 
   clickClose = () => {
     this.props.toggleModal(false, actionsTypes.TEACHER.TOGGLE_MODAL_EDIT);
+  };
+
+  clickSave = () => {
+    const check = Validater.validateTeacher(this.state);
+    if (!check.success) {
+      alert(check.mess);
+      return;
+    }
+    this.setState({
+      isLoading: true
+    });
+    const {
+      id, code, name, topica_email, personal_email, 
+      phone_number, status, location, account, 
+      date_of_birth, note, supporter,
+    } = this.state;
+    ApiClient.saveData(API.TEACHERS, {
+      id, code, name, topica_email, personal_email, 
+      phone_number, status, location, account, 
+      date_of_birth, note, supporter,
+    })
+    .then(res => {
+      if (res.id) {
+        ApiClient.getData(API.TEACHERS, actionsTypes.TEACHER);      
+        this.clickClose();
+        alert("Sửa thành công");
+        return;
+      }
+      const mes = Object.values(res).join('\n');
+      alert(mes);
+      this.setState({
+        isLoading: false
+      });
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      this.setState({
+        isLoading: false
+      })
+    });
   };
   
   componentWillReceiveProps = () => {
@@ -45,7 +89,7 @@ class ModalEdit extends Component {
       topica_email, personal_email, phone_number,
       status, location, account,
       date_of_birth, note, supporter,
-      dateFormat, timeFormat
+      dateFormat, timeFormat, isLoading
     } = this.state;
     return (
       <Modal show={this.props.teacher.showModalEdit} onHide={() => this.clickClose()}>
@@ -161,12 +205,21 @@ class ModalEdit extends Component {
               placeholder="Trợ giảng"
               onChange={event => this.onChange(event)}
             >
-              <option value={supporter}>{supporter}</option>
+              <option hidden>Chọn trợ giảng</option>
+              {
+                this.props.supporter.allItems.map((sp) => (
+                  <option key={sp.id} value={sp.account} selected={sp.account === supporter ? true : false}>
+                    {sp.name}
+                  </option>
+                ))
+              }
             </FormControl>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle="primary">Lưu lại</Button>
+          <Button bsStyle="primary" onClick={() => this.clickSave()}>
+            { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Lưu lại
+          </Button>
           <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>
@@ -176,6 +229,7 @@ class ModalEdit extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
   teacher: state.teacher,
+  supporter: state.supporter,
 });
 
 const mapDispatchToProps = {

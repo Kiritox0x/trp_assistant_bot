@@ -12,6 +12,7 @@ import * as actionsTypes from '../../actions/types';
 import * as API from '../../config/Api';
 import * as ApiClient from '../../util/ApiClient';
 import * as constants from '../../config/constant';
+import * as Validater from '../../util/Validater';
 
 class ModalEdit extends Component {
 
@@ -19,17 +20,6 @@ class ModalEdit extends Component {
     super(props);
     this.state = {};
   }
-
-  validate = () => {
-    const {
-      context, name, title
-    } = this.state;
-    let mess = name.length === 0 ? 'Name is required\n' : '';
-    mess += title.length === 0 ? 'Title is required\n' : '';
-    mess += context.length === 0 ? 'Context is required' : '';
-    if (mess.length === 0) return {success: true};
-    return {success: false, mess};
-  };
 
   onChange = (event) => {
     this.setState({
@@ -48,7 +38,7 @@ class ModalEdit extends Component {
   };
 
   clickSave = () => {
-    const check = this.validate();
+    const check = Validater.validateMailtemplate(this.state);
     if (!check.success) {
       alert(check.mess);
       return;

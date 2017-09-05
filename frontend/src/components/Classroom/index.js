@@ -76,9 +76,11 @@ class Classroom extends Component {
   };
 
   componentWillReceiveProps = () => {
-    if (!this.state.keyWord) {
+    if (!this.state.keyWord || this.props.classroom.isFetching) {
       this.setState({
-        filtered: this.props.classroom.allItems
+        filtered: this.props.classroom.allItems,
+        keyWord: '',
+        searching: false
       });
     }
   };
