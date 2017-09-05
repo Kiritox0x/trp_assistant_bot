@@ -66,7 +66,9 @@ class Supporter extends Component {
   componentWillReceiveProps = () => {
     if (!this.state.keyWord || this.props.mailtemplate.isFetching) {
       this.setState({
-        filtered: this.props.mailtemplate.allItems
+        filtered: this.props.mailtemplate.allItems,
+        keyWord: '',
+        searching: false
       });
     }
   };

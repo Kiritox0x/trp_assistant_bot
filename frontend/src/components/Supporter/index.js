@@ -62,9 +62,11 @@ class Supporter extends Component {
   }
 
   componentWillReceiveProps = () => {
-    if (!this.state.keyWord) {
+    if (!this.state.keyWord || this.props.supporter.isFetching) {
       this.setState({
-        filtered: this.props.supporter.allItems
+        filtered: this.props.supporter.allItems,
+        keyWord: '',
+        searching: false
       });
     }
   };

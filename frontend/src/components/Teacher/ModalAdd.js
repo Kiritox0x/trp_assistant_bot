@@ -5,16 +5,20 @@ import {
   FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 import Datetime from 'react-datetime';
+import { Icon } from 'react-fa';
 
 import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
+import * as Validater from '../../util/Validater';
 
 class ModalAdd extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      dateFormat: 'DD/MM/YYYY',
+      dateFormat: 'YYYY-MM-DD',
       timeFormat: false,
     };
   }
@@ -27,7 +31,7 @@ class ModalAdd extends Component {
 
   onChangeDate = (event, id) => {
     this.setState({
-      [id]: event.toDate()
+      [id]: event.toISOString().split('T')[0]
     });
   };
 
@@ -35,9 +39,49 @@ class ModalAdd extends Component {
     this.props.toggleModal(false, actionsTypes.TEACHER.TOGGLE_MODAL_ADD);
   };
 
+  clickAdd = () => {
+    const check = Validater.validateTeacher(this.state);
+    if (!check.success) {
+      alert(check.mess);
+      return;
+    }
+    this.setState({
+      isLoading: true
+    });
+    const {
+      code, name, topica_email, personal_email, 
+      phone_number, status, location, account, 
+      date_of_birth, note, supporter,
+    } = this.state;
+    ApiClient.addData(API.TEACHERS, {
+      code, name, topica_email, personal_email, 
+      phone_number, status, location, account, 
+      date_of_birth, note, supporter,
+    })
+    .then(res => {
+      if (res.id) {
+        ApiClient.getData(API.TEACHERS, actionsTypes.TEACHER);      
+        this.clickClose();
+        alert("Thêm thành công");
+        return;
+      }
+      const mes = Object.values(res).join('\n');
+      alert(mes);
+      this.setState({
+        isLoading: false
+      });
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      this.setState({
+        isLoading: false
+      });
+    });
+  }
+
   render = () => {
     const { 
-      dateFormat, timeFormat
+      dateFormat, timeFormat, isLoading
     } = this.state;
     return (
       <Modal show={this.props.teacher.showModalAdd} onHide={() => this.clickClose()}>
@@ -143,12 +187,21 @@ class ModalAdd extends Component {
               placeholder="Trợ giảng"
               onChange={event => this.onChange(event)}
             >
-              <option value=""></option>
+              <option hidden>Chọn trợ giảng</option>
+              {
+                this.props.supporter.allItems.map((supporter) => (
+                  <option key={supporter.id} value={supporter.account}>
+                    {supporter.name}
+                  </option>
+                ))
+              }
             </FormControl>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle="success">Thêm</Button>
+          <Button bsStyle="success" onClick={() => this.clickAdd()}>
+            { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Thêm
+          </Button>
           <Button onClick={() => this.clickClose()}>Đóng</Button>
         </Modal.Footer>
       </Modal>
@@ -158,6 +211,7 @@ class ModalAdd extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
   teacher: state.teacher,
+  supporter: state.supporter
 });
 
 const mapDispatchToProps = {

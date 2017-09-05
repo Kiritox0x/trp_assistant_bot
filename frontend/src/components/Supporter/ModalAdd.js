@@ -10,6 +10,7 @@ import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
 import * as API from '../../config/Api';
 import * as ApiClient from '../../util/ApiClient';
+import * as Validater from '../../util/Validater';
 
 class ModalAdd extends Component {
 
@@ -28,23 +29,12 @@ class ModalAdd extends Component {
     });
   }
 
-  validate = () => {
-    const {
-      name, account, email
-    } = this.state;
-    let mess = name.length === 0 ? 'Name is required\n' : '';
-    mess += account.length === 0 ? 'Account is required\n' : '';
-    mess += email.length === 0 ? 'Email is required' : '';
-    if (mess.length === 0) return {success: true};
-    return {success: false, mess};
-  };
-
   clickClose = () => {
     this.props.toggleModal(false, actionsTypes.SUPPORTER.TOGGLE_MODAL_ADD);
   }
   
   clickAdd = () => {
-    const check = this.validate();
+    const check = Validater.validateSupporter(this.state);
     if (!check.success) {
       alert(check.mess);
       return;

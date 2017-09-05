@@ -72,7 +72,9 @@ class Teacher extends Component {
   componentWillReceiveProps = () => {
     if (!this.state.keyWord || this.props.teacher.isFetching) {
       this.setState({
-        filtered: this.props.teacher.allItems
+        filtered: this.props.teacher.allItems,
+        keyWord: '',
+        searching: false
       });
     }
   };

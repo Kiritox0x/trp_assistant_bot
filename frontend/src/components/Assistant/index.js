@@ -10,7 +10,6 @@ import { Icon } from 'react-fa';
 
 import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
-
 import * as API from '../../config/Api';
 import * as ApiClient from '../../util/ApiClient';
 
@@ -72,9 +71,11 @@ class Assistant extends Component {
   };
 
   componentWillReceiveProps = () => {
-    if (!this.state.keyWord) {
+    if (!this.state.keyWord || this.props.assistant.isFetching) {
       this.setState({
-        filtered: this.props.assistant.allItems
+        filtered: this.props.assistant.allItems,
+        keyWord: '',
+        searching: false
       });
     }
   };

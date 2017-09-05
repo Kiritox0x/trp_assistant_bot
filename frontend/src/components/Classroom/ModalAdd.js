@@ -14,7 +14,7 @@ class ModalAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dateFormat: 'DD/MM/YYYY',
+      dateFormat: 'YYYY-MM-DD',
       timeFormat: false,
     };
   }
@@ -27,7 +27,7 @@ class ModalAdd extends Component {
 
   onChangeDate = (event, id) => {
     this.setState({
-      [id]: event.toDate()
+      [id]: event.toISOString().split('T')[0]
     });
   };
 
