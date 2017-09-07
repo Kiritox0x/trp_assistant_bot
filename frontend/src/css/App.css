@@ -237,10 +237,12 @@ a:hover {
   display: block;
   padding-top: 15px;
 }
+
 .show-modal .w3-modal-content {
   padding: 10px 10px 10px 10px;
   border-radius: 10px;
-  min-width: calc(100vw - 50px);
+  width: calc(100vw - 50px);
+  min-width: 810px;
 }
 
 .show-modal .w3-modal-content .w3-button.w3-display-topright{
@@ -285,17 +287,20 @@ a:hover {
 }
 
 .cke_contents.cke_reset {
-  min-height: calc(100vh - 255px) !important;
+  min-height: calc(100vh - 290px) !important;
 }
-
-.form-inline .form-group,
-.form-inline .control-label {
-  margin-bottom: 5px; 
-  margin-left: 5px;
+.mail-custom .cke_contents.cke_reset {
+  min-height: calc(100vh - 360px) !important;
 }
 
 .form-inline .btn,
 .form-inline .form-control,
+.form-inline .control-label,
 .form-inline .checkbox-inline {
+  margin-bottom: 5px; 
   margin-left: 5px;
+}
+
+#template_title {
+  min-width: 300px;
 }

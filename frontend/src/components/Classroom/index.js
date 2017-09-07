@@ -128,8 +128,8 @@ class Classroom extends Component {
           tableBody={body}
           keyName="userTable"
           tableClass="striped bordered hover responsive"
-          rowsPerPage={10}
-          rowsPerPageOption={[5, 10, 15, 20, 50, 100]}
+          rowsPerPage={constants.DEFAULT_ROW_TABLE}
+          rowsPerPageOption={constants.DEFAULT_LIST_OPTIONS_ROW_TABLE}
         />
       </div>
     );

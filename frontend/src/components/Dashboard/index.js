@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { 
-  Col, Row
+  Col, Row, Button
 } from 'react-bootstrap';
+import {
+  LinkContainer
+} from 'react-router-bootstrap';
 import { Icon } from 'react-fa';
 
 class Home extends Component {
@@ -32,7 +35,28 @@ class Home extends Component {
           </Col>
         </Row>
         <Row>
-          Đây là bảng điều khiển chính
+          <Col md={12} sm={12} xs={12}>
+            <Col xs={6} sm={3}>
+              <LinkContainer to="/manage">
+                <Button bsStyle="primary" block>Quản lý</Button>
+              </LinkContainer>
+            </Col>
+            <Col xs={6} sm={3}>
+              <LinkContainer to="/comingsoon">
+                <Button bsStyle="success" block>Xuất báo cáo</Button>
+              </LinkContainer>
+            </Col>
+            <Col xs={6} sm={3}>
+              <LinkContainer to="/comingsoon">
+                <Button bsStyle="info" block>Thông báo</Button>
+              </LinkContainer>
+            </Col>
+            <Col xs={6} sm={3}>
+              <LinkContainer to="/comingsoon">
+                <Button block>Hướng dẫn</Button>
+              </LinkContainer>
+            </Col>
+          </Col>
         </Row>
       </div>
     );

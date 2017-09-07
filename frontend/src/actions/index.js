@@ -39,6 +39,33 @@ export const toggleModal = (toggle, type) => {
   }
 };
 
+export const addRawData = (item, type) => {
+  return {
+    type,
+    data: item
+  }
+};
+
+export const updateRawData = (item, type) => {
+  return {
+    type,
+    data: item
+  }
+};
+
+export const deleteRawData = (id, type) => {
+  return {
+    type,
+    data: id
+  }
+};
+
+export const processRawData = (type) => {
+  return {
+    type
+  }
+};
+
 
 
 

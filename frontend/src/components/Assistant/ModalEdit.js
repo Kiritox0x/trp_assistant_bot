@@ -20,6 +20,7 @@ class ModalEdit extends Component {
     this.state = {
       dateFormat: 'YYYY-MM-DD',
       timeFormat: false,
+      closeOnSelect: true
     };
   }
 
@@ -89,7 +90,7 @@ class ModalEdit extends Component {
       topica_email, personal_email, phone_number,
       status, location, account,
       date_of_birth, note, supporter,
-      dateFormat, timeFormat, isLoading
+      dateFormat, timeFormat, closeOnSelect, isLoading
     } = this.state;
     return (
       <Modal show={this.props.assistant.showModalEdit} onHide={() => this.clickClose()}>
@@ -183,6 +184,7 @@ class ModalEdit extends Component {
               id="date_of_birth"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
+              closeOnSelect={closeOnSelect}
               value={new Date(date_of_birth)}
               onChange={event => this.onChangeDate(event, 'date_of_birth')}
             />
@@ -204,11 +206,12 @@ class ModalEdit extends Component {
               componentClass="select" 
               placeholder="Trợ giảng"
               onChange={event => this.onChange(event)}
+              value={supporter || ''}
             >
               <option hidden>Chọn trợ giảng</option>
               {
                 this.props.supporter.allItems.map((sp) => (
-                  <option key={sp.id} value={sp.account} selected={sp.account === supporter ? true : false}>
+                  <option key={sp.id} value={sp.account}>
                     {sp.name}
                   </option>
                 ))

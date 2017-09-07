@@ -12,12 +12,13 @@ import * as constants from '../config/constant';
 import Route from '../routes/AuthRoute';
 import Header from './Header';
 import Dashboard from './Dashboard/index';
-import Home from './Home/index';
+import Manage from './Manage/index';
 import Classroom from './Classroom/index';
 import Teacher from './Teacher/index';
 import Assistant from './Assistant/index';
 import Supporter from './Supporter/index';
 import MailTemplate from './MailTemplate/index';
+import PreviewEmail from './MailTemplate/PreviewEmail';
 
 export default class Main extends Component {
 
@@ -42,12 +43,13 @@ export default class Main extends Component {
         <Grid>
           <Switch>
             <Route path='/' exact component={Dashboard}/>
-            <Route path='/manage' component={Home}/>
+            <Route path='/manage' component={Manage}/>
             <Route path='/classroom' component={Classroom}/>
             <Route path='/teacher' component={Teacher}/>
             <Route path='/assistant' component={Assistant}/>
             <Route path='/supporter' component={Supporter}/>
             <Route path='/mailtemplate' component={MailTemplate}/>
+            <Route path='/preview' component={PreviewEmail}/>
             <Redirect to="/" />
           </Switch> 
         </Grid>

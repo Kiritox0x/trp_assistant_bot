@@ -1,7 +1,7 @@
 import * as actionType from '../actions/types';
 
 const tokenInitialState = {
-  token: sessionStorage.getItem('token') || null,
+  token: localStorage.getItem('token') || null,
   username: '',
   isLogined: false
 };
@@ -9,7 +9,7 @@ const tokenInitialState = {
 export default (state = tokenInitialState, action) => {
   switch(action.type) {
     case actionType.SET_TOKEN:
-      sessionStorage.setItem('token', action.data.token);
+      localStorage.setItem('token', action.data.token);
       return {
         ...state, 
         token: action.data.token, 

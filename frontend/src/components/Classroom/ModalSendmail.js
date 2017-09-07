@@ -12,21 +12,91 @@ import * as actionsTypes from '../../actions/types';
 import * as API from '../../config/Api';
 import * as ApiClient from '../../util/ApiClient';
 import * as constants from '../../config/constant';
+import * as Validater from '../../util/Validater';
 
 class ModalSendmail extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      template_id: 0,
       editing: false
     };
   }
+
+  getRealTemplateId = (index) => {
+    return this.props.mailtemplate.allItems[index].id || -1;
+  }
+
+  callMailSender = () => {
+    const check = Validater.validateMailSender(this.state);
+    if (!check.success) {
+      alert(check.mess);
+      return;
+    }
+    this.setState({
+      isLoading: true
+    });
+    const {
+      id, template_id
+    } = this.state;
+    ApiClient.sendCustomMail(API.MAILSENDER, {
+      class_id: id, 
+      template_id: this.getRealTemplateId(template_id)
+    })
+    .then(res => {
+      alert(res.data.status);
+      this.setState({
+        isLoading: false
+      });
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      this.setState({
+        isLoading: false
+      })
+    });
+  }
+
+  callMailCustom = () => {
+    const check = Validater.validateMailCustom(this.state);
+    if (!check.success) {
+      alert(check.mess);
+      return;
+    }
+    this.setState({
+      isLoading: true
+    });
+    const {
+      id, template_title, template_content
+    } = this.state;
+    ApiClient.sendCustomMail(API.MAILCUSTOM, {
+      class_id: id, 
+      template_title,
+      template_content
+    })
+    .then(res => {
+      alert(res.data.status);
+      this.setState({
+        isLoading: false
+      });
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      this.setState({
+        isLoading: false
+      })
+    });
+  }
   
   onChange = (event) => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
+    const { id, value } = event.target;
+    id === 'template_id' ? this.setState({
+      template_id: value,
+      template_title: this.props.mailtemplate.allItems[value].title,
+      template_content: this.props.mailtemplate.allItems[value].context
+    }) : this.setState({
+      [id]: value
+    })
   };
 
   onChangeCheckbox = () => {
@@ -37,45 +107,23 @@ class ModalSendmail extends Component {
 
   changeValueTemplate = (newValue) => {
     this.setState({
-      context: newValue
+      template_content: newValue
     });
   }
   
   clickClose = () => {
     this.setState({
-      editing: false,
-      template_id: 0
+      editing: false
     });
     this.props.toggleModal(false, actionsTypes.CLASSROOM.TOGGLE_MODAL_SENDMAIL);
   };
 
-  clickSave = () => {
-    this.setState({
-      isLoading: true
-    });
-    const {
-      id, name, title, context
-    } = this.state;
-    // ApiClient.saveData(API.classroomS, {id, name, title, context})
-    // .then(res => {
-    //   if (res.status === 200) {
-    //     this.clickClose();
-    //     ApiClient.getData(API.classroomS, actionsTypes.classroom, true);
-    //   } else {
-    //     alert("Có lỗi xuất hiện, vui lòng thử lại sau");
-    //     console.log(res);        
-    //   }
-    //   this.setState({
-    //     isLoading: false
-    //   });
-    // })
-    // .catch(err => {
-    //   alert("Có lỗi xuất hiện, vui lòng thử lại sau");
-    //   console.log(err);
-    //   this.setState({
-    //     isLoading: false
-    //   });
-    // });
+  clickSend = () => {
+    if (this.state.editing) { 
+      this.callMailCustom();
+    } else { //không sửa => dùng teamplate có sắn => mailsender
+      this.callMailSender();
+    }
   };
   
   componentWillReceiveProps = () => {
@@ -84,13 +132,13 @@ class ModalSendmail extends Component {
 
   render() {
     const { 
-      teacher, assistant, isLoading
+      teacher, assistant, isLoading, template_title, template_content
     } = this.state;
     return (
       this.props.classroom.showModalSendmail ? 
       <div className="w3-modal show-modal">
         <div className="w3-modal-content clearfix">
-          <div className="w3-container">
+          <div className="w3-container mail-custom">
             <Form inline>
               <FormGroup> {/* Tên mẫu mail */}
                 <ControlLabel>Người nhận: {`${teacher || ''}, ${assistant || ''}`}</ControlLabel><br />
@@ -102,6 +150,7 @@ class ModalSendmail extends Component {
                   placeholder="Mẫu mail"
                   onChange={event => this.onChange(event)}
                 >
+                  <option hidden>Chọn mẫu mail</option>
                   {
                     this.props.mailtemplate.allItems.map((template, index) => {
                       return (
@@ -113,20 +162,29 @@ class ModalSendmail extends Component {
                 <Checkbox inline id="editing" onChange={(event) => this.onChangeCheckbox()}>
                   chỉnh sửa
                 </Checkbox>
-                <Button bsStyle="primary" onClick={() => this.clickSave()}>
+                <Button bsStyle="primary" onClick={() => this.clickSend()}>
                   { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Gửi
                 </Button>
                 <Button onClick={() => this.clickClose()}>Hủy</Button>
               </FormGroup>
               {
-                this.state.editing ? 
-                <CKEditor 
-                  scriptUrl={constants.CKEDITOR_SCRIPT} 
-                  activeClass="p10" content={
-                    this.props.mailtemplate.allItems[this.state.template_id].context
-                  } 
-                  onChange={this.changeValueTemplate.bind(this)} 
-                />
+                this.state.editing && this.props.mailtemplate.allItems[this.state.template_id] ? 
+                <div>
+                  <ControlLabel>Tiêu đề: </ControlLabel>
+                  <FormControl 
+                    id="template_title"
+                    type="text"
+                    label="Text"
+                    value={template_title}
+                    onChange={event => this.onChange(event)}
+                  />
+                  <br />
+                  <CKEditor 
+                    scriptUrl={constants.CKEDITOR_SCRIPT} 
+                    activeClass="p10" content={template_content} 
+                    onChange={this.changeValueTemplate.bind(this)} 
+                  />
+                </div>
                 : null
               }
             </Form>

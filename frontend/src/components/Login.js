@@ -37,13 +37,12 @@ class Login extends Component {
     })
     .then(() => {
       this.props.history.replace('/');
-      this.setState({
-        isLoading: true
-      });
     })
     .catch((err) => {
-      console.log(err);
       alert('Thông tin đăng nhập không chính xác');
+      this.setState({
+        isLoading: false
+      });
     });
   };
 

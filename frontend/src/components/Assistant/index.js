@@ -12,6 +12,7 @@ import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
 import * as API from '../../config/Api';
 import * as ApiClient from '../../util/ApiClient';
+import * as constants from '../../config/constant';
 
 import ModalAdd from './ModalAdd';
 import ModalEdit from './ModalEdit';
@@ -122,8 +123,8 @@ class Assistant extends Component {
           tableBody={body}
           keyName="userTable"
           tableClass="striped bordered hover responsive"
-          rowsPerPage={10}
-          rowsPerPageOption={[5, 10, 15, 20, 50, 100]}
+          rowsPerPage={constants.DEFAULT_ROW_TABLE}
+          rowsPerPageOption={constants.DEFAULT_LIST_OPTIONS_ROW_TABLE}
         />
       </div>
     );

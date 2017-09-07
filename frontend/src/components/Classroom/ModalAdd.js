@@ -5,9 +5,13 @@ import {
   FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 import Datetime from 'react-datetime';
+import { Icon } from 'react-fa';
 
 import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
+import * as Validater from '../../util/Validater';
 
 class ModalAdd extends Component {
 
@@ -16,6 +20,7 @@ class ModalAdd extends Component {
     this.state = {
       dateFormat: 'YYYY-MM-DD',
       timeFormat: false,
+      closeOnSelect: true
     };
   }
 
@@ -35,10 +40,55 @@ class ModalAdd extends Component {
     this.props.toggleModal(false, actionsTypes.CLASSROOM.TOGGLE_MODAL_ADD);
   };
 
+  clickAdd = () => {
+    const check = Validater.validateClassroom(this.state);
+    if (!check.success) {
+      alert(check.mess);
+      return;
+    }
+    this.setState({
+      isLoading: true
+    });
+    const {
+      school, subject, subject_code, 
+      class_name, class_subject, estimated_students,
+      start_date, finish_date, examination_date,
+      teacher, assistant, change_note, supporter
+    } = this.state;
+    ApiClient.addData(API.CLASSROOMS, { 
+      school, subject, subject_code, 
+      class_name, class_subject, estimated_students,
+      start_date, finish_date, examination_date,
+      teacher, assistant, change_note, supporter
+    })
+    .then(res => {
+      if (res.id) {
+        this.props.addRawData(res, actionsTypes.CLASSROOM.ADD_RAW_DATA);  
+        this.props.processRawData(actionsTypes.CLASSROOM.PROCESS_RAW_DATA);
+        this.props.set(true, actionsTypes.CLASSROOM.SET_FETCHING);
+        this.props.set(false, actionsTypes.CLASSROOM.SET_FETCHING);
+        this.clickClose();
+        alert("Thêm thành công");
+        return;
+      }
+      const mes = Object.values(res).join('\n');
+      alert(mes);
+      this.setState({
+        isLoading: false
+      });
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      console.log(err);
+      this.setState({
+        isLoading: false
+      });
+    });
+  }
+
   render = () => {
     const {
-      teacher, assistant, supporter,
-      dateFormat, timeFormat
+      dateFormat, timeFormat, closeOnSelect, isLoading
     } = this.state;
     return (
       <Modal show={this.props.classroom.showModalAdd} onHide={() => this.clickClose()}>
@@ -106,6 +156,7 @@ class ModalAdd extends Component {
               id="start_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
+              closeOnSelect={closeOnSelect}
               onChange={event => this.onChangeDate(event, 'start_date')}
             />
           </FormGroup>
@@ -115,6 +166,7 @@ class ModalAdd extends Component {
               id="finish_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
+              closeOnSelect={closeOnSelect}
               onChange={event => this.onChangeDate(event, 'finish_date')}
             />
           </FormGroup>
@@ -124,6 +176,7 @@ class ModalAdd extends Component {
               id="examination_date"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
+              closeOnSelect={closeOnSelect}
               onChange={event => this.onChangeDate(event, 'examination_date')}
             />
           </FormGroup>
@@ -135,7 +188,14 @@ class ModalAdd extends Component {
               placeholder="GVCM"
               onChange={event => this.onChange(event)}
             >
-              <option value={teacher}>{teacher}</option>
+              <option hidden>Chọn GVCM</option>
+              {
+                this.props.teacher.allItems.map((teacher) => (
+                  <option key={teacher.id} value={teacher.topica_email}>
+                    {teacher.name}
+                  </option>
+                ))
+              }
             </FormControl>
           </FormGroup>
           <FormGroup> {/* GVHD */}
@@ -146,7 +206,14 @@ class ModalAdd extends Component {
               placeholder="GVHD"
               onChange={event => this.onChange(event)}
             >
-              <option value={assistant}>{assistant}</option>
+              <option hidden>Chọn GVHD</option>
+              {
+                this.props.assistant.allItems.map((assistant) => (
+                  <option key={assistant.id} value={assistant.topica_email}>
+                    {assistant.name}
+                  </option>
+                ))
+              }
             </FormControl>
           </FormGroup>
           <FormGroup> {/* VHTT thay đổi */}
@@ -154,7 +221,7 @@ class ModalAdd extends Component {
             <FormControl 
               id="change_note"
               componentClass="textarea" 
-              placeholder="textarea"
+              placeholder="Ghi chú"
               onChange={event => this.onChange(event)}
             />
           </FormGroup>
@@ -166,12 +233,21 @@ class ModalAdd extends Component {
               placeholder="Trợ giảng"
               onChange={event => this.onChange(event)}
             >
-              <option value={supporter}>{supporter}</option>
+              <option hidden>Chọn trợ giảng</option>
+              {
+                this.props.supporter.allItems.map((supporter) => (
+                  <option key={supporter.id} value={supporter.account}>
+                    {supporter.name}
+                  </option>
+                ))
+              }
             </FormControl>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle="primary">Lưu lại</Button>
+          <Button bsStyle="primary" onClick={() => this.clickAdd()}>
+            { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Lưu lại
+          </Button>
           <Button onClick={() => this.clickClose()}>Đóng</Button>
         </Modal.Footer>
       </Modal>
@@ -181,10 +257,16 @@ class ModalAdd extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
   classroom: state.classroom,
+  teacher: state.teacher,
+  assistant: state.assistant,
+  supporter: state.supporter
 });
 
 const mapDispatchToProps = {
+  set: actions.set,
   toggleModal: actions.toggleModal,
+  addRawData: actions.addRawData,
+  processRawData: actions.processRawData
 };
 
 export default connect(

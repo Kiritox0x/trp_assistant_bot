@@ -42,35 +42,42 @@ const getList = (ENDPOINTS) => {
     });
 };
 
+export const processData = (data, type, options = 0) => {
+  return data.map((item, index) => {
+    let row = {
+      ...item,
+      edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => clickEdit(index, type)}>
+                  <Glyphicon glyph="pencil" /> Chỉnh sửa
+                </Button>,
+      delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => clickDelete(index, type)}>
+                  <Glyphicon glyph="trash" /> Xóa
+                </Button>
+    };
+    switch (options) {
+      case constants.HAS_PREVIEW:
+        row.preview = <Button bsStyle="success" bsSize="xsmall" onClick={() => clickPreview(index, type)}>
+                        <Glyphicon glyph="search" /> Xem trước
+                      </Button>
+        break;
+      case constants.HAS_SEND_MAIL:
+        row.sendmail =  <Button bsStyle="success" bsSize="xsmall" onClick={() => clickSendmail(index, type)}>
+                          <Glyphicon glyph="send" /> Gửi mail
+                        </Button>
+        break;
+      default : break;
+    }
+    return row;
+  });
+};
+
 export const getData = (endpoints, type, options = 0) => {
   store.dispatch(actions.set(true, type.SET_FETCHING));
   getList(endpoints)
   .then((data) => {
-    const body = data.map((item, index) => {
-      let row = {
-        ...item,
-        edit:     <Button bsStyle="primary" bsSize="xsmall" onClick={() => clickEdit(index, type)}>
-                    <Glyphicon glyph="pencil" /> Chỉnh sửa
-                  </Button>,
-        delete:   <Button bsStyle="danger" bsSize="xsmall" onClick={() => clickDelete(index, type)}>
-                    <Glyphicon glyph="trash" /> Xóa
-                  </Button>
-      };
-      switch (options) {
-        case constants.HAS_PREVIEW:
-          row.preview = <Button bsStyle="success" bsSize="xsmall" onClick={() => clickPreview(index, type)}>
-                          <Glyphicon glyph="search" /> Xem trước
-                        </Button>
-          break;
-        case constants.HAS_SEND_MAIL:
-          row.sendmail =  <Button bsStyle="success" bsSize="xsmall" onClick={() => clickSendmail(index, type)}>
-                            <Glyphicon glyph="send" /> Gửi mail
-                          </Button>
-          break;
-        default : break;
-      }
-      return row;
-    });
+    const body = processData(data, type, options);
+    if (type.SET_RAW_DATA) {
+      store.dispatch(actions.set(data, type.SET_RAW_DATA));    
+    }
     store.dispatch(actions.set(body, type.SET_BODY));
     setTimeout(() => store.dispatch(actions.set(false, type.SET_FETCHING), 100));
   })
@@ -111,15 +118,15 @@ export const deleteData = (ENDPOINTS, id) => {
   });
 };
 
-// export const addData = (ENDPOINTS, item) => {
-//   return new Promise((resolve, reject) => {
-//     axios.post(`${API.URL}${ENDPOINTS}`, item, {
-//       headers: {'Authorization': 'Token ' + store.getState().token.token }
-//     })
-//     .then(response => resolve(response))
-//     .catch(error => reject(error));
-//   });
-// };
+export const sendCustomMail = (ENDPOINTS, item) => {
+  return new Promise((resolve, reject) => {
+    axios.post(`${API.URL}${ENDPOINTS}`, item, {
+      headers: {'Authorization': 'Token ' + store.getState().token.token }
+    })
+    .then(response => resolve(response))
+    .catch(error => reject(error));
+  });
+};
 
 // export const saveData = (ENDPOINTS, item) => {
 //   return new Promise((resolve, reject) => {

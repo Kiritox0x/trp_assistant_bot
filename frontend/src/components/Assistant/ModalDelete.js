@@ -3,9 +3,12 @@ import { connect } from 'react-redux';
 import {
   Modal, Button
 } from 'react-bootstrap';
+import { Icon } from 'react-fa';
 
 import * as actions from '../../actions';
 import * as actionsTypes from '../../actions/types';
+import * as API from '../../config/Api';
+import * as ApiClient from '../../util/ApiClient';
 
 class ModalDelete extends Component {
 
@@ -18,13 +21,32 @@ class ModalDelete extends Component {
     this.props.toggleModal(false, actionsTypes.ASSISTANT.TOGGLE_MODAL_DELETE);
   };
 
+  clickDelete = () => {
+    this.setState({
+      isLoading: true
+    })
+    ApiClient.deleteData(API.ASSISTANTS, this.state.id)
+    .then(res => {
+      ApiClient.getData(API.ASSISTANTS, actionsTypes.ASSISTANT);
+      this.clickClose();
+      alert("Xoá thành công");
+      return;
+    })
+    .catch(err => {
+      alert("Có lỗi xuất hiện, vui lòng thử lại sau");
+      this.setState({
+        isLoading: false
+      });
+    });
+  };
+
   componentWillReceiveProps = () => {
     this.setState(this.props.assistant.selected);
   };
 
   render = () => {
     const {
-      name, code,
+      name, code, isLoading
     } = this.state;
     return (
       <Modal show={this.props.assistant.showModalDelete} onHide={() => this.clickClose()}>
@@ -35,7 +57,9 @@ class ModalDelete extends Component {
           Xác nhận xóa GVHD {name} mã: {code}?
         </Modal.Body>
         <Modal.Footer>
-        <Button bsStyle="danger">Xóa GVHD</Button>
+        <Button bsStyle="danger" onClick={() => this.clickDelete()}>
+          { isLoading ? <Icon spin={true} name="circle-o-notch"/> : null } Xóa GVHD
+        </Button>
         <Button onClick={() => this.clickClose()}>Hủy</Button>
         </Modal.Footer>
       </Modal>

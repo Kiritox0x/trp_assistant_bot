@@ -6,4 +6,6 @@ export const ASSISTANTS = "/courses/assistants/";
 export const CLASSROOMS = "/courses/classrooms/";
 export const SUPPORTERS = "/courses/supporters/";
 export const MAILTEMPLATES = "/template_editor/mailtemplates/";
+export const MAILSENDER = "/template_editor/mailsender/";
+export const MAILCUSTOM = "/template_editor/mailcustom/";
 

@@ -20,6 +20,7 @@ class ModalAdd extends Component {
     this.state = {
       dateFormat: 'YYYY-MM-DD',
       timeFormat: false,
+      closeOnSelect: true,
     };
   }
 
@@ -83,8 +84,8 @@ class ModalAdd extends Component {
 
   render = () => {
     const { 
-      supporter, isLoading,
-      dateFormat, timeFormat
+      isLoading,
+      dateFormat, timeFormat, closeOnSelect
     } = this.state;
     return (
       <Modal show={this.props.assistant.showModalAdd} onHide={() => this.clickClose()}>
@@ -170,6 +171,7 @@ class ModalAdd extends Component {
               id="date_of_birth"
               dateFormat={dateFormat}
               timeFormat={timeFormat}
+              closeOnSelect={closeOnSelect}
               onChange={event => this.onChangeDate(event, 'date_of_birth')}
             />
           </FormGroup>
