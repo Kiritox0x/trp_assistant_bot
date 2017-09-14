@@ -32,15 +32,19 @@ class Header extends Component {
   render = () => {
     return (
       <div className="navbar navbar-inverse navbar-fixed-left">
-        <div className="profile">
-          <div className="profile-pic">
-            <img src={Logo} alt="logo-uni" />
-          </div>
-          <div className="profile-info">
-            <p title="username">{store.getState().token.username}</p>
-            <p title="Normal user">Normal user</p>
-          </div>
-        </div>
+        <LinkContainer to="/profile">
+          <a>
+            <div className="profile">
+              <div className="profile-pic">
+                <img src={Logo} alt="logo-uni" />
+              </div>
+              <div className="profile-info">
+                <p title="username">{store.getState().token.username}</p>
+                <p title="Normal user">Normal user</p>
+              </div>
+            </div>
+          </a>
+        </LinkContainer>
         <ul className="nav navbar-nav">
           <li>
             <a onClick={() => this.clickLogout()}
@@ -57,10 +61,10 @@ class Header extends Component {
                 <LinkContainer to="/teacher"><li><a>GVCM</a></li></LinkContainer>
                 <LinkContainer to="/assistant"><li><a>GVHD</a></li></LinkContainer>
                 <LinkContainer to="/supporter"><li><a>Trợ giảng</a></li></LinkContainer>
+                <LinkContainer to="/mailtemplate"><li><a>Mẫu mail</a></li></LinkContainer>
               </ul>
             </li>
           </LinkContainer>
-          <LinkContainer to="/mailtemplate" exact><li><a>Mẫu mail</a></li></LinkContainer>
         </ul>
       </div>
     );

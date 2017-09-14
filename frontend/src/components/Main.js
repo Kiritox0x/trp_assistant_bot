@@ -18,7 +18,7 @@ import Teacher from './Teacher/index';
 import Assistant from './Assistant/index';
 import Supporter from './Supporter/index';
 import MailTemplate from './MailTemplate/index';
-import PreviewEmail from './MailTemplate/PreviewEmail';
+import Profile from './Profile/index';
 
 export default class Main extends Component {
 
@@ -49,7 +49,7 @@ export default class Main extends Component {
             <Route path='/assistant' component={Assistant}/>
             <Route path='/supporter' component={Supporter}/>
             <Route path='/mailtemplate' component={MailTemplate}/>
-            <Route path='/preview' component={PreviewEmail}/>
+            <Route path='/profile' component={Profile}/>
             <Redirect to="/" />
           </Switch> 
         </Grid>

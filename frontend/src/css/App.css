@@ -3,6 +3,10 @@ body {
   min-width: 650px;
 }
 
+.table {
+  margin-bottom: 0;
+}
+
 .scroll-top {
   overflow-x: scroll;
   width: calc(100% - 30px);
@@ -40,6 +44,10 @@ a:hover {
 .profile {
   padding: 5px;
   color: white;
+}
+
+.profile:hover, .active .profile {
+  background: #35495d;
 }
 
 .profile::after {
